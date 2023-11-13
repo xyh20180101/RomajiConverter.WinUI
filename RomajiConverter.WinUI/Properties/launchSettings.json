@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RomajiConverter.WinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "RomajiConverter.WinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
