@@ -1,41 +1,56 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
+using Newtonsoft.Json;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace RomajiConverter.WinUI
-{
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            this.InitializeComponent();
-            this.Title = $"RomajiConverter.WinUI ({System.Reflection.Assembly.GetExecutingAssembly().GetName().Version})";
-        }
+namespace RomajiConverter.WinUI;
 
-        private void MainWindow_OnActivated(object sender, WindowActivatedEventArgs args)
+/// <summary>
+/// An empty window that can be used on its own or navigated to within a Frame.
+/// </summary>
+public sealed partial class MainWindow : Window
+{
+    private const string ConfigFileName = "config.json";
+
+    public MainWindow()
+    {
+        InitConfig();
+        InitializeComponent();
+        Title = $"RomajiConverter.WinUI ({Assembly.GetExecutingAssembly().GetName().Version})";
+    }
+
+    private void InitConfig()
+    {
+        var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFileName);
+        if (File.Exists(configPath))
         {
-            CloudMusicHelper.Init();
-            RomajiHelper.Init();
-            VariantHelper.Init();
+            App.Config = JsonConvert.DeserializeObject<MyConfig>(File.ReadAllText(configPath));
         }
+        else
+        {
+            App.Config = new MyConfig();
+            var file = File.Create(configPath);
+            using var sw = new StreamWriter(file);
+            sw.Write(JsonConvert.SerializeObject(App.Config, Formatting.Indented));
+        }
+    }
+
+    private void MainWindow_OnActivated(object sender, WindowActivatedEventArgs args)
+    {
+        CloudMusicHelper.Init();
+        RomajiHelper.Init();
+        VariantHelper.Init();
+    }
+
+    private void MainWindow_OnClosed(object sender, WindowEventArgs args)
+    {
+        File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFileName),
+            JsonConvert.SerializeObject(App.Config, Formatting.Indented));
     }
 }

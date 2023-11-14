@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <UserControl
     x:Class="RomajiConverter.WinUI.Controls.EditableLabelGroup"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,12 +8,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
     <Grid>
         <StackPanel>
-            <local:EditableLabel Text="{Binding Unit.Romaji,ElementName=Group,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding RomajiVisibility,ElementName=Group,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MyFontSize="{Binding Path=MyFontSize,Mode=TwoWay,ElementName=Group,UpdateSourceTrigger=PropertyChanged}"></local:EditableLabel>
-            <local:EditableLabel Text="{Binding Unit.Hiragana,ElementName=Group,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding HiraganaVisibility,ElementName=Group,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MyFontSize="{Binding Path=MyFontSize,Mode=TwoWay,ElementName=Group,UpdateSourceTrigger=PropertyChanged}"></local:EditableLabel>
-            <TextBlock Padding="5,0,5,5" Text="{Binding Unit.Japanese,ElementName=Group,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Path=MyFontSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <local:EditableLabel Text="{x:Bind Unit.Romaji,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 Visibility="{x:Bind RomajiVisibility,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 MyFontSize="{Binding Path=MyFontSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <local:EditableLabel x:Name="HiraganaLabel"
+                                 Text="{x:Bind Unit.Hiragana,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 MyFontSize="{Binding Path=MyFontSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Padding="4,4,4,4" Text="{x:Bind Unit.Japanese,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       FontSize="{Binding Path=MyFontSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
     </Grid>
 </UserControl>
