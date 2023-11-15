@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.CompilerServices;
 using RomajiConverter.WinUI.Extensions;
 
 namespace RomajiConverter.WinUI.Models;
@@ -30,10 +32,10 @@ public class MyConfig
         FontPixelSize = 48;
         FontColor = Color.Black.ToHexString();
         BackgroundColor = Color.White.ToHexString();
-        Margin = 24;
-        PaddingX = 0;
-        PaddingY = 48;
-        PaddingInnerY = 12;
+        PagePadding = 24;
+        TextMargin = 0;
+        LineMargin = 48;
+        LinePadding = 12;
     }
 
     #region 通用设置
@@ -64,13 +66,13 @@ public class MyConfig
 
     public string BackgroundColor { get; set; }
 
-    public int Margin { get; set; }
+    public int PagePadding { get; set; }
 
-    public int PaddingX { get; set; }
+    public int TextMargin { get; set; }
 
-    public int PaddingY { get; set; }
+    public int LineMargin { get; set; }
 
-    public int PaddingInnerY { get; set; }
+    public int LinePadding { get; set; }
 
     #endregion
 }

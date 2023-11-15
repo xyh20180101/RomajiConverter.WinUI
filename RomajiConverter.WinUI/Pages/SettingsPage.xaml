@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:winUi="using:RomajiConverter.WinUI"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -18,63 +19,105 @@
             <AppBarButton x:Uid="BackButton" x:Name="BackButton" Icon="Back" Label="返回" Tapped="BackButton_OnTapped" />
         </CommandBar>
         <ScrollViewer Grid.Row="1">
-            <StackPanel Margin="8,0,8,32">
+            <StackPanel Margin="8,0,8,16">
                 <TextBlock Margin="16,4,4,4" FontWeight="SemiBold" Text="生成图片选项" />
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="渲染为图片时的字体" Header="字体">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D2;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
-                    </ComboBox>
-                </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="字体大小">
-                    <toolkit:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE8E9;" />
-                    </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
+                    <ComboBox x:Name="FontFamilyComboBox" SelectedValue="{x:Bind winUi:App.Config.FontFamilyName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                     </ComboBox>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="字体颜色">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D3;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
-                    </ComboBox>
+                    <ColorPicker x:Name="FontColorPicker" Color="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    </ColorPicker>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="背景颜色">
                     <toolkit:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xF354;" />
+                        <FontIcon Glyph="&#xE790;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
-                    </ComboBox>
+                    <ColorPicker x:Name="BackgroundColorPicker" Color="{x:Bind winUi:App.Config.BackgroundColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    </ColorPicker>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="字体大小">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8E9;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Bind FontPixelSizeSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,8,2"></TextBlock>
+                        <Slider x:Name="FontPixelSizeSlider" StepFrequency="1" Minimum="8" Maximum="72" Width="200" Value="{x:Bind winUi:App.Config.FontPixelSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        </Slider>
+                    </StackPanel>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="页面内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF573;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
-                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Bind PagePaddingSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,8,2"></TextBlock>
+                        <Slider x:Name="PagePaddingSlider" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.PagePadding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        </Slider>
+                    </StackPanel>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="字间距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE799;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
-                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Bind TextMarginSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,8,2"></TextBlock>
+                        <Slider x:Name="TextMarginSlider" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.TextMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        </Slider>
+                    </StackPanel>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="行外边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xEA37;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
-                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Bind LineMarginSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,8,2"></TextBlock>
+                        <Slider x:Name="LineMarginSlider" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.LineMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        </Slider>
+                    </StackPanel>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="行内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF168;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox>
-                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Bind LinePaddingSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,8,2"></TextBlock>
+                        <Slider x:Name="LinePaddingSlider" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.LinePadding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        </Slider>
+                    </StackPanel>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="生成图片后打开文件夹">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE838;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsOpenExplorerAfterSaveImageToggleSwitch" IsOn="{x:Bind winUi:App.Config.IsOpenExplorerAfterSaveImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    </ToggleSwitch>
+                </toolkit:SettingsCard>
+                <TextBlock Margin="16,32,4,4" FontWeight="SemiBold" Text="生成文本选项" />
+                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="左括号符号">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE973;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <TextBox x:Name="LeftParenthesisTextBox" MaxLength="1" TextWrapping="Wrap" Text="{x:Bind winUi:App.Config.LeftParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="右括号符号">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE974;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <TextBox x:Name="RightParenthesisTextBox" MaxLength="1" TextWrapping="Wrap" Text="{x:Bind winUi:App.Config.RightParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </toolkit:SettingsCard>
+                <TextBlock Margin="16,32,4,4" FontWeight="SemiBold" Text="其他" />
+                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="恢复默认设置">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE72C;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <Button x:Name="ResetButton" Content="恢复默认设置" Tapped="ResetButton_OnTapped"></Button>
                 </toolkit:SettingsCard>
             </StackPanel>
         </ScrollViewer>

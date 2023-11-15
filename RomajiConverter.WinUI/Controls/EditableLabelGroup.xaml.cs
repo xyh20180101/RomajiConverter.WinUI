@@ -43,7 +43,23 @@ public sealed partial class EditableLabelGroup : UserControl
     public Visibility RomajiVisibility
     {
         get => (Visibility)GetValue(RomajiVisibilityProperty);
-        set => SetValue(RomajiVisibilityProperty, value);
+        set
+        {
+            switch (value)
+            {
+                case Visibility.Visible:
+                    RomajiLabel.IsEnabled = true;
+                    RomajiLabel.Opacity = 1;
+                    RomajiLabel.Visibility = Visibility.Visible;
+                    break;
+                case Visibility.Collapsed:
+                    RomajiLabel.IsEnabled = false;
+                    RomajiLabel.Opacity = 0;
+                    RomajiLabel.Visibility = Visibility.Collapsed;
+                    break;
+            }
+            SetValue(RomajiVisibilityProperty, value);
+        }
     }
 
     [Category("Extension")]

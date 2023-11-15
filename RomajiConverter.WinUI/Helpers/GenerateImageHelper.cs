@@ -15,27 +15,26 @@ public static class GenerateImageHelper
             return new Bitmap(1, 1);
 
         var fontSize = setting.FontPixelSize;
-        var margin = setting.Margin;
-        var paddingX = setting.PaddingX;
-        var paddingY = setting.PaddingY;
-        var paddingInnerY = setting.PaddingInnerY;
+        var pagePadding = setting.PagePadding;
+        var textMargin = setting.TextMargin;
+        var lineMargin = setting.LineMargin;
+        var linePadding = setting.LinePadding;
 
         var font = new Font(setting.FontFamilyName, fontSize, GraphicsUnit.Pixel);
         var brush = new SolidBrush(setting.FontColor);
         var background = setting.BackgroundColor;
 
         //(最长句的渲染长度,该句的单元数)
-        var longestLine = list.Select(p => new { MaxLength = p.Sum(q => GetUnitLength(q, font)), UnitCount = p.Length })
-            .OrderByDescending(p => p.MaxLength).FirstOrDefault();
+        var longestLine = list.Select(p => new { MaxLength = p.Sum(q => GetUnitLength(q, font)), UnitCount = p.Length }).MaxBy(p => p.MaxLength);
 
         //最长句子的渲染长度
         var maxLength = longestLine?.MaxLength ?? 0;
         //最大单元数
         var maxUnitCount = longestLine?.UnitCount ?? 0;
         //图片宽度
-        var width = maxLength + maxUnitCount * paddingX + margin * 2;
+        var width = maxLength + maxUnitCount * textMargin + pagePadding * 2;
         //图片高度
-        var height = list.Count * (list[0][0].Length * fontSize + paddingInnerY) + list.Count * paddingY + margin * 2;
+        var height = list.Count * (list[0][0].Length * fontSize + linePadding) + list.Count * lineMargin + pagePadding * 2;
         var image = new Bitmap(width, height);
 
         using var g1 = Graphics.FromImage(image);
@@ -50,17 +49,17 @@ public static class GenerateImageHelper
         for (var i = 0; i < list.Count; i++)
         {
             var line = list[i];
-            var startX = margin + paddingX;
+            var startX = pagePadding + textMargin;
             foreach (var unit in line)
             {
                 var unitLength = GetUnitLength(unit, font);
                 var renderXArray = unit.Select(str => startX + GetStringXOffset(str, font, unitLength)).ToArray();
                 var renderYArray = unit.Select((str, index) =>
-                    margin + (fontSize * unit.Length + paddingInnerY + paddingY) * i +
-                    index * (fontSize + paddingInnerY)).ToArray();
+                    pagePadding + (fontSize * unit.Length + linePadding + lineMargin) * i +
+                    index * (fontSize + linePadding)).ToArray();
                 for (var j = 0; j < unit.Length; j++)
                     g1.DrawString(unit[j], font, brush, new PointF(renderXArray[j], renderYArray[j]));
-                startX += unitLength + paddingX;
+                startX += unitLength + textMargin;
             }
         }
 
@@ -102,10 +101,10 @@ public static class GenerateImageHelper
         {
             FontFamilyName = config.FontFamilyName;
             FontPixelSize = config.FontPixelSize;
-            Margin = config.Margin;
-            PaddingX = config.PaddingX;
-            PaddingY = config.PaddingY;
-            PaddingInnerY = config.PaddingInnerY;
+            PagePadding = config.PagePadding;
+            TextMargin = config.TextMargin;
+            LineMargin = config.LineMargin;
+            LinePadding = config.LinePadding;
             BackgroundColor = (Color)new ColorConverter().ConvertFromString(config.BackgroundColor);
             FontColor = (Color)new ColorConverter().ConvertFromString(config.FontColor);
         }
@@ -114,13 +113,13 @@ public static class GenerateImageHelper
 
         public int FontPixelSize { get; set; }
 
-        public int Margin { get; set; }
+        public int PagePadding { get; set; }
 
-        public int PaddingX { get; set; }
+        public int TextMargin { get; set; }
 
-        public int PaddingY { get; set; }
+        public int LineMargin { get; set; }
 
-        public int PaddingInnerY { get; set; }
+        public int LinePadding { get; set; }
 
         public Color BackgroundColor { get; set; }
 

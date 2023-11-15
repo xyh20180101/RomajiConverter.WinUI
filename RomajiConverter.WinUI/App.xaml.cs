@@ -9,6 +9,8 @@ using Microsoft.UI;
 using Windows.ApplicationModel.Core;
 using Windows.UI.ViewManagement;
 using System.Reflection;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

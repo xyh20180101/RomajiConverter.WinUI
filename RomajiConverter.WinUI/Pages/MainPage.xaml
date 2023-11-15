@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls1="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:winUi="using:RomajiConverter.WinUI"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
     <Grid x:Name="MainGrid">
@@ -31,8 +32,7 @@
             <AppBarButton x:Uid="ConvertPictureButton" x:Name="ConvertPictureButton" Icon="Pictures" Label="导出图片"
                           Tapped="ConvertPictureButton_OnTapped" />
             <AppBarSeparator x:Name="AppBarSeparator2" />
-            <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Icon="List" Label="详细模式"
-                                Tapped="DetailModeButton_OnTapped" />
+            <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Icon="List" Label="详细模式" IsChecked="{x:Bind winUi:App.Config.IsDetailMode,Mode=TwoWay}"/>
             <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Icon="Setting" Label="设置" Tapped="SettingButton_OnTapped" />
         </CommandBar>
         <Grid Grid.Column="0" Grid.Row="1">
