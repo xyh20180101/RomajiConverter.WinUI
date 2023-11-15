@@ -2,9 +2,11 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
+using RomajiConverter.WinUI.Pages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -22,7 +24,9 @@ public sealed partial class MainWindow : Window
     {
         InitConfig();
         InitializeComponent();
-        Title = $"RomajiConverter.WinUI ({Assembly.GetExecutingAssembly().GetName().Version})";
+        ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBar);
+        MainFrame.Navigate(typeof(MainPage));
     }
 
     private void InitConfig()

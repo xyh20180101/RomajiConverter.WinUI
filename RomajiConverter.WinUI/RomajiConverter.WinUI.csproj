@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
 		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
 		<RootNamespace>RomajiConverter.WinUI</RootNamespace>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Platforms>x86;x64;ARM64</Platforms>
-		<RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-		<PublishProfile>win10-$(Platform).pubxml</PublishProfile>
+		<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+		<PublishProfile>win-$(Platform).pubxml</PublishProfile>
 		<UseWinUI>true</UseWinUI>
 		<EnableMsixTooling>true</EnableMsixTooling>
 		<DefaultLanguage>zh-CN</DefaultLanguage>
-		<WindowsPackageType>None</WindowsPackageType>
+		<!--<WindowsPackageType>None</WindowsPackageType>-->
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+		<PlatformTarget>AnyCPU</PlatformTarget>
 	</PropertyGroup>
 	<Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build">
 		<ItemGroup>
@@ -25,6 +26,7 @@
 		<None Remove="Controls\EditableLabel.xaml" />
 		<None Remove="Controls\EditableLabelGroup.xaml" />
 		<None Remove="Pages\MainPage.xaml" />
+		<None Remove="Pages\SettingsPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="unidic\**">
@@ -43,6 +45,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.230907" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
 		<PackageReference Include="MeCab.DotNet" Version="1.1.0" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231008000" />
@@ -50,7 +53,8 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NTextCat" Version="0.3.65" />
 		<PackageReference Include="Opportunity.LrcParser" Version="1.0.4" />
-		<PackageReference Include="System.Windows.Extensions" Version="7.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+		<PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
 		<PackageReference Include="WanaKanaSharp" Version="0.2.0" />
 		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
@@ -76,6 +80,9 @@
 		<None Update="customizeDict.txt">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<Page Update="Pages\SettingsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
 		<None Update="Variants\kSimplifiedVariant.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

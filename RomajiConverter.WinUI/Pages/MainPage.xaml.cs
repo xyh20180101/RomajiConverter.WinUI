@@ -21,6 +21,7 @@ using RomajiConverter.WinUI.Enums;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
 using WinRT.Interop;
+using Microsoft.UI.Xaml.Media.Animation;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -182,6 +183,8 @@ public sealed partial class MainPage : Page
             else
                 continue;
 
+            var isLineContainsKanji = wrapPanel.Children.Any(p => ((EditableLabelGroup)p).Unit.IsKanji);
+
             foreach (EditableLabelGroup editableLabelGroup in wrapPanel.Children)
                 switch (senderName)
                 {
@@ -192,17 +195,24 @@ public sealed partial class MainPage : Page
                     case "EditHiraganaCheckBox":
                         if (EditHiraganaCheckBox.IsOn)
                             if (IsOnlyShowKanjiCheckBox.IsOn && !editableLabelGroup.Unit.IsKanji)
-                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
+                                if(isLineContainsKanji)
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
+                                else
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
                             else
                                 editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
                         else
                             editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
                         break;
                     case "IsOnlyShowKanjiCheckBox":
-                        if (editableLabelGroup.Unit.IsKanji == false)
-                            editableLabelGroup.HiraganaVisibility = IsOnlyShowKanjiCheckBox.IsOn
-                                ? HiraganaVisibility.Hidden
-                                : HiraganaVisibility.Visible;
+                        if (EditHiraganaCheckBox.IsOn && editableLabelGroup.Unit.IsKanji == false)
+                            if (IsOnlyShowKanjiCheckBox.IsOn)
+                                if (isLineContainsKanji)
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
+                                else
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                            else
+                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
                         break;
                 }
         }
@@ -421,22 +431,28 @@ public sealed partial class MainPage : Page
     {
         if (isDetailMode)
         {
-            if (MainGrid.ColumnDefinitions.Count == 2) MainGrid.ColumnDefinitions.Insert(1, _editColumnDefinition);
-            EditGrid.Visibility = Visibility.Visible;
-            ReadButton.Visibility = Visibility.Visible;
-            SaveButton.Visibility = Visibility.Visible;
-            ConvertPictureButton.Visibility = Visibility.Visible;
-            AppBarSeparator2.Visibility = Visibility.Visible;
+            if (MainGrid.ColumnDefinitions.Count == 2)
+            {
+                MainGrid.ColumnDefinitions.Insert(1, _editColumnDefinition);
+                MainGrid.Children.Add(EditGrid);
+                MainCommandBar.PrimaryCommands.Insert(2, ReadButton);
+                MainCommandBar.PrimaryCommands.Insert(3, SaveButton);
+                MainCommandBar.PrimaryCommands.Insert(4, ConvertPictureButton);
+                MainCommandBar.PrimaryCommands.Insert(5, AppBarSeparator2);
+            }
         }
         else
         {
-            ReadButton.Visibility = Visibility.Collapsed;
-            SaveButton.Visibility = Visibility.Collapsed;
-            ConvertPictureButton.Visibility = Visibility.Collapsed;
-            AppBarSeparator2.Visibility = Visibility.Collapsed;
-            _editColumnDefinition = MainGrid.ColumnDefinitions[1];
-            EditGrid.Visibility = Visibility.Collapsed;
-            if (MainGrid.ColumnDefinitions.Count == 3) MainGrid.ColumnDefinitions.RemoveAt(1);
+            if (MainGrid.ColumnDefinitions.Count == 3)
+            {
+                MainCommandBar.PrimaryCommands.Remove(ReadButton);
+                MainCommandBar.PrimaryCommands.Remove(SaveButton);
+                MainCommandBar.PrimaryCommands.Remove(ConvertPictureButton);
+                MainCommandBar.PrimaryCommands.Remove(AppBarSeparator2);
+                MainGrid.Children.Remove(EditGrid);
+                _editColumnDefinition = MainGrid.ColumnDefinitions[1];
+                MainGrid.ColumnDefinitions.RemoveAt(1);
+            }
         }
     }
 
@@ -448,6 +464,20 @@ public sealed partial class MainPage : Page
     private void DetailModeButton_OnTapped(object sender, TappedRoutedEventArgs e)
     {
         IsDetailMode = DetailModeButton.IsChecked.Value;
+    }
+
+    /// <summary>
+    /// 设置按钮事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void SettingButton_OnTapped(object sender, TappedRoutedEventArgs e)
+    {
+        Frame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo
+        { 
+            Effect = SlideNavigationTransitionEffect.FromRight
+        });
     }
 
     #endregion

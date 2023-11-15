@@ -60,8 +60,8 @@ public sealed partial class EditableLabelGroup : UserControl
                     HiraganaLabel.Visibility = Visibility.Visible;
                     break;
                 case HiraganaVisibility.Collapsed:
-                    HiraganaLabel.IsEnabled = true;
-                    HiraganaLabel.Opacity = 1;
+                    HiraganaLabel.IsEnabled = false;
+                    HiraganaLabel.Opacity = 0;
                     HiraganaLabel.Visibility = Visibility.Collapsed;
                     break;
                 case HiraganaVisibility.Hidden:

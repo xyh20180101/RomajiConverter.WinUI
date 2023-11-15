@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls1="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    NavigationCacheMode="Enabled">
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -19,23 +19,28 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <CommandBar Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="8,8,8,4"
+        <CommandBar x:Name="MainCommandBar" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="8,8,8,4"
                     Padding="0" DefaultLabelPosition="Right"
                     HorizontalAlignment="Left" Height="44">
             <AppBarButton x:Uid="ImportCloudMusicButton" x:Name="ImportCloudMusicButton" Icon="Document"
                           Label="获取网易云歌词" Click="ImportCloudMusicButton_OnClick" />
             <AppBarSeparator x:Name="AppBarSeparator1" />
             <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Icon="OpenFile" Label="打开"
-                          Tapped="ReadButton_OnTapped" />
+                          Tapped="ReadButton_OnTapped"/>
             <AppBarButton x:Uid="SaveButton" x:Name="SaveButton" Icon="Save" Label="保存" Tapped="SaveButton_OnTapped" />
             <AppBarButton x:Uid="ConvertPictureButton" x:Name="ConvertPictureButton" Icon="Pictures" Label="导出图片"
                           Tapped="ConvertPictureButton_OnTapped" />
             <AppBarSeparator x:Name="AppBarSeparator2" />
             <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Icon="List" Label="详细模式"
                                 Tapped="DetailModeButton_OnTapped" />
-            <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Icon="Setting" Label="设置" />
+            <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Icon="Setting" Label="设置" Tapped="SettingButton_OnTapped" />
         </CommandBar>
         <Grid Grid.Column="0" Grid.Row="1">
+            <Grid.Transitions>
+                <TransitionCollection>
+                    <RepositionThemeTransition/>
+                </TransitionCollection>
+            </Grid.Transitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -50,6 +55,11 @@
                     Margin="4,4,4,8" Click="ConvertButton_OnClick" />
         </Grid>
         <Grid x:Name="EditGrid" Grid.Column="1" Grid.Row="1">
+            <Grid.Transitions>
+                <TransitionCollection>
+                    <RepositionThemeTransition></RepositionThemeTransition>
+                </TransitionCollection>
+            </Grid.Transitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -68,9 +78,16 @@
                     </controls1:WrapPanel>
                 </StackPanel>
             </Expander>
-            <Border x:Name="EditBorder" Grid.Row="1" Tapped="EditBorder_OnTapped" Margin="4,4,4,4">
+            <Border x:Name="EditBorder" Grid.Row="1" Tapped="EditBorder_OnTapped" Margin="4,4,4,4" CornerRadius="4">
                 <ScrollViewer>
-                    <StackPanel x:Name="EditPanel" />
+                    <StackPanel x:Name="EditPanel" >
+                        <StackPanel.ChildrenTransitions>
+                            <TransitionCollection>
+                                <AddDeleteThemeTransition/>
+                            </TransitionCollection>
+                        </StackPanel.ChildrenTransitions>
+
+                    </StackPanel>
                 </ScrollViewer>
             </Border>
             <Grid Grid.Row="2" Margin="4,4,4,8">
@@ -79,6 +96,11 @@
             </Grid>
         </Grid>
         <Grid Grid.Column="2" Grid.Row="1">
+            <Grid.Transitions>
+                <TransitionCollection>
+                    <RepositionThemeTransition></RepositionThemeTransition>
+                </TransitionCollection>
+            </Grid.Transitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />

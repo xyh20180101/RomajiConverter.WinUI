@@ -6,9 +6,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pages="using:RomajiConverter.WinUI.Pages"
     mc:Ignorable="d"
+    Title="RomajiConverter WinUI"
     Activated="MainWindow_OnActivated"
     Closed="MainWindow_OnClosed">
-    <pages:MainPage />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="AppTitleBar">
+            <TextBlock x:Uid="AppTitleTextBlock" x:Name="AppTitleTextBlock" Text="RomajiConverter"
+                       TextWrapping="NoWrap"
+                       Style="{StaticResource CaptionTextBlockStyle}" 
+                       VerticalAlignment="Center"
+                       Margin="16,8,0,0"/>
+        </Grid>
+        <Frame Grid.Row="1" x:Name="MainFrame"></Frame>
+    </Grid>
+    <Window.SystemBackdrop>
+        <MicaBackdrop Kind="BaseAlt"/>
+    </Window.SystemBackdrop>
 </Window>
