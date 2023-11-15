@@ -32,8 +32,21 @@
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D3;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ColorPicker x:Name="FontColorPicker" Color="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                    </ColorPicker>
+                    <StackPanel Orientation="Horizontal">
+                        <SplitButton Padding="0" VerticalAlignment="Stretch">
+                            <Rectangle Fill="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch" MinHeight="30" Width="40"/>
+                            <SplitButton.Flyout>
+                                <Flyout>
+                                    <ColorPicker x:Name="FontColorPicker"
+                                                 IsMoreButtonVisible="False"
+                                                 IsHexInputVisible="False"
+                                                 IsColorChannelTextInputVisible="False"
+                                                 Color="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                </Flyout>
+                            </SplitButton.Flyout>
+                        </SplitButton>
+                        <TextBox x:Name="FontColorTextBox" Margin="4,0,0,0" TextWrapping="Wrap" MaxLength="9" Text="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="FontColorTextBox_OnTextChanged" LostFocus="FontColorTextBox_OnLostFocus"/>
+                    </StackPanel>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="背景颜色">
                     <toolkit:SettingsCard.HeaderIcon>

@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Media.Animation;
 using System.Drawing;
 using System.Drawing.Text;
 using CommunityToolkit.WinUI.Helpers;
+using Microsoft.UI.Xaml;
 using RomajiConverter.WinUI.Extensions;
 using RomajiConverter.WinUI.Models;
 
@@ -72,6 +73,29 @@ public sealed partial class SettingsPage : Page
         if (result == ContentDialogResult.Primary)
         {
             InitAllConfig(new MyConfig());
+        }
+    }
+
+    private void FontColorTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            FontColorPicker.Color = FontColorTextBox.Text.ToDrawingColor().ToWindowsUIColor();
+        }
+        catch
+        {
+        }
+    }
+
+    private void FontColorTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            FontColorPicker.Color = FontColorTextBox.Text.ToDrawingColor().ToWindowsUIColor();
+        }
+        finally
+        {
+            FontColorTextBox.Text = App.Config.FontColor;
         }
     }
 }
