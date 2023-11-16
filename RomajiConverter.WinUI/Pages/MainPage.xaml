@@ -6,14 +6,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls1="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:winUi="using:RomajiConverter.WinUI"
+    xmlns:valueConverters="using:RomajiConverter.WinUI.ValueConverters"
+    xmlns:userControls="using:RomajiConverter.WinUI.Controls"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
+    <Page.Resources>
+        <valueConverters:IsDetailModeToWidthValueConverter x:Key="IsDetailModeToWidthValueConverter"></valueConverters:IsDetailModeToWidthValueConverter>
+        <valueConverters:IsDetailModeToVisibilityValueConverter x:Key="IsDetailModeToVisibilityValueConverter"></valueConverters:IsDetailModeToVisibilityValueConverter>
+        <valueConverters:FontSizeToScaleTextValueConverter x:Key="FontSizeToScaleTextValueConverter"></valueConverters:FontSizeToScaleTextValueConverter>
+    </Page.Resources>
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="1.2*" />
+            <ColumnDefinition Width="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToWidthValueConverter}}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -25,13 +32,13 @@
                     HorizontalAlignment="Left" Height="44">
             <AppBarButton x:Uid="ImportCloudMusicButton" x:Name="ImportCloudMusicButton" Icon="Document"
                           Label="获取网易云歌词" Click="ImportCloudMusicButton_OnClick" />
-            <AppBarSeparator x:Name="AppBarSeparator1" />
+            <AppBarSeparator />
             <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Icon="OpenFile" Label="打开"
-                          Tapped="ReadButton_OnTapped"/>
-            <AppBarButton x:Uid="SaveButton" x:Name="SaveButton" Icon="Save" Label="保存" Tapped="SaveButton_OnTapped" />
+                          Tapped="ReadButton_OnTapped" Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}"/>
+            <AppBarButton x:Uid="SaveButton" x:Name="SaveButton" Icon="Save" Label="保存" Tapped="SaveButton_OnTapped" Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}"/>
             <AppBarButton x:Uid="ConvertPictureButton" x:Name="ConvertPictureButton" Icon="Pictures" Label="导出图片"
-                          Tapped="ConvertPictureButton_OnTapped" />
-            <AppBarSeparator x:Name="AppBarSeparator2" />
+                          Tapped="ConvertPictureButton_OnTapped" Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}"/>
+            <AppBarSeparator Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}"/>
             <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Icon="List" Label="详细模式" IsChecked="{x:Bind winUi:App.Config.IsDetailMode,Mode=TwoWay}"/>
             <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Icon="Setting" Label="设置" Tapped="SettingButton_OnTapped" />
         </CommandBar>
@@ -48,7 +55,9 @@
             <TextBox x:Name="InputTextBox" Grid.Row="0" Margin="8,4,4,4"
                      AcceptsReturn="True" TextWrapping="Wrap"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     IsSpellCheckEnabled="False" />
+                     IsSpellCheckEnabled="False" PointerWheelChanged="InputTextBox_OnPointerWheelChanged"
+                     FontSize="{x:Bind winUi:App.Config.InputTextBoxFontSize,Mode=TwoWay}"/>
+            <userControls:ScaleLabel Grid.Row="0" Grid.Column="0" ScaleText="{x:Bind winUi:App.Config.InputTextBoxFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,4,6"></userControls:ScaleLabel>
             <CheckBox x:Uid="AutoVariantCheckBox" x:Name="AutoVariantCheckBox" Grid.Row="1" Margin="8,4,4,8"
                       Content="识别变体" />
             <Button x:Uid="ConvertButton" x:Name="ConvertButton" Grid.Row="1" Content="转换" HorizontalAlignment="Right"
@@ -68,14 +77,14 @@
             <Expander x:Uid="DisplayOptionExpander" Margin="4,4,4,4" Grid.Row="0" HorizontalAlignment="Stretch"
                       HorizontalContentAlignment="Left" Padding="16,16,16,8" Header="显示选项">
                 <StackPanel>
-                    <controls1:WrapPanel>
+                    <controls:WrapPanel>
                         <ToggleSwitch x:Uid="EditRomajiCheckBox" x:Name="EditRomajiCheckBox" MinWidth="100"
                                       Header="罗马音" IsOn="True" />
                         <ToggleSwitch x:Uid="EditHiraganaCheckBox" x:Name="EditHiraganaCheckBox" MinWidth="100"
                                       Header="平假名" IsOn="False" />
                         <ToggleSwitch x:Uid="IsOnlyShowKanjiCheckBox" x:Name="IsOnlyShowKanjiCheckBox" MinWidth="100"
                                       Header="仅汉字假名" IsOn="False" />
-                    </controls1:WrapPanel>
+                    </controls:WrapPanel>
                 </StackPanel>
             </Expander>
             <Border x:Name="EditBorder" Grid.Row="1" Tapped="EditBorder_OnTapped" Margin="4,4,4,4" CornerRadius="4">
@@ -109,7 +118,7 @@
             <Expander x:Uid="TextDisplayOptionExpander" Margin="4,4,8,4" Grid.Row="0" HorizontalAlignment="Stretch"
                       HorizontalContentAlignment="Left" Padding="16,16,16,8" Header="文本显示选项">
                 <StackPanel>
-                    <controls1:WrapPanel>
+                    <controls:WrapPanel>
                         <ToggleSwitch x:Uid="SpaceCheckBox" x:Name="SpaceCheckBox" MinWidth="100" Header="空格分隔"
                                       IsOn="True" />
                         <ToggleSwitch x:Uid="NewLineCheckBox" x:Name="NewLineCheckBox" MinWidth="100" Header="每句换行"
@@ -121,7 +130,7 @@
                         <ToggleSwitch x:Uid="KanjiHiraganaCheckBox" x:Name="KanjiHiraganaCheckBox" MinWidth="100"
                                       Header="汉字假名标注" />
                         <ToggleSwitch x:Uid="CHCheckBox" x:Name="CHCheckBox" MinWidth="100" Header="中文" IsOn="True" />
-                    </controls1:WrapPanel>
+                    </controls:WrapPanel>
                 </StackPanel>
             </Expander>
             <TextBox x:Name="OutputTextBox" Grid.Row="1" Margin="4,4,8,4" AcceptsReturn="True" TextWrapping="Wrap"

@@ -26,6 +26,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         get => _japanese;
         set
         {
+            if (value == _japanese) return;
             _japanese = value;
             OnPropertyChanged();
         }
@@ -36,6 +37,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         get => _romaji;
         set
         {
+            if (value == _romaji) return;
             _romaji = value;
             OnPropertyChanged();
         }
@@ -46,6 +48,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         get => _hiragana;
         set
         {
+            if (value == _hiragana) return;
             _hiragana = value;
             OnPropertyChanged();
         }
@@ -56,6 +59,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         get => _isKanji;
         set
         {
+            if (value == _isKanji) return;
             _isKanji = value;
             OnPropertyChanged();
         }

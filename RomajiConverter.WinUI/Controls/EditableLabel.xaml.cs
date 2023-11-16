@@ -46,6 +46,7 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
         get => _isEdit;
         set
         {
+            if (value == _isEdit) return;
             _isEdit = value;
             OnPropertyChanged("EditLabelVisibility");
             OnPropertyChanged("EditBoxVisibility");

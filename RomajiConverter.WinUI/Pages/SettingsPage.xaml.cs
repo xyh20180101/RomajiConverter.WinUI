@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using CommunityToolkit.WinUI.Helpers;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using RomajiConverter.WinUI.Extensions;
 using RomajiConverter.WinUI.Models;
 
@@ -41,21 +42,6 @@ public sealed partial class SettingsPage : Page
             FontFamilyComboBox.Items.Add(font.Name);
         }
     }
-    private void InitAllConfig(MyConfig config)
-    {
-        IsOpenExplorerAfterSaveImageToggleSwitch.IsOn = config.IsOpenExplorerAfterSaveImage;
-        LeftParenthesisTextBox.Text = config.LeftParenthesis;
-        RightParenthesisTextBox.Text = config.RightParenthesis;
-
-        FontFamilyComboBox.SelectedValue = config.FontFamilyName;
-        FontPixelSizeSlider.Value = config.FontPixelSize;
-        FontColorPicker.Color = config.FontColor.ToDrawingColor().ToWindowsUIColor();
-        BackgroundColorPicker.Color = config.BackgroundColor.ToDrawingColor().ToWindowsUIColor();
-        PagePaddingSlider.Value = config.PagePadding;
-        TextMarginSlider.Value = config.TextMargin;
-        LineMarginSlider.Value = config.LineMargin;
-        LinePaddingSlider.Value = config.LinePadding;
-    }
 
     private async void ResetButton_OnTapped(object sender, TappedRoutedEventArgs e)
     {
@@ -72,9 +58,11 @@ public sealed partial class SettingsPage : Page
         var result = await contentDialog.ShowAsync();
         if (result == ContentDialogResult.Primary)
         {
-            InitAllConfig(new MyConfig());
+            App.Config.ResetSetting();
         }
     }
+
+    #region ÑÕÉ«Ñ¡È¡
 
     private void FontColorTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
@@ -98,4 +86,29 @@ public sealed partial class SettingsPage : Page
             FontColorTextBox.Text = App.Config.FontColor;
         }
     }
+
+    private void BackgroundColorTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            BackgroundColorPicker.Color = BackgroundColorTextBox.Text.ToDrawingColor().ToWindowsUIColor();
+        }
+        catch
+        {
+        }
+    }
+
+    private void BackgroundColorTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            BackgroundColorPicker.Color = BackgroundColorTextBox.Text.ToDrawingColor().ToWindowsUIColor();
+        }
+        finally
+        {
+            BackgroundColorTextBox.Text = App.Config.BackgroundColor;
+        }
+    }
+
+    #endregion
 }

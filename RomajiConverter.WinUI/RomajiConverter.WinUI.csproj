@@ -25,6 +25,7 @@
 	<ItemGroup>
 		<None Remove="Controls\EditableLabel.xaml" />
 		<None Remove="Controls\EditableLabelGroup.xaml" />
+		<None Remove="Controls\ScaleLabel.xaml" />
 		<None Remove="Pages\MainPage.xaml" />
 		<None Remove="Pages\SettingsPage.xaml" />
 	</ItemGroup>
@@ -75,6 +76,9 @@
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Controls\EditableLabelGroup.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Update="Controls\ScaleLabel.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>
 		<None Update="customizeDict.txt">

@@ -5,12 +5,15 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.System;
 using Windows.UI;
 using CommunityToolkit.WinUI.UI.Controls;
+using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -22,6 +25,7 @@ using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
 using WinRT.Interop;
 using Microsoft.UI.Xaml.Media.Animation;
+using RomajiConverter.WinUI.Extensions;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -32,14 +36,9 @@ public sealed partial class MainPage : Page
     /// </summary>
     private List<ConvertedLine> _convertedLineList = new();
 
-    private bool _isDetailMode;
-
     public MainPage()
     {
         InitializeComponent();
-
-        IsDetailMode = App.Config.IsDetailMode;
-        DetailModeButton.IsChecked = IsDetailMode;
 
         EditRomajiCheckBox.Toggled += EditToggleSwitch_OnToggled;
         EditHiraganaCheckBox.Toggled += EditToggleSwitch_OnToggled;
@@ -52,20 +51,6 @@ public sealed partial class MainPage : Page
         JPCheckBox.Toggled += ThirdCheckBox_OnToggled;
         KanjiHiraganaCheckBox.Toggled += ThirdCheckBox_OnToggled;
         CHCheckBox.Toggled += ThirdCheckBox_OnToggled;
-    }
-
-    /// <summary>
-    /// 是否详细模式
-    /// </summary>
-    public bool IsDetailMode
-    {
-        get => _isDetailMode;
-        set
-        {
-            _isDetailMode = value;
-            App.Config.IsDetailMode = value;
-            SwitchMode(_isDetailMode);
-        }
     }
 
     #region 输入区
@@ -106,7 +91,7 @@ public sealed partial class MainPage : Page
         _convertedLineList =
             RomajiHelper.ToRomaji(InputTextBox.Text, SpaceCheckBox.IsOn, AutoVariantCheckBox.IsChecked.Value);
 
-        if (IsDetailMode)
+        if (App.Config.IsDetailMode)
             RenderEditPanel();
         else
             OutputTextBox.Text = GetResultText();
@@ -195,7 +180,7 @@ public sealed partial class MainPage : Page
                     case "EditHiraganaCheckBox":
                         if (EditHiraganaCheckBox.IsOn)
                             if (IsOnlyShowKanjiCheckBox.IsOn && !editableLabelGroup.Unit.IsKanji)
-                                if(isLineContainsKanji)
+                                if (isLineContainsKanji)
                                     editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
                                 else
                                     editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
@@ -364,8 +349,8 @@ public sealed partial class MainPage : Page
                 if (KanjiHiraganaCheckBox.IsOn)
                 {
                     var japanese = item.Japanese;
-                    var leftParenthesis = "(";
-                    var rightParenthesis = ")";
+                    var leftParenthesis = App.Config.LeftParenthesis;
+                    var rightParenthesis = App.Config.RightParenthesis;
 
                     var kanjiUnitList = item.Units.Where(p => p.IsKanji);
                     foreach (var kanjiUnit in kanjiUnitList)
@@ -419,52 +404,7 @@ public sealed partial class MainPage : Page
 
     #endregion
 
-    #region 切换详细模式
-
-    private ColumnDefinition _editColumnDefinition = new();
-
-    /// <summary>
-    /// 切换详细模式
-    /// </summary>
-    /// <param name="isDetailMode"></param>
-    private void SwitchMode(bool isDetailMode)
-    {
-        if (isDetailMode)
-        {
-            if (MainGrid.ColumnDefinitions.Count == 2)
-            {
-                MainGrid.ColumnDefinitions.Insert(1, _editColumnDefinition);
-                MainGrid.Children.Add(EditGrid);
-                MainCommandBar.PrimaryCommands.Insert(2, ReadButton);
-                MainCommandBar.PrimaryCommands.Insert(3, SaveButton);
-                MainCommandBar.PrimaryCommands.Insert(4, ConvertPictureButton);
-                MainCommandBar.PrimaryCommands.Insert(5, AppBarSeparator2);
-            }
-        }
-        else
-        {
-            if (MainGrid.ColumnDefinitions.Count == 3)
-            {
-                MainCommandBar.PrimaryCommands.Remove(ReadButton);
-                MainCommandBar.PrimaryCommands.Remove(SaveButton);
-                MainCommandBar.PrimaryCommands.Remove(ConvertPictureButton);
-                MainCommandBar.PrimaryCommands.Remove(AppBarSeparator2);
-                MainGrid.Children.Remove(EditGrid);
-                _editColumnDefinition = MainGrid.ColumnDefinitions[1];
-                MainGrid.ColumnDefinitions.RemoveAt(1);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 切换详细模式按钮事件
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void DetailModeButton_OnTapped(object sender, TappedRoutedEventArgs e)
-    {
-        IsDetailMode = DetailModeButton.IsChecked.Value;
-    }
+    #region 切换页面
 
     /// <summary>
     /// 设置按钮事件
@@ -475,10 +415,27 @@ public sealed partial class MainPage : Page
     private void SettingButton_OnTapped(object sender, TappedRoutedEventArgs e)
     {
         Frame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo
-        { 
+        {
             Effect = SlideNavigationTransitionEffect.FromRight
         });
     }
 
     #endregion
+
+    private void InputTextBox_OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
+    {
+        var pointer = e.GetCurrentPoint((UIElement)sender);
+        if (pointer.PointerDeviceType != PointerDeviceType.Mouse || KeyboardExtension.IsKeyDown(VirtualKey.Control))
+        {
+            if (pointer.Properties.MouseWheelDelta < 0 && InputTextBox.FontSize > 14 / Math.Pow(1.1, 16))
+            {
+                InputTextBox.FontSize /= 1.1;
+            }
+            else if (pointer.Properties.MouseWheelDelta > 0 && InputTextBox.FontSize < Math.Floor(14 * Math.Pow(1.1, 14)))
+            {
+                InputTextBox.FontSize *= 1.1;
+            }
+            e.Handled = true;
+        }
+    }
 }
