@@ -20,15 +20,15 @@
         </CommandBar>
         <ScrollViewer Grid.Row="1">
             <StackPanel Margin="8,0,8,16">
-                <TextBlock Margin="16,4,4,4" FontWeight="SemiBold" Text="生成图片选项" />
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="渲染为图片时的字体" Header="字体">
+                <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,4,4,4" FontWeight="SemiBold" Text="生成图片选项" />
+                <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="8,4,8,4" Description="" Header="字体">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D2;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox x:Name="FontFamilyComboBox" SelectedValue="{x:Bind winUi:App.Config.FontFamilyName,Mode=TwoWay}">
-                    </ComboBox>
+                    <ComboBox x:Name="FontFamilyComboBox"
+                              SelectedValue="{x:Bind winUi:App.Config.FontFamilyName,Mode=TwoWay}" />
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="字体颜色">
+                <toolkit:SettingsCard x:Uid="ImageOptionFontColorSetting" Margin="8,4,8,4" Description="" Header="字体颜色">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D3;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -36,7 +36,7 @@
                         <SplitButton Padding="0" VerticalAlignment="Stretch">
                             <Rectangle VerticalAlignment="Stretch" MinHeight="30" Width="40">
                                 <Rectangle.Fill>
-                                    <SolidColorBrush Color="{x:Bind winUi:App.Config.FontColor,Mode=OneWay}"></SolidColorBrush>
+                                    <SolidColorBrush Color="{x:Bind winUi:App.Config.FontColor,Mode=OneWay}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                             <SplitButton.Flyout>
@@ -45,14 +45,17 @@
                                                  IsMoreButtonVisible="False"
                                                  IsHexInputVisible="False"
                                                  IsColorChannelTextInputVisible="False"
-                                                 Color="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                 IsAlphaEnabled="True"
+                                                 Color="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                                 </Flyout>
                             </SplitButton.Flyout>
                         </SplitButton>
-                        <TextBox x:Name="FontColorTextBox" Margin="4,0,0,0" TextWrapping="Wrap" MaxLength="9" Text="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="FontColorTextBox_OnTextChanged" LostFocus="FontColorTextBox_OnLostFocus"/>
+                        <TextBox x:Name="FontColorTextBox" Margin="4,0,0,0" TextWrapping="Wrap" MaxLength="9"
+                                 Text="{x:Bind winUi:App.Config.FontColor,Mode=TwoWay}"
+                                 LostFocus="FontColorTextBox_OnLostFocus" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="背景颜色">
+                <toolkit:SettingsCard x:Uid="ImageOptionBackgroundColorSetting" Margin="8,4,8,4" Description="" Header="背景颜色">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE790;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -60,7 +63,7 @@
                         <SplitButton Padding="0" VerticalAlignment="Stretch">
                             <Rectangle VerticalAlignment="Stretch" MinHeight="30" Width="40">
                                 <Rectangle.Fill>
-                                    <SolidColorBrush Color="{x:Bind winUi:App.Config.BackgroundColor,Mode=OneWay}"></SolidColorBrush>
+                                    <SolidColorBrush Color="{x:Bind winUi:App.Config.BackgroundColor,Mode=OneWay}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                             <SplitButton.Flyout>
@@ -69,89 +72,104 @@
                                                  IsMoreButtonVisible="False"
                                                  IsHexInputVisible="False"
                                                  IsColorChannelTextInputVisible="False"
-                                                 Color="{x:Bind winUi:App.Config.BackgroundColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                 IsAlphaEnabled="True"
+                                                 Color="{x:Bind winUi:App.Config.BackgroundColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                                 </Flyout>
                             </SplitButton.Flyout>
                         </SplitButton>
-                        <TextBox x:Name="BackgroundColorTextBox" Margin="4,0,0,0" TextWrapping="Wrap" MaxLength="9" Text="{x:Bind winUi:App.Config.BackgroundColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="BackgroundColorTextBox_OnTextChanged" LostFocus="BackgroundColorTextBox_OnLostFocus"/>
+                        <TextBox x:Name="BackgroundColorTextBox" Margin="4,0,0,0" TextWrapping="Wrap" MaxLength="9"
+                                 Text="{x:Bind winUi:App.Config.BackgroundColor,Mode=TwoWay}"
+                                 LostFocus="BackgroundColorTextBox_OnLostFocus" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="字体大小">
+                <toolkit:SettingsCard x:Uid="ImageOptionFontSizeSetting" Margin="8,4,8,4" Description="" Header="字体大小">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8E9;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <StackPanel Orientation="Horizontal">
-                        <Slider x:Name="FontPixelSizeSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="20" Maximum="72" Width="200" Value="{x:Bind winUi:App.Config.FontPixelSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        </Slider>
-                        <TextBox x:Name="FontPixelSizeTextBox" Text="{x:Bind FontPixelSizeSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3"></TextBox>
+                        <Slider x:Name="FontPixelSizeSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="20"
+                                Maximum="72" Width="200"
+                                Value="{x:Bind winUi:App.Config.FontPixelSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox x:Name="FontPixelSizeTextBox" Text="{x:Bind FontPixelSizeSlider.Value,Mode=TwoWay}"
+                                 VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="页面内边距">
+                <toolkit:SettingsCard x:Uid="ImageOptionPagePaddingSetting" Margin="8,4,8,4" Description="" Header="页面内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF573;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <StackPanel Orientation="Horizontal">
-                        <Slider x:Name="PagePaddingSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.PagePadding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        </Slider>
-                        <TextBox x:Name="PagePaddingTextBox" Text="{x:Bind PagePaddingSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3"></TextBox>
+                        <Slider x:Name="PagePaddingSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100"
+                                Width="200"
+                                Value="{x:Bind winUi:App.Config.PagePadding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox x:Name="PagePaddingTextBox" Text="{x:Bind PagePaddingSlider.Value,Mode=TwoWay}"
+                                 VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="字间距">
+                <toolkit:SettingsCard x:Uid="ImageOptionTextMarginSetting" Margin="8,4,8,4" Description="" Header="字间距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE799;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <StackPanel Orientation="Horizontal">
-                        <Slider x:Name="TextMarginSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.TextMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        </Slider>
-                        <TextBox x:Name="TextMarginTextBox" Text="{x:Bind TextMarginSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3"></TextBox>
+                        <Slider x:Name="TextMarginSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100"
+                                Width="200"
+                                Value="{x:Bind winUi:App.Config.TextMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox x:Name="TextMarginTextBox" Text="{x:Bind TextMarginSlider.Value,Mode=TwoWay}"
+                                 VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="行外边距">
+                <toolkit:SettingsCard x:Uid="ImageOptionLineMarginSetting" Margin="8,4,8,4" Description="" Header="行外边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xEA37;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <StackPanel Orientation="Horizontal">
-                        <Slider x:Name="LineMarginSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.LineMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        </Slider>
-                        <TextBox x:Name="LineMarginTextBox" Text="{x:Bind LineMarginSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3"></TextBox>
+                        <Slider x:Name="LineMarginSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100"
+                                Width="200"
+                                Value="{x:Bind winUi:App.Config.LineMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox x:Name="LineMarginTextBox" Text="{x:Bind LineMarginSlider.Value,Mode=TwoWay}"
+                                 VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="行内边距">
+                <toolkit:SettingsCard x:Uid="ImageOptionLinePaddingSetting" Margin="8,4,8,4" Description="" Header="行内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF168;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <StackPanel Orientation="Horizontal">
-                        <Slider x:Name="LinePaddingSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100" Width="200" Value="{x:Bind winUi:App.Config.LinePadding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        </Slider>
-                        <TextBox x:Name="LinePaddingTextBox" Text="{x:Bind LinePaddingSlider.Value,Mode=TwoWay}" VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3"></TextBox>
+                        <Slider x:Name="LinePaddingSlider" Margin="0,0,8,0" StepFrequency="1" Minimum="0" Maximum="100"
+                                Width="200"
+                                Value="{x:Bind winUi:App.Config.LinePadding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox x:Name="LinePaddingTextBox" Text="{x:Bind LinePaddingSlider.Value,Mode=TwoWay}"
+                                 VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="生成图片后打开文件夹">
+                <toolkit:SettingsCard x:Uid="ImageOptionIsOpenExplorerAfterSaveImageSetting" Margin="8,4,8,4" Description="" Header="生成图片后打开文件夹">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE838;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="IsOpenExplorerAfterSaveImageToggleSwitch" IsOn="{x:Bind winUi:App.Config.IsOpenExplorerAfterSaveImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                    </ToggleSwitch>
+                    <ToggleSwitch x:Name="IsOpenExplorerAfterSaveImageToggleSwitch"
+                                  IsOn="{x:Bind winUi:App.Config.IsOpenExplorerAfterSaveImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
-                <TextBlock Margin="16,32,4,4" FontWeight="SemiBold" Text="生成文本选项" />
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="左括号符号">
+                <TextBlock x:Uid="TextOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成文本选项" />
+                <toolkit:SettingsCard x:Uid="TextOptionLeftParenthesisSetting" Margin="8,4,8,4" Description="" Header="左括号符号">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE973;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <TextBox x:Name="LeftParenthesisTextBox" MaxLength="5" TextWrapping="Wrap" Text="{x:Bind winUi:App.Config.LeftParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox x:Name="LeftParenthesisTextBox" MaxLength="5" TextWrapping="Wrap"
+                             Text="{x:Bind winUi:App.Config.LeftParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="右括号符号">
+                <toolkit:SettingsCard x:Uid="TextOptionRightParenthesisSetting" Margin="8,4,8,4" Description="" Header="右括号符号">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE974;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <TextBox x:Name="RightParenthesisTextBox" MaxLength="5" TextWrapping="Wrap" Text="{x:Bind winUi:App.Config.RightParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox x:Name="RightParenthesisTextBox" MaxLength="5" TextWrapping="Wrap"
+                             Text="{x:Bind winUi:App.Config.RightParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
-                <TextBlock Margin="16,32,4,4" FontWeight="SemiBold" Text="其他" />
-                <toolkit:SettingsCard Margin="8,4,8,4" Description="" Header="恢复默认设置">
+                <TextBlock x:Uid="OtherOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="其他" />
+                <toolkit:SettingsCard x:Uid="OtherOptionResetSetting" Margin="8,4,8,4" Description="" Header="恢复默认设置">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE72C;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <Button x:Name="ResetButton" Content="恢复默认设置" Tapped="ResetButton_OnTapped"></Button>
+                    <Button x:Uid="OtherOptionResetSettingButton" x:Name="ResetButton" Content="恢复默认设置" Tapped="ResetButton_OnTapped" />
                 </toolkit:SettingsCard>
             </StackPanel>
         </ScrollViewer>

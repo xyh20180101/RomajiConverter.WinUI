@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <UserControl
     x:Class="RomajiConverter.WinUI.Controls.ScaleLabel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RomajiConverter.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:winUi="using:RomajiConverter.WinUI"
     mc:Ignorable="d">
     <Grid x:Name="Grid" Padding="4">
-        <Border Background="{ThemeResource SystemListMediumColor}" CornerRadius="4"></Border>
-        <TextBlock Text="{x:Bind ScaleText,Mode=OneWay}" Padding="4" FontSize="12px"></TextBlock>
+        <Border Background="{ThemeResource SystemListMediumColor}" CornerRadius="4" />
+        <TextBlock Text="{x:Bind ScaleText,Mode=OneWay}" Padding="4" FontSize="12px" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="CommonStates">
                 <VisualStateGroup.Transitions>
-                    <VisualTransition From="ScaleTextChanged" To="ScaleTextNormal" GeneratedDuration="0:0:1"/>
+                    <VisualTransition From="ScaleTextChanged" To="ScaleTextNormal" GeneratedDuration="0:0:1" />
                 </VisualStateGroup.Transitions>
                 <VisualState x:Name="ScaleTextChanged">
                     <VisualState.Setters>
-                        <Setter Target="Grid.Opacity" Value="1.0"></Setter>
+                        <Setter Target="Grid.Opacity" Value="1.0" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="ScaleTextNormal">
                     <VisualState.Setters>
-                        <Setter Target="Grid.Opacity" Value="0.0"></Setter>
+                        <Setter Target="Grid.Opacity" Value="0.0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

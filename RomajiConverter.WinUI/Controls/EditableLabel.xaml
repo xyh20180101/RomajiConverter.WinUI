@@ -18,6 +18,6 @@
         <TextBox Visibility="{x:Bind EditBoxVisibility,Mode=OneWay}" x:Name="EditBox"
                  Text="{x:Bind Text,Mode=TwoWay}" TextWrapping="Wrap" TextAlignment="Center"
                  HorizontalAlignment="Center" VerticalAlignment="Center" KeyDown="EditBox_OnKeyDown"
-                 LostFocus="EditBox_LostFocus" FontSize="{x:Bind MyFontSize,Mode=OneWay}"/>
+                 LostFocus="EditBox_LostFocus" FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
     </Grid>
 </UserControl>

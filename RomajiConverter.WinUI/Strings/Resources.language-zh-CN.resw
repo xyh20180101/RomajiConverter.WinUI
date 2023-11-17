@@ -123,6 +123,9 @@
   <data name="AutoVariantCheckBox.Content" xml:space="preserve">
     <value>识别变体</value>
   </data>
+  <data name="BackButton.Label" xml:space="preserve">
+    <value>返回</value>
+  </data>
   <data name="CHCheckBox.Header" xml:space="preserve">
     <value>中文</value>
   </data>
@@ -165,11 +168,44 @@
   <data name="Exception" xml:space="preserve">
     <value>异常</value>
   </data>
+  <data name="GetLyricsError" xml:space="preserve">
+    <value>获取歌词出错</value>
+  </data>
   <data name="HiraganaCheckBox.Header" xml:space="preserve">
     <value>平假名</value>
   </data>
   <data name="HiraganaCheckBox.MinWidth" xml:space="preserve">
     <value>100</value>
+  </data>
+  <data name="ImageOptionBackgroundColorSetting.Header" xml:space="preserve">
+    <value>背景颜色</value>
+  </data>
+  <data name="ImageOptionFontColorSetting.Header" xml:space="preserve">
+    <value>字体颜色</value>
+  </data>
+  <data name="ImageOptionFontSetting.Header" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="ImageOptionFontSizeSetting.Header" xml:space="preserve">
+    <value>字体大小</value>
+  </data>
+  <data name="ImageOptionIsOpenExplorerAfterSaveImageSetting.Header" xml:space="preserve">
+    <value>生成图片后打开文件夹</value>
+  </data>
+  <data name="ImageOptionLineMarginSetting.Header" xml:space="preserve">
+    <value>行外边距</value>
+  </data>
+  <data name="ImageOptionLinePaddingSetting.Header" xml:space="preserve">
+    <value>行内边距</value>
+  </data>
+  <data name="ImageOptionPagePaddingSetting.Header" xml:space="preserve">
+    <value>页面内边距</value>
+  </data>
+  <data name="ImageOptionTextBlock.Text" xml:space="preserve">
+    <value>生成图片选项</value>
+  </data>
+  <data name="ImageOptionTextMarginSetting.Header" xml:space="preserve">
+    <value>字间距</value>
   </data>
   <data name="ImportCloudMusicButton.Label" xml:space="preserve">
     <value>获取网易云歌词</value>
@@ -201,8 +237,29 @@
   <data name="NotValidLyricsFile" xml:space="preserve">
     <value>无效的歌词json文件</value>
   </data>
+  <data name="OtherOptionResetSetting.Header" xml:space="preserve">
+    <value>恢复默认设置</value>
+  </data>
+  <data name="OtherOptionResetSettingButton.Content" xml:space="preserve">
+    <value>恢复默认设置</value>
+  </data>
+  <data name="OtherOptionTextBlock.Text" xml:space="preserve">
+    <value>其他</value>
+  </data>
   <data name="ReadButton.Label" xml:space="preserve">
     <value>打开</value>
+  </data>
+  <data name="ResetSettingDialogCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ResetSettingDialogConfirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="ResetSettingDialogContent" xml:space="preserve">
+    <value>现有的设置将不会被保存。</value>
+  </data>
+  <data name="ResetSettingDialogTitle" xml:space="preserve">
+    <value>是否恢复默认设置？</value>
   </data>
   <data name="RomajiCheckBox.Header" xml:space="preserve">
     <value>罗马音</value>
@@ -224,5 +281,14 @@
   </data>
   <data name="TextDisplayOptionExpander.Header" xml:space="preserve">
     <value>文本显示选项</value>
+  </data>
+  <data name="TextOptionLeftParenthesisSetting.Header" xml:space="preserve">
+    <value>左括号符号</value>
+  </data>
+  <data name="TextOptionRightParenthesisSetting.Header" xml:space="preserve">
+    <value>右括号符号</value>
+  </data>
+  <data name="TextOptionTextBlock.Text" xml:space="preserve">
+    <value>生成文本选项</value>
   </data>
 </root>

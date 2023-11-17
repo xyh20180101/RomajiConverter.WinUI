@@ -4,15 +4,7 @@ using Windows.ApplicationModel.Resources;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using RomajiConverter.WinUI.Models;
-using RomajiConverter.WinUI.Pages;
 using UnhandledExceptionEventArgs = Microsoft.UI.Xaml.UnhandledExceptionEventArgs;
-using Microsoft.UI;
-using Windows.ApplicationModel.Core;
-using Windows.UI.ViewManagement;
-using System.Reflection;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,9 +18,9 @@ public partial class App : Application
 {
     public static MainWindow MainWindow;
 
-    public static MyConfig Config;
+    public static MyConfig Config = new();
 
-    public static List<ConvertedLine> ConvertedLineList;
+    public static List<ConvertedLine> ConvertedLineList = new ();
 
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code

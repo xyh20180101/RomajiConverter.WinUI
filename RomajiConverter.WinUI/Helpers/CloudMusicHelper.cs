@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Newtonsoft.Json.Linq;
 using Opportunity.LrcParser;
 
@@ -35,7 +36,10 @@ public static class CloudMusicHelper
         var chnLrcResponse = await client.GetAsync($"api/song/lyric?os=pc&id={songId}&tv=-1");
         content = JObject.Parse(await chnLrcResponse.Content.ReadAsStringAsync());
         if ((int?)content["code"] != 200)
-            throw new Exception("获取歌词出错");
+        {
+            var resourceLoader = ResourceLoader.GetForViewIndependentUse();
+            throw new Exception(resourceLoader.GetString("GetLyricsError"));
+        }
         var chnLrc = Lyrics.Parse(content["tlyric"]["lyric"].ToString());
         var lrcList = jpnLrc.Lyrics.Lines.Select(line => new ReturnLrc
             { Time = line.Timestamp.ToString("mm:ss.fff"), JLrc = line.Content }).ToList();

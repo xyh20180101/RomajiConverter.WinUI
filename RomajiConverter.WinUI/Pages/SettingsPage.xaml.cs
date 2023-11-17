@@ -1,19 +1,14 @@
 using System;
 using System.Drawing.Text;
+using Windows.ApplicationModel.Resources;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
 using RomajiConverter.WinUI.Extensions;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace RomajiConverter.WinUI.Pages;
 
-/// <summary>
-/// An empty page that can be used on its own or navigated to within a Frame.
-/// </summary>
 public sealed partial class SettingsPage : Page
 {
     public SettingsPage()
@@ -30,19 +25,28 @@ public sealed partial class SettingsPage : Page
         });
     }
 
+    /// <summary>
+    /// 初始化字体下拉框
+    /// </summary>
     private void InitFontFamily()
     {
         foreach (var font in new InstalledFontCollection().Families) FontFamilyComboBox.Items.Add(font.Name);
     }
 
+    /// <summary>
+    /// 重置按钮事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void ResetButton_OnTapped(object sender, TappedRoutedEventArgs e)
     {
+        var resourceLoader = ResourceLoader.GetForViewIndependentUse();
         var contentDialog = new ContentDialog
         {
-            Title = "是否恢复默认设置？",
-            Content = "现有的设置将不会被保存。",
-            CloseButtonText = "取消",
-            PrimaryButtonText = "确认",
+            Title = resourceLoader.GetString("ResetSettingDialogTitle"),
+            Content = resourceLoader.GetString("ResetSettingDialogContent"),
+            CloseButtonText = resourceLoader.GetString("ResetSettingDialogCancel"),
+            PrimaryButtonText = resourceLoader.GetString("ResetSettingDialogConfirm"),
             DefaultButton = ContentDialogButton.Primary,
             XamlRoot = Content.XamlRoot
         };
@@ -53,17 +57,6 @@ public sealed partial class SettingsPage : Page
 
     #region 颜色选取
 
-    private void FontColorTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
-    {
-        try
-        {
-            FontColorPicker.Color = FontColorTextBox.Text.ToDrawingColor().ToWindowsUIColor();
-        }
-        catch
-        {
-        }
-    }
-
     private void FontColorTextBox_OnLostFocus(object sender, RoutedEventArgs e)
     {
         try
@@ -73,17 +66,6 @@ public sealed partial class SettingsPage : Page
         finally
         {
             FontColorTextBox.Text = App.Config.FontColor;
-        }
-    }
-
-    private void BackgroundColorTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
-    {
-        try
-        {
-            BackgroundColorPicker.Color = BackgroundColorTextBox.Text.ToDrawingColor().ToWindowsUIColor();
-        }
-        catch
-        {
         }
     }
 

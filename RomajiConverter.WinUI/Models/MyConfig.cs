@@ -7,21 +7,21 @@ namespace RomajiConverter.WinUI.Models;
 
 public class MyConfig : INotifyPropertyChanged
 {
-    private bool _isDetailMode;
-    private double _inputTextBoxFontSize;
+    private string _backgroundColor;
     private double _editPanelFontSize;
-    private double _outputTextBoxFontSize;
-    private bool _isOpenExplorerAfterSaveImage;
-    private string _leftParenthesis;
-    private string _rightParenthesis;
+    private string _fontColor;
     private string _fontFamilyName;
     private int _fontPixelSize;
-    private string _fontColor;
-    private string _backgroundColor;
-    private int _pagePadding;
-    private int _textMargin;
+    private double _inputTextBoxFontSize;
+    private bool _isDetailMode;
+    private bool _isOpenExplorerAfterSaveImage;
+    private string _leftParenthesis;
     private int _lineMargin;
     private int _linePadding;
+    private double _outputTextBoxFontSize;
+    private int _pagePadding;
+    private string _rightParenthesis;
+    private int _textMargin;
 
     /// <summary>
     /// 默认设置
@@ -30,6 +30,8 @@ public class MyConfig : INotifyPropertyChanged
     {
         ResetSetting();
     }
+
+    public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
     /// <summary>
     /// 重置为默认设置
@@ -52,8 +54,6 @@ public class MyConfig : INotifyPropertyChanged
         LineMargin = 48;
         LinePadding = 12;
     }
-
-    public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
     public void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {

@@ -16,7 +16,8 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
         typeof(EditableLabel), new PropertyMetadata(default(string)));
 
     public static readonly DependencyProperty MyFontSizeProperty =
-        DependencyProperty.Register(nameof(MyFontSize), typeof(double), typeof(EditableLabel), new PropertyMetadata(14d));
+        DependencyProperty.Register(nameof(MyFontSize), typeof(double), typeof(EditableLabel),
+            new PropertyMetadata(14d));
 
     private bool _isEdit;
 

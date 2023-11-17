@@ -10,7 +10,8 @@
     mc:Ignorable="d">
     <Grid>
         <StackPanel>
-            <local:EditableLabel x:Name="RomajiLabel" Text="{x:Bind Unit.Romaji,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            <local:EditableLabel x:Name="RomajiLabel"
+                                 Text="{x:Bind Unit.Romaji,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                  Visibility="{x:Bind RomajiVisibility,Mode=OneWay}"
                                  MyFontSize="{x:Bind MyFontSize,Mode=OneWay}">
                 <local:EditableLabel.OpacityTransition>

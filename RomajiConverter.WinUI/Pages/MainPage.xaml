@@ -6,18 +6,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:winUi="using:RomajiConverter.WinUI"
     xmlns:valueConverters="using:RomajiConverter.WinUI.ValueConverters"
-    xmlns:userControls="using:RomajiConverter.WinUI.Controls"
+    xmlns:pages="using:RomajiConverter.WinUI.Pages"
     mc:Ignorable="d"
-    NavigationCacheMode="Enabled">
+    NavigationCacheMode="Enabled"
+    Loaded="MainPage_OnLoaded">
     <Page.Resources>
         <valueConverters:IsDetailModeToWidthValueConverter x:Key="IsDetailModeToWidthValueConverter" />
         <valueConverters:IsDetailModeToVisibilityValueConverter x:Key="IsDetailModeToVisibilityValueConverter" />
-        <valueConverters:FontSizeToScaleTextValueConverter x:Key="FontSizeToScaleTextValueConverter" />
     </Page.Resources>
-    <Grid x:Name="MainGrid">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition
@@ -32,7 +31,7 @@
                     Padding="0" DefaultLabelPosition="Right"
                     HorizontalAlignment="Left" Height="44">
             <AppBarButton x:Uid="ImportCloudMusicButton" x:Name="ImportCloudMusicButton" Icon="Document"
-                          Label="获取网易云歌词" Click="ImportCloudMusicButton_OnClick"/>
+                          Label="获取网易云歌词" Click="ImportCloudMusicButton_OnClick" />
             <AppBarSeparator />
             <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Icon="OpenFile" Label="打开"
                           Tapped="ReadButton_OnTapped"
@@ -49,113 +48,8 @@
             <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Icon="Setting" Label="设置"
                           Tapped="SettingButton_OnTapped" />
         </CommandBar>
-        <Grid Grid.Column="0" Grid.Row="1">
-            <Grid.Transitions>
-                <TransitionCollection>
-                    <RepositionThemeTransition />
-                </TransitionCollection>
-            </Grid.Transitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBox x:Name="InputTextBox" Grid.Row="0" Margin="8,4,4,4"
-                     AcceptsReturn="True" TextWrapping="Wrap"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     IsSpellCheckEnabled="False" PointerWheelChanged="InputTextBox_OnPointerWheelChanged"
-                     FontSize="{x:Bind winUi:App.Config.InputTextBoxFontSize,Mode=OneWay}" />
-            <userControls:ScaleLabel Grid.Row="0" Grid.Column="0"
-                                     ScaleText="{x:Bind winUi:App.Config.InputTextBoxFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
-                                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8" />
-            <CheckBox x:Uid="AutoVariantCheckBox" x:Name="AutoVariantCheckBox" Grid.Row="1" Margin="8,4,4,8"
-                      Content="识别变体" />
-            <Button x:Uid="ConvertButton" x:Name="ConvertButton" Grid.Row="1" Content="转换" HorizontalAlignment="Right"
-                    Margin="4,4,4,8" Click="ConvertButton_OnClick" />
-        </Grid>
-        <Grid x:Name="EditGrid" Grid.Column="1" Grid.Row="1">
-            <Grid.Transitions>
-                <TransitionCollection>
-                    <RepositionThemeTransition />
-                </TransitionCollection>
-            </Grid.Transitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Expander x:Uid="DisplayOptionExpander" Margin="4,4,4,4" Grid.Row="0" HorizontalAlignment="Stretch"
-                      HorizontalContentAlignment="Left" Padding="16,16,16,8" Header="显示选项">
-                <StackPanel>
-                    <controls:WrapPanel>
-                        <ToggleSwitch x:Uid="EditRomajiCheckBox" x:Name="EditRomajiCheckBox" MinWidth="100"
-                                      Header="罗马音" IsOn="True" />
-                        <ToggleSwitch x:Uid="EditHiraganaCheckBox" x:Name="EditHiraganaCheckBox" MinWidth="100"
-                                      Header="平假名" IsOn="False" />
-                        <ToggleSwitch x:Uid="IsOnlyShowKanjiCheckBox" x:Name="IsOnlyShowKanjiCheckBox" MinWidth="100"
-                                      Header="仅汉字假名" IsOn="False" />
-                    </controls:WrapPanel>
-                </StackPanel>
-            </Expander>
-            <Border x:Name="EditBorder" Grid.Row="1" Tapped="EditBorder_OnTapped" Margin="4,4,4,4" CornerRadius="4">
-                <ScrollViewer x:Name="EditScrollViewer" PointerWheelChanged="EditScrollViewer_OnPointerWheelChanged">
-                    <StackPanel x:Name="EditPanel">
-                        <StackPanel.ChildrenTransitions>
-                            <TransitionCollection>
-                                <AddDeleteThemeTransition />
-                            </TransitionCollection>
-                        </StackPanel.ChildrenTransitions>
-                    </StackPanel>
-                </ScrollViewer>
-            </Border>
-            <userControls:ScaleLabel Grid.Row="1"
-                                     ScaleText="{x:Bind winUi:App.Config.EditPanelFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
-                                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8" />
-            <Grid Grid.Row="2" Margin="4,4,4,8">
-                <Button x:Uid="ConvertTextButton" x:Name="ConvertTextButton" Content="生成文本" HorizontalAlignment="Right"
-                        Tapped="ConvertTextButton_OnTapped" />
-            </Grid>
-        </Grid>
-        <Grid Grid.Column="2" Grid.Row="1">
-            <Grid.Transitions>
-                <TransitionCollection>
-                    <RepositionThemeTransition />
-                </TransitionCollection>
-            </Grid.Transitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Expander x:Uid="TextDisplayOptionExpander" Margin="4,4,8,4" Grid.Row="0" HorizontalAlignment="Stretch"
-                      HorizontalContentAlignment="Left" Padding="16,16,16,8" Header="文本显示选项">
-                <StackPanel>
-                    <controls:WrapPanel>
-                        <ToggleSwitch x:Uid="SpaceCheckBox" x:Name="SpaceCheckBox" MinWidth="100" Header="空格分隔"
-                                      IsOn="True" />
-                        <ToggleSwitch x:Uid="NewLineCheckBox" x:Name="NewLineCheckBox" MinWidth="100" Header="每句换行"
-                                      IsOn="True" />
-                        <ToggleSwitch x:Uid="RomajiCheckBox" x:Name="RomajiCheckBox" MinWidth="100" Header="罗马音"
-                                      IsOn="True" />
-                        <ToggleSwitch x:Uid="HiraganaCheckBox" x:Name="HiraganaCheckBox" MinWidth="100" Header="平假名" />
-                        <ToggleSwitch x:Uid="JPCheckBox" x:Name="JPCheckBox" MinWidth="100" Header="日文" IsOn="True" />
-                        <ToggleSwitch x:Uid="KanjiHiraganaCheckBox" x:Name="KanjiHiraganaCheckBox" MinWidth="100"
-                                      Header="汉字假名标注" />
-                        <ToggleSwitch x:Uid="CHCheckBox" x:Name="CHCheckBox" MinWidth="100" Header="中文" IsOn="True" />
-                    </controls:WrapPanel>
-                </StackPanel>
-            </Expander>
-            <TextBox x:Name="OutputTextBox" Grid.Row="1" Margin="4,4,8,4" AcceptsReturn="True" TextWrapping="Wrap"
-                     ScrollViewer.VerticalScrollMode="Auto"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     IsSpellCheckEnabled="False" PointerWheelChanged="OutputTextBox_OnPointerWheelChanged"
-                     FontSize="{x:Bind winUi:App.Config.OutputTextBoxFontSize,Mode=OneWay}"/>
-            <userControls:ScaleLabel Grid.Row="1"
-                                     ScaleText="{x:Bind winUi:App.Config.OutputTextBoxFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
-                                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,8" />
-            <Grid Grid.Row="2" Margin="4,4,8,8">
-                <Button x:Uid="CopyButton" x:Name="CopyButton" HorizontalAlignment="Right" Content="复制"
-                        Tapped="CopyButton_OnTapped" />
-            </Grid>
-        </Grid>
+        <pages:InputPage x:Name="MainInputPage" Grid.Row="1" Grid.Column="0" />
+        <pages:EditPage x:Name="MainEditPage" Grid.Row="1" Grid.Column="1" />
+        <pages:OutputPage x:Name="MainOutputPage" Grid.Row="1" Grid.Column="2" />
     </Grid>
 </Page>

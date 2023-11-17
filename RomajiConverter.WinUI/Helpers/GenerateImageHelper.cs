@@ -25,7 +25,8 @@ public static class GenerateImageHelper
         var background = setting.BackgroundColor;
 
         //(最长句的渲染长度,该句的单元数)
-        var longestLine = list.Select(p => new { MaxLength = p.Sum(q => GetUnitLength(q, font)), UnitCount = p.Length }).MaxBy(p => p.MaxLength);
+        var longestLine = list.Select(p => new { MaxLength = p.Sum(q => GetUnitLength(q, font)), UnitCount = p.Length })
+            .MaxBy(p => p.MaxLength);
 
         //最长句子的渲染长度
         var maxLength = longestLine?.MaxLength ?? 0;
@@ -34,7 +35,8 @@ public static class GenerateImageHelper
         //图片宽度
         var width = maxLength + maxUnitCount * textMargin + pagePadding * 2;
         //图片高度
-        var height = list.Count * (list[0][0].Length * fontSize + linePadding) + list.Count * lineMargin + pagePadding * 2;
+        var height = list.Count * (list[0][0].Length * fontSize + linePadding) + list.Count * lineMargin +
+                     pagePadding * 2;
         var image = new Bitmap(width, height);
 
         using var g1 = Graphics.FromImage(image);

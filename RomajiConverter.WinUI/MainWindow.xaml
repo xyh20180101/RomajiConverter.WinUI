@@ -12,19 +12,19 @@
     Closed="MainWindow_OnClosed">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid x:Name="AppTitleBar">
             <TextBlock x:Uid="AppTitleTextBlock" x:Name="AppTitleTextBlock" Text="RomajiConverter"
                        TextWrapping="NoWrap"
-                       Style="{StaticResource CaptionTextBlockStyle}" 
+                       Style="{StaticResource CaptionTextBlockStyle}"
                        VerticalAlignment="Center"
-                       Margin="16,8,0,0"/>
+                       Margin="16,8,0,0" />
         </Grid>
-        <Frame Grid.Row="1" x:Name="MainFrame"></Frame>
+        <Frame Grid.Row="1" x:Name="MainFrame" />
     </Grid>
     <Window.SystemBackdrop>
-        <MicaBackdrop Kind="BaseAlt"/>
+        <MicaBackdrop Kind="BaseAlt" />
     </Window.SystemBackdrop>
 </Window>
