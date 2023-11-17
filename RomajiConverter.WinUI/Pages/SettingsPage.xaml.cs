@@ -1,15 +1,10 @@
 using System;
+using System.Drawing.Text;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
-using System.Drawing;
-using System.Drawing.Text;
-using CommunityToolkit.WinUI.Helpers;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using RomajiConverter.WinUI.Extensions;
-using RomajiConverter.WinUI.Models;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,10 +32,7 @@ public sealed partial class SettingsPage : Page
 
     private void InitFontFamily()
     {
-        foreach (var font in new InstalledFontCollection().Families)
-        {
-            FontFamilyComboBox.Items.Add(font.Name);
-        }
+        foreach (var font in new InstalledFontCollection().Families) FontFamilyComboBox.Items.Add(font.Name);
     }
 
     private async void ResetButton_OnTapped(object sender, TappedRoutedEventArgs e)
@@ -52,14 +44,11 @@ public sealed partial class SettingsPage : Page
             CloseButtonText = "取消",
             PrimaryButtonText = "确认",
             DefaultButton = ContentDialogButton.Primary,
-            XamlRoot = this.Content.XamlRoot
+            XamlRoot = Content.XamlRoot
         };
 
         var result = await contentDialog.ShowAsync();
-        if (result == ContentDialogResult.Primary)
-        {
-            App.Config.ResetSetting();
-        }
+        if (result == ContentDialogResult.Primary) App.Config.ResetSetting();
     }
 
     #region 颜色选取

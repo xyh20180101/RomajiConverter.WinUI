@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="RomajiConverter.WinUI.Pages.EditPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RomajiConverter.WinUI.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winUi="using:RomajiConverter.WinUI"
+    xmlns:controls="using:RomajiConverter.WinUI.Controls"
+    xmlns:controls1="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:valueConverters="using:RomajiConverter.WinUI.ValueConverters"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled">
+    <Page.Resources>
+        <valueConverters:IsDetailModeToWidthValueConverter x:Key="IsDetailModeToWidthValueConverter" />
+        <valueConverters:IsDetailModeToVisibilityValueConverter x:Key="IsDetailModeToVisibilityValueConverter" />
+        <valueConverters:FontSizeToScaleTextValueConverter x:Key="FontSizeToScaleTextValueConverter" />
+    </Page.Resources>
+    <Grid x:Name="EditGrid" Grid.Column="1" Grid.Row="1">
+        <Grid.Transitions>
+            <TransitionCollection>
+                <RepositionThemeTransition />
+            </TransitionCollection>
+        </Grid.Transitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Expander x:Uid="DisplayOptionExpander" Margin="4,4,4,4" Grid.Row="0" HorizontalAlignment="Stretch"
+              HorizontalContentAlignment="Left" Padding="16,16,16,8" Header="显示选项">
+            <StackPanel>
+                <controls1:WrapPanel>
+                    <ToggleSwitch x:Uid="EditRomajiCheckBox" x:Name="EditRomajiCheckBox" MinWidth="100"
+                              Header="罗马音" IsOn="True" />
+                    <ToggleSwitch x:Uid="EditHiraganaCheckBox" x:Name="EditHiraganaCheckBox" MinWidth="100"
+                              Header="平假名" IsOn="False" />
+                    <ToggleSwitch x:Uid="IsOnlyShowKanjiCheckBox" x:Name="IsOnlyShowKanjiCheckBox" MinWidth="100"
+                              Header="仅汉字假名" IsOn="False" />
+                </controls1:WrapPanel>
+            </StackPanel>
+        </Expander>
+        <Border x:Name="EditBorder" Grid.Row="1" Tapped="EditBorder_OnTapped" Margin="4,4,4,4" CornerRadius="4">
+            <ScrollViewer x:Name="EditScrollViewer" PointerWheelChanged="EditScrollViewer_OnPointerWheelChanged">
+                <StackPanel x:Name="EditPanel">
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection>
+                            <AddDeleteThemeTransition />
+                        </TransitionCollection>
+                    </StackPanel.ChildrenTransitions>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <controls:ScaleLabel Grid.Row="1"
+                             ScaleText="{x:Bind winUi:App.Config.EditPanelFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
+                             HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8" />
+        <Grid Grid.Row="2" Margin="4,4,4,8">
+            <Button x:Uid="ConvertTextButton" x:Name="ConvertTextButton" Content="生成文本" HorizontalAlignment="Right"
+                Tapped="ConvertTextButton_OnTapped" />
+        </Grid>
+    </Grid>
+</Page>

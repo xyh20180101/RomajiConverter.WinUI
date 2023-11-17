@@ -22,12 +22,11 @@ public sealed partial class EditableLabelGroup : UserControl
             new PropertyMetadata(HiraganaVisibility.Collapsed));
 
     public static readonly DependencyProperty MyFontSizeProperty = DependencyProperty.Register("MyFontSize",
-        typeof(double), typeof(EditableLabelGroup), new PropertyMetadata(12d));
+        typeof(double), typeof(EditableLabelGroup), new PropertyMetadata(14d));
 
     public EditableLabelGroup(ConvertedUnit unit)
     {
         InitializeComponent();
-        DataContext = this;
         Unit = unit;
         MyFontSize = 14;
     }
@@ -58,6 +57,7 @@ public sealed partial class EditableLabelGroup : UserControl
                     RomajiLabel.Visibility = Visibility.Collapsed;
                     break;
             }
+
             SetValue(RomajiVisibilityProperty, value);
         }
     }

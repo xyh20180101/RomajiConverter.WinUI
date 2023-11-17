@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -16,16 +15,18 @@ using CommunityToolkit.WinUI.UI.Controls;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Animation;
 using Newtonsoft.Json;
 using RomajiConverter.WinUI.Controls;
 using RomajiConverter.WinUI.Enums;
+using RomajiConverter.WinUI.Extensions;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
+using RomajiConverter.WinUI.ValueConverters;
 using WinRT.Interop;
-using Microsoft.UI.Xaml.Media.Animation;
-using RomajiConverter.WinUI.Extensions;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -53,7 +54,7 @@ public sealed partial class MainPage : Page
         CHCheckBox.Toggled += ThirdCheckBox_OnToggled;
     }
 
-    #region 输入区
+    #region 菜单栏
 
     /// <summary>
     /// 导入网易云歌词
@@ -79,138 +80,6 @@ public sealed partial class MainPage : Page
         }
 
         InputTextBox.Text = stringBuilder.ToString();
-    }
-
-    /// <summary>
-    /// 转换按钮事件
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ConvertButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        _convertedLineList =
-            RomajiHelper.ToRomaji(InputTextBox.Text, SpaceCheckBox.IsOn, AutoVariantCheckBox.IsChecked.Value);
-
-        if (App.Config.IsDetailMode)
-            RenderEditPanel();
-        else
-            OutputTextBox.Text = GetResultText();
-    }
-
-    #endregion
-
-    #region 编辑区
-
-    /// <summary>
-    /// 渲染编辑面板
-    /// </summary>
-    private void RenderEditPanel()
-    {
-        EditPanel.Children.Clear();
-        for (var i = 0; i < _convertedLineList.Count; i++)
-        {
-            var item = _convertedLineList[i];
-
-            var line = new WrapPanel();
-            foreach (var unit in item.Units)
-            {
-                var group = new EditableLabelGroup(unit);
-                group.RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                if (EditHiraganaCheckBox.IsOn)
-                {
-                    if (IsOnlyShowKanjiCheckBox.IsOn && group.Unit.IsKanji == false)
-                        group.HiraganaVisibility = HiraganaVisibility.Collapsed;
-                    else
-                        group.HiraganaVisibility = HiraganaVisibility.Visible;
-                }
-                else
-                {
-                    group.HiraganaVisibility = HiraganaVisibility.Collapsed;
-                }
-
-                line.Children.Add(group);
-            }
-
-            EditPanel.Children.Add(line);
-            if (item.Units.Any() && i < _convertedLineList.Count - 1)
-                EditPanel.Children.Add(new Grid
-                {
-                    Height = 1,
-                    Background = new SolidColorBrush(Color.FromArgb(170, 170, 170, 170)),
-                    Margin = new Thickness(4, 4, 4, 4)
-                });
-        }
-    }
-
-    /// <summary>
-    /// 编辑区点击事件(用于单击空白区后令文本框失焦)
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void EditBorder_OnTapped(object sender, TappedRoutedEventArgs e)
-    {
-        Focus(FocusState.Programmatic);
-    }
-
-    /// <summary>
-    /// 编辑区的ToggleSwitch通用事件
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void EditToggleSwitch_OnToggled(object sender, RoutedEventArgs e)
-    {
-        var senderName = ((ToggleSwitch)sender).Name;
-        foreach (object children in EditPanel.Children)
-        {
-            WrapPanel wrapPanel;
-            if (children.GetType() == typeof(WrapPanel))
-                wrapPanel = (WrapPanel)children;
-            else
-                continue;
-
-            var isLineContainsKanji = wrapPanel.Children.Any(p => ((EditableLabelGroup)p).Unit.IsKanji);
-
-            foreach (EditableLabelGroup editableLabelGroup in wrapPanel.Children)
-                switch (senderName)
-                {
-                    case "EditRomajiCheckBox":
-                        editableLabelGroup.RomajiVisibility =
-                            EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                        break;
-                    case "EditHiraganaCheckBox":
-                        if (EditHiraganaCheckBox.IsOn)
-                            if (IsOnlyShowKanjiCheckBox.IsOn && !editableLabelGroup.Unit.IsKanji)
-                                if (isLineContainsKanji)
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
-                                else
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
-                            else
-                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
-                        else
-                            editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
-                        break;
-                    case "IsOnlyShowKanjiCheckBox":
-                        if (EditHiraganaCheckBox.IsOn && editableLabelGroup.Unit.IsKanji == false)
-                            if (IsOnlyShowKanjiCheckBox.IsOn)
-                                if (isLineContainsKanji)
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
-                                else
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
-                            else
-                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
-                        break;
-                }
-        }
-    }
-
-    /// <summary>
-    /// 生成文本按钮事件
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ConvertTextButton_OnTapped(object sender, TappedRoutedEventArgs e)
-    {
-        OutputTextBox.Text = GetResultText();
     }
 
     /// <summary>
@@ -321,6 +190,175 @@ public sealed partial class MainPage : Page
         }
     }
 
+    /// <summary>
+    /// 设置按钮事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void SettingButton_OnTapped(object sender, TappedRoutedEventArgs e)
+    {
+        Frame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo
+        {
+            Effect = SlideNavigationTransitionEffect.FromRight
+        });
+    }
+
+    #endregion
+
+    #region 输入区
+
+    /// <summary>
+    /// 转换按钮事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ConvertButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        _convertedLineList = RomajiHelper.ToRomaji(InputTextBox.Text, AutoVariantCheckBox.IsChecked.Value);
+
+        if (App.Config.IsDetailMode)
+            RenderEditPanel();
+        else
+            OutputTextBox.Text = GetResultText();
+    }
+
+    #endregion
+
+    #region 编辑区
+
+    /// <summary>
+    /// 渲染编辑面板
+    /// </summary>
+    private void RenderEditPanel()
+    {
+        EditPanel.Children.Clear();
+
+        var fontSizeBinding = new Binding
+        {
+            Source = App.Config,
+            Path = new PropertyPath("EditPanelFontSize"),
+            Mode = BindingMode.OneWay
+        };
+
+        var separatorMarginBinding = new Binding
+        {
+            Source = App.Config,
+            Path = new PropertyPath("EditPanelFontSize"),
+            Mode = BindingMode.OneWay,
+            Converter = new FontSizeToMarginValueConverter()
+        };
+
+        for (var i = 0; i < _convertedLineList.Count; i++)
+        {
+            var item = _convertedLineList[i];
+
+            var line = new WrapPanel();
+            foreach (var unit in item.Units)
+            {
+                var group = new EditableLabelGroup(unit);
+                group.RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                group.SetBinding(EditableLabelGroup.MyFontSizeProperty, fontSizeBinding);
+                if (EditHiraganaCheckBox.IsOn)
+                {
+                    if (IsOnlyShowKanjiCheckBox.IsOn && group.Unit.IsKanji == false)
+                        group.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                    else
+                        group.HiraganaVisibility = HiraganaVisibility.Visible;
+                }
+                else
+                {
+                    group.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                }
+
+                line.Children.Add(group);
+            }
+
+            EditPanel.Children.Add(line);
+            if (item.Units.Any() && i < _convertedLineList.Count - 1)
+            {
+                var separator = new Grid
+                {
+                    Height = 1,
+                    Background = new SolidColorBrush(Color.FromArgb(170, 170, 170, 170))
+                };
+                separator.SetBinding(MarginProperty, separatorMarginBinding);
+                EditPanel.Children.Add(separator);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 编辑区点击事件(用于单击空白区后令文本框失焦)
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void EditBorder_OnTapped(object sender, TappedRoutedEventArgs e)
+    {
+        Focus(FocusState.Programmatic);
+    }
+
+    /// <summary>
+    /// 编辑区的ToggleSwitch通用事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void EditToggleSwitch_OnToggled(object sender, RoutedEventArgs e)
+    {
+        var senderName = ((ToggleSwitch)sender).Name;
+        foreach (object children in EditPanel.Children)
+        {
+            WrapPanel wrapPanel;
+            if (children.GetType() == typeof(WrapPanel))
+                wrapPanel = (WrapPanel)children;
+            else
+                continue;
+
+            var isLineContainsKanji = wrapPanel.Children.Any(p => ((EditableLabelGroup)p).Unit.IsKanji);
+
+            foreach (EditableLabelGroup editableLabelGroup in wrapPanel.Children)
+                switch (senderName)
+                {
+                    case "EditRomajiCheckBox":
+                        editableLabelGroup.RomajiVisibility =
+                            EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                        break;
+                    case "EditHiraganaCheckBox":
+                        if (EditHiraganaCheckBox.IsOn)
+                            if (IsOnlyShowKanjiCheckBox.IsOn && !editableLabelGroup.Unit.IsKanji)
+                                if (isLineContainsKanji)
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
+                                else
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                            else
+                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
+                        else
+                            editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                        break;
+                    case "IsOnlyShowKanjiCheckBox":
+                        if (EditHiraganaCheckBox.IsOn && editableLabelGroup.Unit.IsKanji == false)
+                            if (IsOnlyShowKanjiCheckBox.IsOn)
+                                if (isLineContainsKanji)
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
+                                else
+                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                            else
+                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
+                        break;
+                }
+        }
+    }
+
+    /// <summary>
+    /// 生成文本按钮事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ConvertTextButton_OnTapped(object sender, TappedRoutedEventArgs e)
+    {
+        OutputTextBox.Text = GetResultText();
+    }
+
     #endregion
 
     #region 生成文本区
@@ -404,38 +442,48 @@ public sealed partial class MainPage : Page
 
     #endregion
 
-    #region 切换页面
-
-    /// <summary>
-    /// 设置按钮事件
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <exception cref="NotImplementedException"></exception>
-    private void SettingButton_OnTapped(object sender, TappedRoutedEventArgs e)
-    {
-        Frame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo
-        {
-            Effect = SlideNavigationTransitionEffect.FromRight
-        });
-    }
-
-    #endregion
+    #region 缩放
 
     private void InputTextBox_OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
     {
         var pointer = e.GetCurrentPoint((UIElement)sender);
         if (pointer.PointerDeviceType != PointerDeviceType.Mouse || KeyboardExtension.IsKeyDown(VirtualKey.Control))
         {
-            if (pointer.Properties.MouseWheelDelta < 0 && InputTextBox.FontSize > 14 / Math.Pow(1.1, 16))
-            {
-                InputTextBox.FontSize /= 1.1;
-            }
-            else if (pointer.Properties.MouseWheelDelta > 0 && InputTextBox.FontSize < Math.Floor(14 * Math.Pow(1.1, 14)))
-            {
-                InputTextBox.FontSize *= 1.1;
-            }
+            if (pointer.Properties.MouseWheelDelta < 0 &&
+                App.Config.InputTextBoxFontSize > 3.047) //14 / Math.Pow(1.1, 16)
+                App.Config.InputTextBoxFontSize /= 1.1;
+            else if (pointer.Properties.MouseWheelDelta > 0 &&
+                     App.Config.InputTextBoxFontSize < 53.1) //14 * Math.Pow(1.1, 14)
+                App.Config.InputTextBoxFontSize *= 1.1;
             e.Handled = true;
         }
     }
+
+    private void OutputTextBox_OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
+    {
+        var pointer = e.GetCurrentPoint((UIElement)sender);
+        if (pointer.PointerDeviceType != PointerDeviceType.Mouse || KeyboardExtension.IsKeyDown(VirtualKey.Control))
+        {
+            if (pointer.Properties.MouseWheelDelta < 0 && App.Config.OutputTextBoxFontSize > 3.047)
+                App.Config.OutputTextBoxFontSize /= 1.1;
+            else if (pointer.Properties.MouseWheelDelta > 0 && App.Config.OutputTextBoxFontSize < 53.1)
+                App.Config.OutputTextBoxFontSize *= 1.1;
+            e.Handled = true;
+        }
+    }
+
+    private void EditScrollViewer_OnPointerWheelChanged(object sender, PointerRoutedEventArgs e)
+    {
+        var pointer = e.GetCurrentPoint((UIElement)sender);
+        if (pointer.PointerDeviceType != PointerDeviceType.Mouse || KeyboardExtension.IsKeyDown(VirtualKey.Control))
+        {
+            if (pointer.Properties.MouseWheelDelta < 0 && App.Config.EditPanelFontSize > 3.047)
+                App.Config.EditPanelFontSize /= 1.1;
+            else if (pointer.Properties.MouseWheelDelta > 0 && App.Config.EditPanelFontSize < 53.1)
+                App.Config.EditPanelFontSize *= 1.1;
+            e.Handled = true;
+        }
+    }
+
+    #endregion
 }

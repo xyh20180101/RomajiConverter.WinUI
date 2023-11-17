@@ -26,7 +26,10 @@
 		<None Remove="Controls\EditableLabel.xaml" />
 		<None Remove="Controls\EditableLabelGroup.xaml" />
 		<None Remove="Controls\ScaleLabel.xaml" />
+		<None Remove="Pages\EditPage.xaml" />
+		<None Remove="Pages\InputPage.xaml" />
 		<None Remove="Pages\MainPage.xaml" />
+		<None Remove="Pages\OutputPage.xaml" />
 		<None Remove="Pages\SettingsPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
@@ -84,6 +87,15 @@
 		<None Update="customizeDict.txt">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<Page Update="Pages\OutputPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Update="Pages\EditPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Update="Pages\InputPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
 		<Page Update="Pages\SettingsPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>

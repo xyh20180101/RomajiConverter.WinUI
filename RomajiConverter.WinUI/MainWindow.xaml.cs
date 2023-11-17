@@ -1,8 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
+using System.Text;
+using Windows.ApplicationModel.Resources;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Animation;
 using Newtonsoft.Json;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;

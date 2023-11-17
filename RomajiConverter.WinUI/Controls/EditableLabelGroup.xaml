@@ -11,22 +11,22 @@
     <Grid>
         <StackPanel>
             <local:EditableLabel x:Name="RomajiLabel" Text="{x:Bind Unit.Romaji,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 Visibility="{x:Bind RomajiVisibility,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 MyFontSize="{x:Bind Path=MyFontSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                 Visibility="{x:Bind RomajiVisibility,Mode=OneWay}"
+                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}">
                 <local:EditableLabel.OpacityTransition>
                     <ScalarTransition />
                 </local:EditableLabel.OpacityTransition>
             </local:EditableLabel>
             <local:EditableLabel x:Name="HiraganaLabel"
                                  Text="{x:Bind Unit.Hiragana,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 MyFontSize="{x:Bind Path=MyFontSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}">
                 <local:EditableLabel.OpacityTransition>
                     <ScalarTransition />
                 </local:EditableLabel.OpacityTransition>
             </local:EditableLabel>
             <TextBlock Padding="4,4,4,4" Text="{x:Bind Unit.Japanese,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                       FontSize="{x:Bind Path=MyFontSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                       FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
         </StackPanel>
     </Grid>
 </UserControl>

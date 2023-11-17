@@ -51,12 +51,10 @@ public static class RomajiHelper
     /// 生成转换结果列表
     /// </summary>
     /// <param name="text"></param>
-    /// <param name="isSpace"></param>
     /// <param name="isAutoVariant"></param>
     /// <param name="chineseRate"></param>
     /// <returns></returns>
-    public static List<ConvertedLine> ToRomaji(string text, bool isSpace = true, bool isAutoVariant = false,
-        float chineseRate = 1f)
+    public static List<ConvertedLine> ToRomaji(string text, bool isAutoVariant = false, float chineseRate = 1f)
     {
         var lineTextList = text.RemoveEmptyLine().Split(Environment.NewLine);
 
