@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
+using Microsoft.Data.Sqlite;
 using Newtonsoft.Json.Linq;
 using Opportunity.LrcParser;
 
@@ -12,18 +13,53 @@ namespace RomajiConverter.WinUI.Helpers;
 
 public static class CloudMusicHelper
 {
+    /// <summary>
+    /// 旧版本的历史文件路径
+    /// </summary>
     public static string HistoryPath { get; set; }
+
+    /// <summary>
+    /// 3.0版本的历史文件路径
+    /// </summary>
+    public static string New3ClientHistoryPath { get; set; }
 
     public static void Init()
     {
         HistoryPath =
             $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\AppData\\Local\\Netease\\CloudMusic\\webdata\\file\\history";
+        New3ClientHistoryPath = 
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\AppData\\Local\\Netease\\CloudMusic\\Library\\webdb.dat";
     }
 
     public static string GetLastSongId()
     {
-        var history = JArray.Parse(File.ReadAllText(HistoryPath));
-        return history[0]["track"]["id"].ToString();
+        try
+        {
+            //3.0版本获取songId方法
+            using var connection = new SqliteConnection($"Data Source={New3ClientHistoryPath}");
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = @"SELECT id FROM historyTracks ORDER BY playtime DESC LIMIT 1";
+
+            using var reader = command.ExecuteReader();
+            reader.Read();
+            var id = reader.GetString(0);
+            return id;
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                //旧版本获取songId方法
+                var history = JArray.Parse(File.ReadAllText(HistoryPath));
+                return history[0]["track"]["id"].ToString();
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
+        }
     }
 
     public static async Task<List<ReturnLrc>> GetLrc(string songId)

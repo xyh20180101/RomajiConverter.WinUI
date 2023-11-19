@@ -5,9 +5,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace RomajiConverter.WinUI.Controls;
 
 public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
@@ -27,14 +24,12 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
         IsEdit = false;
     }
 
-    [Category("Extension")]
     public string Text
     {
         get => (string)GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
 
-    [Category("Extension")]
     public double MyFontSize
     {
         get => (double)GetValue(MyFontSizeProperty);

@@ -15,14 +15,8 @@
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+		<MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
 	</PropertyGroup>
-	<Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build">
-		<ItemGroup>
-			<RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)en-us\*.mui" />
-			<RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
-		</ItemGroup>
-		<RemoveDir Directories="@(RemovingFolders)" />
-	</Target>
 	<ItemGroup>
 	  <Content Remove="Assets\BadgeLogo.scale-100.png" />
 	  <Content Remove="Assets\BadgeLogo.scale-125.png" />
@@ -59,6 +53,7 @@
 		<PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.230907" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
 		<PackageReference Include="MeCab.DotNet" Version="1.1.0" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

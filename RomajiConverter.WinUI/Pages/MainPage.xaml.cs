@@ -27,17 +27,17 @@ public sealed partial class MainPage : Page
 
     private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
     {
-        //Ìá¹©¿çÒ³Ãæ²Ù×÷¶ÔÏó
+        //æä¾›è·¨é¡µé¢æ“ä½œå¯¹è±¡
         MainInputPage.MainEditPage = MainEditPage;
         MainInputPage.MainOutputPage = MainOutputPage;
 
         MainEditPage.MainOutputPage = MainOutputPage;
     }
 
-    #region ²Ëµ¥À¸
+    #region èœå•æ 
 
     /// <summary>
-    /// µ¼ÈëÍøÒ×ÔÆ¸è´Ê
+    /// å¯¼å…¥ç½‘æ˜“äº‘æ­Œè¯
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -47,7 +47,7 @@ public sealed partial class MainPage : Page
     }
 
     /// <summary>
-    /// ÏÔÊ¾¸è´Ê
+    /// æ˜¾ç¤ºæ­Œè¯
     /// </summary>
     /// <param name="lrc"></param>
     private void ShowLrc(List<ReturnLrc> lrc)
@@ -63,7 +63,7 @@ public sealed partial class MainPage : Page
     }
 
     /// <summary>
-    /// ´ò¿ª°´Å¥ÊÂ¼ş
+    /// æ‰“å¼€æŒ‰é’®äº‹ä»¶
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -95,7 +95,7 @@ public sealed partial class MainPage : Page
     }
 
     /// <summary>
-    /// ±£´æ°´Å¥ÊÂ¼ş
+    /// ä¿å­˜æŒ‰é’®äº‹ä»¶
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -121,7 +121,7 @@ public sealed partial class MainPage : Page
     }
 
     /// <summary>
-    /// µ¼³öÍ¼Æ¬°´Å¥ÊÂ¼ş
+    /// å¯¼å‡ºå›¾ç‰‡æŒ‰é’®äº‹ä»¶
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -171,7 +171,7 @@ public sealed partial class MainPage : Page
     }
 
     /// <summary>
-    /// ÉèÖÃ°´Å¥ÊÂ¼ş
+    /// è®¾ç½®æŒ‰é’®äº‹ä»¶
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

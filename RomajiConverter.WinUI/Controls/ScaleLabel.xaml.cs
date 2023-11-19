@@ -2,9 +2,6 @@ using System.ComponentModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace RomajiConverter.WinUI.Controls;
 
 public sealed partial class ScaleLabel : UserControl
@@ -18,7 +15,6 @@ public sealed partial class ScaleLabel : UserControl
         DataContext = this;
     }
 
-    [Category("Extension")]
     public string ScaleText
     {
         get => (string)GetValue(ScaleTextProperty);

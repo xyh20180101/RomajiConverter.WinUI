@@ -29,13 +29,13 @@ public sealed partial class EditPage : Page
     public OutputPage MainOutputPage { get; set; }
 
     /// <summary>
-    /// ToggleSwitch¿Ø¼ş×´Ì¬
+    /// ToggleSwitchæ§ä»¶çŠ¶æ€
     /// </summary>
     public (bool Romaji, bool Hiragana, bool IsOnlyShowKanji) ToggleSwitchState => (EditRomajiCheckBox.IsOn,
         EditHiraganaCheckBox.IsOn, IsOnlyShowKanjiCheckBox.IsOn);
 
     /// <summary>
-    /// äÖÈ¾±à¼­Ãæ°å
+    /// æ¸²æŸ“ç¼–è¾‘é¢æ¿
     /// </summary>
     public void RenderEditPanel()
     {
@@ -96,7 +96,7 @@ public sealed partial class EditPage : Page
     }
 
     /// <summary>
-    /// ±à¼­Çøµã»÷ÊÂ¼ş(ÓÃÓÚµ¥»÷¿Õ°×ÇøºóÁîÎÄ±¾¿òÊ§½¹)
+    /// ç¼–è¾‘åŒºç‚¹å‡»äº‹ä»¶(ç”¨äºå•å‡»ç©ºç™½åŒºåä»¤æ–‡æœ¬æ¡†å¤±ç„¦)
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -106,7 +106,7 @@ public sealed partial class EditPage : Page
     }
 
     /// <summary>
-    /// ±à¼­ÇøµÄToggleSwitchÍ¨ÓÃÊÂ¼ş
+    /// ç¼–è¾‘åŒºçš„ToggleSwitché€šç”¨äº‹ä»¶
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -157,7 +157,7 @@ public sealed partial class EditPage : Page
     }
 
     /// <summary>
-    /// Éú³ÉÎÄ±¾°´Å¥ÊÂ¼ş
+    /// ç”Ÿæˆæ–‡æœ¬æŒ‰é’®äº‹ä»¶
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -167,7 +167,7 @@ public sealed partial class EditPage : Page
     }
 
     /// <summary>
-    /// ¹ö¶¯ÊÂ¼ş
+    /// æ»šåŠ¨äº‹ä»¶
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

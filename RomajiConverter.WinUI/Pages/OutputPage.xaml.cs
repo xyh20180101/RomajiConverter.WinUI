@@ -28,7 +28,7 @@ public sealed partial class OutputPage : Page
     }
 
     /// <summary>
-    /// 显示文本
+    /// 鏄剧ず鏂囨湰
     /// </summary>
     public void RenderText()
     {
@@ -36,7 +36,7 @@ public sealed partial class OutputPage : Page
     }
 
     /// <summary>
-    /// 获取结果文本
+    /// 鑾峰彇缁撴灉鏂囨湰
     /// </summary>
     /// <returns></returns>
     private string GetResultText()
@@ -91,7 +91,7 @@ public sealed partial class OutputPage : Page
     }
 
     /// <summary>
-    /// 生成文本区的ToggleSwitch通用事件
+    /// 鐢熸垚鏂囨湰鍖虹殑ToggleSwitch閫氱敤浜嬩欢
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -101,7 +101,7 @@ public sealed partial class OutputPage : Page
     }
 
     /// <summary>
-    /// 复制按钮事件
+    /// 澶嶅埗鎸夐挳浜嬩欢
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -113,7 +113,7 @@ public sealed partial class OutputPage : Page
     }
 
     /// <summary>
-    /// 滚动事件
+    /// 婊氬姩浜嬩欢
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

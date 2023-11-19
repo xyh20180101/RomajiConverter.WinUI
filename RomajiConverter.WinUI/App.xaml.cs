@@ -20,7 +20,9 @@ public partial class App : Application
 
     public static MyConfig Config = new();
 
-    public static List<ConvertedLine> ConvertedLineList = new ();
+    public static List<ConvertedLine> ConvertedLineList = new();
+
+    public const string ConfigFileName = "config.json";
 
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code

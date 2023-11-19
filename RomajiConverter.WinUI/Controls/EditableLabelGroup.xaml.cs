@@ -4,9 +4,6 @@ using Microsoft.UI.Xaml.Controls;
 using RomajiConverter.WinUI.Enums;
 using RomajiConverter.WinUI.Models;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace RomajiConverter.WinUI.Controls;
 
 public sealed partial class EditableLabelGroup : UserControl
@@ -31,14 +28,12 @@ public sealed partial class EditableLabelGroup : UserControl
         MyFontSize = 14;
     }
 
-    [Category("Extension")]
     public ConvertedUnit Unit
     {
         get => (ConvertedUnit)GetValue(UnitProperty);
         set => SetValue(UnitProperty, value);
     }
 
-    [Category("Extension")]
     public Visibility RomajiVisibility
     {
         get => (Visibility)GetValue(RomajiVisibilityProperty);
@@ -62,7 +57,6 @@ public sealed partial class EditableLabelGroup : UserControl
         }
     }
 
-    [Category("Extension")]
     public HiraganaVisibility HiraganaVisibility
     {
         get => (HiraganaVisibility)GetValue(HiraganaVisibilityProperty);
@@ -91,7 +85,6 @@ public sealed partial class EditableLabelGroup : UserControl
         }
     }
 
-    [Category("Extension")]
     public double MyFontSize
     {
         get => (double)GetValue(MyFontSizeProperty);

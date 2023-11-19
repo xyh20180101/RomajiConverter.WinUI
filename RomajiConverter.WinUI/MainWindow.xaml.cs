@@ -6,30 +6,31 @@ using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
 using RomajiConverter.WinUI.Pages;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace RomajiConverter.WinUI;
 
-/// <summary>
-/// An empty window that can be used on its own or navigated to within a Frame.
-/// </summary>
 public sealed partial class MainWindow : Window
 {
-    private const string ConfigFileName = "config.json";
-
     public MainWindow()
     {
-        InitConfig();
+        InitConfig();//必须在InitializeComponent前执行
+
         InitializeComponent();
+
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
+        AppWindow.SetIcon("Assets/icon.ico");
+
+        InitHelper();
+
         MainFrame.Navigate(typeof(MainPage));
     }
 
+    /// <summary>
+    /// 初始化应用设置
+    /// </summary>
     private void InitConfig()
     {
-        var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFileName);
+        var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, App.ConfigFileName);
         if (File.Exists(configPath))
         {
             App.Config = JsonConvert.DeserializeObject<MyConfig>(File.ReadAllText(configPath));
@@ -43,16 +44,21 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    private void MainWindow_OnActivated(object sender, WindowActivatedEventArgs args)
+    private void InitHelper()
     {
         CloudMusicHelper.Init();
         RomajiHelper.Init();
         VariantHelper.Init();
     }
 
+    /// <summary>
+    /// 窗口关闭事件(保存应用设置)
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
     private void MainWindow_OnClosed(object sender, WindowEventArgs args)
     {
-        File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFileName),
+        File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, App.ConfigFileName),
             JsonConvert.SerializeObject(App.Config, Formatting.Indented));
     }
 }

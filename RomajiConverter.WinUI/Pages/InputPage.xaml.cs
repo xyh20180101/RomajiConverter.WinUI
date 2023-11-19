@@ -20,7 +20,7 @@ public sealed partial class InputPage : Page
     public OutputPage MainOutputPage { get; set; }
 
     /// <summary>
-    /// 转换按钮事件
+    /// 杞崲鎸夐挳浜嬩欢
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -35,7 +35,7 @@ public sealed partial class InputPage : Page
     }
 
     /// <summary>
-    /// 滚动事件
+    /// 婊氬姩浜嬩欢
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -55,7 +55,7 @@ public sealed partial class InputPage : Page
     }
 
     /// <summary>
-    /// 设置输入文本
+    /// 璁剧疆杈撳叆鏂囨湰
     /// </summary>
     /// <param name="str"></param>
     public void SetTextBoxText(string str)

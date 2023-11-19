@@ -26,7 +26,7 @@ public sealed partial class SettingsPage : Page
     }
 
     /// <summary>
-    /// 初始化字体下拉框
+    /// 鍒濆鍖栧瓧浣撲笅鎷夋
     /// </summary>
     private void InitFontFamily()
     {
@@ -34,7 +34,7 @@ public sealed partial class SettingsPage : Page
     }
 
     /// <summary>
-    /// 重置按钮事件
+    /// 閲嶇疆鎸夐挳浜嬩欢
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -55,7 +55,7 @@ public sealed partial class SettingsPage : Page
         if (result == ContentDialogResult.Primary) App.Config.ResetSetting();
     }
 
-    #region 颜色选取
+    #region 棰滆壊閫夊彇
 
     private void FontColorTextBox_OnLostFocus(object sender, RoutedEventArgs e)
     {

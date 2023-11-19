@@ -7,8 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="RomajiConverter WinUI"
-    Activated="MainWindow_OnActivated"
+    Title="{x:Bind AppTitleTextBlock.Text,Mode=OneWay}"
     Closed="MainWindow_OnClosed">
     <Grid>
         <Grid.RowDefinitions>
@@ -16,7 +15,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid x:Name="AppTitleBar">
-            <TextBlock x:Uid="AppTitleTextBlock" x:Name="AppTitleTextBlock" Text="RomajiConverter"
+            <TextBlock x:Uid="AppTitleTextBlock" x:Name="AppTitleTextBlock" Text="罗马音转换器"
                        TextWrapping="NoWrap"
                        Style="{StaticResource CaptionTextBlockStyle}"
                        VerticalAlignment="Center"
