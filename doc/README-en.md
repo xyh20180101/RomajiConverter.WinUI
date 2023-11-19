@@ -2,15 +2,15 @@
 
 Win11 style romaji converter developed using WinUI 3 framework
 
-![](https://raw.githubusercontent.com/xyh20180101/RomajiConverter.WinUI/main/doc/icon.png)
+![](/doc/icon.png)
 
 [中文使用文档](https://github.com/xyh20180101/RomajiConverter.WinUI/blob/main/README.md)
 
-Here's the user-facing document, if you're more focused on development-related content, [jump here](https://github.com/xyh20180101/RomajiConverter.WinUI/blob/main/doc/README-dev-cn.md)
+Here's the user-facing document, if you're more focused on development-related content, [jump here](https://github.com/xyh20180101/RomajiConverter.WinUI/blob/main/doc/README-dev-en.md)
 
 **Preview(Win11)**
 
-![](https://raw.githubusercontent.com/xyh20180101/RomajiConverter.WinUI/main/doc/preview.png)
+![](/doc/preview.png)
 
 ## Supported system versions
 - Supported versions of project settings: Windows 10 1809 (Build 17763) or above

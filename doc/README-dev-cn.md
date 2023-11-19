@@ -1,5 +1,5 @@
 # RomajiConverter.WinUI
-这里是面向开发者的文档，如果你更关注如何使用本应用，[请跳转此处](https://github.com/xyh20180101/RomajiConverter.WinUI/blob/main/doc/README.md)
+这里是面向开发者的文档，如果你更关注如何使用本应用，[请跳转此处](https://github.com/xyh20180101/RomajiConverter.WinUI/blob/main/README.md)
 
 ## 项目框架版本
 .NET 8.0

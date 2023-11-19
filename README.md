@@ -2,7 +2,7 @@
 
 使用WinUI 3框架开发的Win11风格罗马音转换器
 
-![](https://raw.githubusercontent.com/xyh20180101/RomajiConverter.WinUI/main/doc/icon.png)
+![](/doc/icon.png)
 
 [English Readme](https://github.com/xyh20180101/RomajiConverter.WinUI/blob/main/doc/README-en.md)
 
@@ -10,7 +10,7 @@
 
 **界面预览图(Win11)**
 
-![](https://raw.githubusercontent.com/xyh20180101/RomajiConverter.WinUI/main/doc/preview.png)
+![](/doc/preview.png)
 
 ## 支持的系统版本
 - 项目设置的受支持版本：Windows 10 1809（内部版本17763）及以上
