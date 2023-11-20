@@ -44,7 +44,8 @@ Here's the user-facing document, if you're more focused on development-related c
 - The reason for the above situation where the kanji characters are not converted and the pronunciation is wrong is that the uploader of the lyrics has already marked the pronunciation in parentheses. In this case, just use the pronunciation in parentheses
 
 ## Download and update
-Download please check [Release](https://github.com/xyh20180101/RomajiConverter.WinUI/releases), choose the latest version to download
+- Download please check [Release](https://github.com/xyh20180101/RomajiConverter.WinUI/releases), choose the latest version to download for your system
+- Selecting the framework-dependent version requires installing [.net core 8.0 desktop runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0), while the self-contained version does not
 
 ## Update log
 

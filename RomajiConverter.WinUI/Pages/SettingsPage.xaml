@@ -171,6 +171,23 @@
                     </toolkit:SettingsCard.HeaderIcon>
                     <Button x:Uid="OtherOptionResetSettingButton" x:Name="ResetButton" Content="恢复默认设置" Tapped="ResetButton_OnTapped" />
                 </toolkit:SettingsCard>
+                <toolkit:SettingsExpander x:Uid="VersionSettingExpander" Margin="8,4,8,4" Header="应用版本">
+                    <toolkit:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE946;" />
+                    </toolkit:SettingsExpander.HeaderIcon>
+                    <toolkit:SettingsExpander.Items>
+                        <toolkit:SettingsCard x:Uid="VersionSetting" x:Name="VersionSetting" Header="检查更新">
+                            <Grid>
+                                <Button x:Uid="UpdateButton" x:Name="UpdateButton" Content="检查更新" Tapped="UpdateButton_OnTapped"/>
+                                <ProgressRing x:Name="UpdateRing" Margin="0,0,24,0" IsActive="False" Visibility="Collapsed"/>
+                            </Grid>
+                        </toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="RepositorySetting" x:Name="RepositorySetting" Header="Github" IsClickEnabled="True" Tapped="RepositorySetting_OnTapped">
+                            <TextBlock Text="https://github.com/xyh20180101/RomajiConverter.WinUI"></TextBlock>
+                        </toolkit:SettingsCard>
+                    </toolkit:SettingsExpander.Items>
+                    <TextBlock x:Name="VersionTextBlock"></TextBlock>
+                </toolkit:SettingsExpander>
             </StackPanel>
         </ScrollViewer>
     </Grid>

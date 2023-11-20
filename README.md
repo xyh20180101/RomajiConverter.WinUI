@@ -44,7 +44,8 @@
 - 上面这种汉字没转换、读音错误的情况的原因为：歌词上传者已经在括号里标注了读音。这种情况下直接使用括号里的读音就可以了
 
 ## 下载与更新
-下载请查看[Release](https://github.com/xyh20180101/RomajiConverter.WinUI/releases)，选择最新版本下载
+- 下载请查看[Release](https://github.com/xyh20180101/RomajiConverter.WinUI/releases)，选择适合你系统的最新版本下载
+- 选择框架依赖版需要安装[.net core 8.0桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)，独立版则不需要
 
 ## 更新日志
 

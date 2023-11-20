@@ -11,11 +11,15 @@
 		<UseWinUI>true</UseWinUI>
 		<EnableMsixTooling>true</EnableMsixTooling>
 		<DefaultLanguage>zh-CN</DefaultLanguage>
-		<WindowsPackageType>None</WindowsPackageType>
+		<!--<WindowsPackageType>None</WindowsPackageType>-->
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
 		<MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
+		<Title>RomajiConverter.WinUI</Title>
+		<Authors>WL</Authors>
+		<PackageProjectUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</PackageProjectUrl>
+		<Version>1.0.0</Version>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Content Remove="Assets\BadgeLogo.scale-100.png" />

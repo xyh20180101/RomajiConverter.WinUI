@@ -132,6 +132,18 @@
   <data name="CHCheckBox.MinWidth" xml:space="preserve">
     <value>100</value>
   </data>
+  <data name="CheckUpdate" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="CheckUpdate-Error" xml:space="preserve">
+    <value>检查更新时出错，请确认你的网络是否正常，或联系开发者</value>
+  </data>
+  <data name="CheckUpdate-New" xml:space="preserve">
+    <value>检查到新版本，是否前往下载？</value>
+  </data>
+  <data name="CheckUpdate-None" xml:space="preserve">
+    <value>当前应用已经是最新版本</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>关闭</value>
   </data>
@@ -234,6 +246,9 @@
   <data name="NewLineCheckBox.MinWidth" xml:space="preserve">
     <value>100</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
   <data name="NotValidLyricsFile" xml:space="preserve">
     <value>无效的歌词json文件</value>
   </data>
@@ -290,5 +305,17 @@
   </data>
   <data name="TextOptionTextBlock.Text" xml:space="preserve">
     <value>生成文本选项</value>
+  </data>
+  <data name="UpdateButton.Content" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="VersionSetting.Header" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="VersionSettingExpander.Header" xml:space="preserve">
+    <value>应用版本</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
   </data>
 </root>

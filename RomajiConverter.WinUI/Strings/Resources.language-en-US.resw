@@ -132,6 +132,18 @@
   <data name="CHCheckBox.MinWidth" xml:space="preserve">
     <value>120</value>
   </data>
+  <data name="CheckUpdate" xml:space="preserve">
+    <value>Check Update</value>
+  </data>
+  <data name="CheckUpdate-Error" xml:space="preserve">
+    <value>An error occurred while checking for updates, please confirm whether your network is normal, or contact the developer</value>
+  </data>
+  <data name="CheckUpdate-New" xml:space="preserve">
+    <value>New version detected, do you want to download it?</value>
+  </data>
+  <data name="CheckUpdate-None" xml:space="preserve">
+    <value>The current application is already the latest version</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -234,6 +246,9 @@
   <data name="NewLineCheckBox.MinWidth" xml:space="preserve">
     <value>120</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
   <data name="NotValidLyricsFile" xml:space="preserve">
     <value>File is not a valid lyrics json file</value>
   </data>
@@ -290,5 +305,17 @@
   </data>
   <data name="TextOptionTextBlock.Text" xml:space="preserve">
     <value>Text Option</value>
+  </data>
+  <data name="UpdateButton.Content" xml:space="preserve">
+    <value>Check Update</value>
+  </data>
+  <data name="VersionSetting.Header" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="VersionSettingExpander.Header" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>
