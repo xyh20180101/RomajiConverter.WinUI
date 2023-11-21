@@ -6,12 +6,11 @@ namespace RomajiConverter.WinUI.Models;
 public class ConvertedUnit : INotifyPropertyChanged
 {
     private string _hiragana;
-
     private bool _isKanji;
-
     private string _japanese;
-
     private string _romaji;
+    private string[] _replaceRomaji;
+    private string[] _replaceHiragana;
 
     public ConvertedUnit(string japanese, string hiragana, string romaji, bool isKanji)
     {
@@ -43,6 +42,17 @@ public class ConvertedUnit : INotifyPropertyChanged
         }
     }
 
+    public string[] ReplaceRomaji
+    {
+        get => _replaceRomaji;
+        set
+        {
+            if (Equals(value, _replaceRomaji)) return;
+            _replaceRomaji = value;
+            OnPropertyChanged();
+        }
+    }
+
     public string Hiragana
     {
         get => _hiragana;
@@ -50,6 +60,17 @@ public class ConvertedUnit : INotifyPropertyChanged
         {
             if (value == _hiragana) return;
             _hiragana = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string[] ReplaceHiragana
+    {
+        get => _replaceHiragana;
+        set
+        {
+            if (Equals(value, _replaceHiragana)) return;
+            _replaceHiragana = value;
             OnPropertyChanged();
         }
     }

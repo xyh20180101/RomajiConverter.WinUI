@@ -47,8 +47,10 @@ public static class RomajiHelper
         }
     }
 
+    #region 主逻辑
+
     /// <summary>
-    /// 生成转换结果列表
+    /// 生成转换结果列表(此处主要实现区分中文,识别变体)
     /// </summary>
     /// <param name="text"></param>
     /// <param name="isAutoVariant"></param>
@@ -59,7 +61,6 @@ public static class RomajiHelper
         var lineTextList = text.RemoveEmptyLine().Split(Environment.NewLine);
 
         var convertedText = new List<ConvertedLine>();
-
 
         for (var index = 0; index < lineTextList.Length; index++)
         {
@@ -134,76 +135,6 @@ public static class RomajiHelper
     }
 
     /// <summary>
-    /// 判断字符串(句子)是否简体中文
-    /// </summary>
-    /// <param name="str"></param>
-    /// <param name="rate">容错率(0-1)</param>
-    /// <returns></returns>
-    public static bool IsChinese(string str, float rate)
-    {
-        if (str.Length < 2)
-            return false;
-
-        var wordArray = str.ToCharArray();
-
-        var total = wordArray.Length;
-
-        var chCount = 0f;
-
-        var enCount = 0f;
-
-        foreach (var word in wordArray)
-        {
-            if (Regex.IsMatch(word.ToString(), @"^[\u3040-\u30ff]+$"))
-                //含有日文直接返回否
-                return false;
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var gbBytes = Encoding.Unicode.GetBytes(word.ToString());
-
-            if (gbBytes.Length == 2) // double bytes char.  
-            {
-                if (gbBytes[1] >= 0x4E && gbBytes[1] <= 0x9F) //中文
-                    chCount++;
-                else
-                    total--;
-            }
-            else if (gbBytes.Length == 1)
-            {
-                var byteAscii = int.Parse(gbBytes[0].ToString());
-                if ((byteAscii >= 65 && byteAscii <= 90) || (byteAscii >= 97 && byteAscii <= 122)) //英文字母
-                    enCount++;
-                else
-                    total--;
-            }
-        }
-
-        if (chCount == 0) return false; //一个简体中文都没有
-
-        return (chCount + enCount) / total >= rate;
-    }
-
-    /// <summary>
-    /// 判断字符串是否全为单字节
-    /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    public static bool IsEnglish(string str)
-    {
-        return new Regex("^[\x20-\x7E]+$").IsMatch(str);
-    }
-
-    /// <summary>
-    /// 判断字符串是否全为假名
-    /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    public static bool IsJapanese(string str)
-    {
-        return Regex.IsMatch(str, @"^[\u3040-\u30ff]+$");
-    }
-
-    /// <summary>
     /// 分句转为罗马音
     /// </summary>
     /// <param name="str"></param>
@@ -215,46 +146,127 @@ public static class RomajiHelper
         var result = new List<ConvertedUnit>();
 
         foreach (var item in list)
+        {
+            ConvertedUnit unit = null;
             if (item.CharType > 0)
             {
-                string[] features;
-                features = item.Feature.Split(',');
+                var features = CustomSplit(item.Feature);
                 if (TryCustomConvert(item.Surface, out var customResult))
                 {
                     //用户自定义词典
-                    result.Add(new ConvertedUnit(item.Surface, customResult, WanaKana.ToRomaji(customResult), true));
+                    unit = new ConvertedUnit(item.Surface,
+                        customResult,
+                        WanaKana.ToRomaji(customResult),
+                        true);
                 }
                 else if (features.Length > 0 && features[0] != "助詞" && IsJapanese(item.Surface))
                 {
                     //纯假名
-                    result.Add(new ConvertedUnit(item.Surface, KanaConverter.ToHiragana(item.Surface),
-                        WanaKana.ToRomaji(item.Surface), false));
+                    unit = new ConvertedUnit(item.Surface,
+                        KanaHelper.ToHiragana(item.Surface),
+                        WanaKana.ToRomaji(item.Surface),
+                        false);
                 }
                 else if (features.Length <= 6 || new[] { "補助記号" }.Contains(features[0]))
                 {
                     //标点符号
-                    result.Add(new ConvertedUnit(item.Surface, item.Surface, item.Surface, false));
+                    unit = new ConvertedUnit(item.Surface,
+                        item.Surface,
+                        item.Surface,
+                        false);
                 }
                 else if (IsEnglish(item.Surface))
                 {
                     //英文
-                    result.Add(new ConvertedUnit(item.Surface, item.Surface, item.Surface, false));
+                    unit = new ConvertedUnit(item.Surface,
+                        item.Surface,
+                        item.Surface,
+                        false);
                 }
                 else
                 {
                     //汉字或助词
-                    var isKanji = !IsJapanese(item.Surface);
-                    result.Add(new ConvertedUnit(item.Surface,
-                        KanaConverter.ToHiragana(features[ChooseIndexByType(features[0])]),
-                        WanaKana.ToRomaji(features[ChooseIndexByType(features[0])]), isKanji));
+                    unit = new ConvertedUnit(item.Surface,
+                        KanaHelper.ToHiragana(features[ChooseIndexByType(features[0])]),
+                        WanaKana.ToRomaji(features[ChooseIndexByType(features[0])]),
+                        !IsJapanese(item.Surface));
                 }
             }
             else if (item.Stat != MeCabNodeStat.Bos && item.Stat != MeCabNodeStat.Eos)
             {
-                result.Add(new ConvertedUnit(item.Surface, item.Surface, item.Surface, false));
+                unit = new ConvertedUnit(item.Surface,
+                    item.Surface,
+                    item.Surface,
+                    false);
+                var (replaceHiragana, replaceRomaji) = GetReplaceData(item);
+                unit.ReplaceHiragana = replaceHiragana;
+                unit.ReplaceRomaji = replaceRomaji;
             }
 
+            if (unit != null)
+                result.Add(unit);
+        }
+
         return result.ToArray();
+    }
+
+    #endregion
+
+    #region 帮助方法
+
+    /// <summary>
+    /// 自定义分隔方法(Feature可能存在如 a,b,c,"d,e",f 格式的数据,此处不能把双引号中的内容也分隔开)
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    private static string[] CustomSplit(string str)
+    {
+        var list = new List<string>();
+        var item = new List<char>();
+        var haveMark = false;
+        foreach (var c in str)
+        {
+            if (c == ',' && !haveMark)
+            {
+                list.Add(new string(item.ToArray()));
+                item.Clear();
+            }
+            else if (c == '"')
+            {
+                item.Add(c);
+                haveMark = !haveMark;
+            }
+            else
+                item.Add(c);
+        }
+        return list.ToArray();
+    }
+
+    /// <summary>
+    /// 获取所有发音
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
+    private static (string[] replaceHiragana, string[] replaceRomaji) GetReplaceData(MeCabNode node)
+    {
+        var length = node.Length;
+        var features = CustomSplit(node.Feature);
+        var replaceHiragana = new List<string>();
+        var replaceRomaji = new List<string>();
+
+        while (node != null)
+        {
+            var hiragana = KanaHelper.ToHiragana(features[ChooseIndexByType(features[0])]);
+            var romaji = WanaKana.ToRomaji(features[ChooseIndexByType(features[0])]);
+            if (replaceHiragana.Contains(hiragana) == false)
+            {
+                replaceHiragana.Add(hiragana);
+                replaceRomaji.Add(romaji);
+            }
+            node = node.BNext;
+        }
+
+        return (replaceHiragana.ToArray(), replaceRomaji.ToArray());
     }
 
     /// <summary>
@@ -288,47 +300,67 @@ public static class RomajiHelper
         result = "";
         return false;
     }
-}
 
-public static class KanaConverter
-{
     /// <summary>
-    /// 转为片假名
+    /// 判断字符串(句子)是否简体中文
     /// </summary>
     /// <param name="str"></param>
+    /// <param name="rate">容错率(0-1)</param>
     /// <returns></returns>
-    public static string ToKatakana(string str)
+    private static bool IsChinese(string str, float rate)
     {
-        var stringBuilder = new StringBuilder();
-        foreach (var c in str)
+        if (str.Length < 2)
+            return false;
+
+        var wordArray = str.ToCharArray();
+        var total = wordArray.Length;
+        var chCount = 0f;
+        var enCount = 0f;
+
+        foreach (var word in wordArray)
         {
-            var bytes = Encoding.Unicode.GetBytes(c.ToString());
-            if (bytes.Length == 2 && bytes[1] == 0x30 && bytes[0] >= 0x40 && bytes[0] <= 0x9F)
-                stringBuilder.Append(Encoding.Unicode.GetString(new[] { (byte)(bytes[0] + 0x60), bytes[1] }));
-            else
-                stringBuilder.Append(c);
+            if (IsJapanese(word.ToString()))
+                //含有日文直接返回否
+                return false;
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var gbBytes = Encoding.Unicode.GetBytes(word.ToString());
+
+            if (gbBytes.Length == 2) // double bytes char.  
+            {
+                if (gbBytes[1] >= 0x4E && gbBytes[1] <= 0x9F) //中文
+                    chCount++;
+                else
+                    total--;
+            }
+            else if (gbBytes.Length == 1)
+            {
+                var byteAscii = int.Parse(gbBytes[0].ToString());
+                if ((byteAscii >= 65 && byteAscii <= 90) || (byteAscii >= 97 && byteAscii <= 122)) //英文字母
+                    enCount++;
+                else
+                    total--;
+            }
         }
 
-        return stringBuilder.ToString();
+        if (chCount == 0) return false; //一个简体中文都没有
+
+        return (chCount + enCount) / total >= rate;
     }
 
     /// <summary>
-    /// 转为平假名
+    /// 判断字符串是否全为单字节
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static string ToHiragana(string str)
-    {
-        var stringBuilder = new StringBuilder();
-        foreach (var c in str)
-        {
-            var bytes = Encoding.Unicode.GetBytes(c.ToString());
-            if (bytes.Length == 2 && bytes[1] == 0x30 && bytes[0] >= 0xA0 && bytes[0] <= 0xFF)
-                stringBuilder.Append(Encoding.Unicode.GetString(new[] { (byte)(bytes[0] - 0x60), bytes[1] }));
-            else
-                stringBuilder.Append(c);
-        }
+    private static bool IsEnglish(string str) => new Regex("^[\x20-\x7E]+$", RegexOptions.Compiled).IsMatch(str);
 
-        return stringBuilder.ToString();
-    }
+    /// <summary>
+    /// 判断字符串是否全为假名
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    private static bool IsJapanese(string str) => Regex.IsMatch(str, @"^[\u3040-\u30ff]+$", RegexOptions.Compiled);
+
+    #endregion
 }
