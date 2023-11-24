@@ -11,16 +11,18 @@
     <Grid>
         <StackPanel>
             <local:EditableLabel x:Name="RomajiLabel"
-                                 Text="{x:Bind Unit.Romaji,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}"
                                  Visibility="{x:Bind RomajiVisibility,Mode=OneWay}"
-                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}">
+                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}"
+                                 ReplaceText="{x:Bind Unit.ReplaceRomaji,Mode=TwoWay}">
                 <local:EditableLabel.OpacityTransition>
                     <ScalarTransition />
                 </local:EditableLabel.OpacityTransition>
             </local:EditableLabel>
             <local:EditableLabel x:Name="HiraganaLabel"
-                                 Text="{x:Bind Unit.Hiragana,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}">
+                                 SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}"
+                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}"
+                                 ReplaceText="{x:Bind Unit.ReplaceHiragana,Mode=TwoWay}">
                 <local:EditableLabel.OpacityTransition>
                     <ScalarTransition />
                 </local:EditableLabel.OpacityTransition>

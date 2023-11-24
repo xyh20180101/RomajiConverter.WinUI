@@ -96,16 +96,6 @@ public sealed partial class EditPage : Page
     }
 
     /// <summary>
-    /// 编辑区点击事件(用于单击空白区后令文本框失焦)
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void EditBorder_OnTapped(object sender, TappedRoutedEventArgs e)
-    {
-        Focus(FocusState.Programmatic);
-    }
-
-    /// <summary>
     /// 编辑区的ToggleSwitch通用事件
     /// </summary>
     /// <param name="sender"></param>
@@ -182,5 +172,18 @@ public sealed partial class EditPage : Page
                 App.Config.EditPanelFontSize *= 1.1;
             e.Handled = true;
         }
+    }
+
+    private void EditGrid_OnTapped(object sender, TappedRoutedEventArgs e)
+    {
+        var element = (DependencyObject)e.OriginalSource;
+        while (element != null)
+        {
+            if (element is EditableLabel)
+                return;
+            element = VisualTreeHelper.GetParent(element);
+        }
+
+        Focus(FocusState.Programmatic);
     }
 }

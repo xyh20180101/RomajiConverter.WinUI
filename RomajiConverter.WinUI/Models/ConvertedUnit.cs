@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace RomajiConverter.WinUI.Models;
@@ -9,8 +11,8 @@ public class ConvertedUnit : INotifyPropertyChanged
     private bool _isKanji;
     private string _japanese;
     private string _romaji;
-    private string[] _replaceRomaji;
-    private string[] _replaceHiragana;
+    private ObservableCollection<string> _replaceRomaji;
+    private ObservableCollection<string> _replaceHiragana;
 
     public ConvertedUnit(string japanese, string hiragana, string romaji, bool isKanji)
     {
@@ -18,6 +20,8 @@ public class ConvertedUnit : INotifyPropertyChanged
         Romaji = romaji;
         Hiragana = hiragana;
         IsKanji = isKanji;
+        ReplaceHiragana =new ObservableCollection<string> { hiragana };
+        ReplaceRomaji = new ObservableCollection<string> { romaji };
     }
 
     public string Japanese
@@ -42,7 +46,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         }
     }
 
-    public string[] ReplaceRomaji
+    public ObservableCollection<string> ReplaceRomaji
     {
         get => _replaceRomaji;
         set
@@ -64,7 +68,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         }
     }
 
-    public string[] ReplaceHiragana
+    public ObservableCollection<string> ReplaceHiragana
     {
         get => _replaceHiragana;
         set

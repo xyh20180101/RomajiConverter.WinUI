@@ -11,13 +11,15 @@
         <Border Visibility="{x:Bind EditLabelVisibility,Mode=OneWay}" BorderThickness="1" CornerRadius="4"
                 BorderBrush="#AAAAAAAA" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Visibility="{x:Bind EditLabelVisibility,Mode=OneWay}" x:Name="EditLabel"
-                       Text="{x:Bind Text,Mode=TwoWay}" DoubleTapped="EditLabel_OnDoubleTapped"
+                       Text="{x:Bind EditBox.SelectedValue,Mode=OneWay}" DoubleTapped="EditLabel_OnDoubleTapped"
                        HorizontalAlignment="Center" VerticalAlignment="Center" Padding="4,4,4,4"
                        FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
         </Border>
-        <TextBox Visibility="{x:Bind EditBoxVisibility,Mode=OneWay}" x:Name="EditBox"
-                 Text="{x:Bind Text,Mode=TwoWay}" TextWrapping="Wrap" TextAlignment="Center"
-                 HorizontalAlignment="Center" VerticalAlignment="Center" KeyDown="EditBox_OnKeyDown"
-                 LostFocus="EditBox_LostFocus" FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
+        <ComboBox Visibility="{x:Bind EditBoxVisibility,Mode=OneWay}" x:Name="EditBox"
+                  SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}" ItemsSource="{x:Bind ReplaceText,Mode=TwoWay}"
+                  KeyDown="EditBox_OnKeyDown" DropDownClosed="EditBox_OnDropDownClosed" IsEditable="True"
+                  TextSubmitted="EditBox_OnTextSubmitted"
+                  LosingFocus="EditBox_OnLosingFocus"
+                  FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
     </Grid>
 </UserControl>

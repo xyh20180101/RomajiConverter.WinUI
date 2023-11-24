@@ -1,12 +1,15 @@
+using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using RomajiConverter.WinUI.Enums;
 using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Controls;
 
-public sealed partial class EditableLabelGroup : UserControl
+public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyChanged
 {
     public static readonly DependencyProperty UnitProperty = DependencyProperty.Register("Unit", typeof(ConvertedUnit),
         typeof(EditableLabelGroup), new PropertyMetadata(null));
@@ -26,6 +29,13 @@ public sealed partial class EditableLabelGroup : UserControl
         InitializeComponent();
         Unit = unit;
         MyFontSize = 14;
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+    public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public ConvertedUnit Unit
@@ -89,5 +99,19 @@ public sealed partial class EditableLabelGroup : UserControl
     {
         get => (double)GetValue(MyFontSizeProperty);
         set => SetValue(MyFontSizeProperty, value);
+    }
+
+    private int _selectedIndex;
+
+    public int SelectedIndex
+    {
+        get => _selectedIndex;
+        set
+        {
+            _selectedIndex = value;
+            Unit.Romaji = Unit.ReplaceRomaji[SelectedIndex];
+            Unit.Hiragana = Unit.ReplaceHiragana[SelectedIndex];
+            OnPropertyChanged();
+        }
     }
 }

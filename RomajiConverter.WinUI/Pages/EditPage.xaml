@@ -20,7 +20,7 @@
             <RepositionThemeTransition />
         </TransitionCollection>
     </Page.Transitions>
-    <Grid x:Name="EditGrid">
+    <Grid x:Name="EditGrid" Tapped="EditGrid_OnTapped">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -39,7 +39,7 @@
                 </controls1:WrapPanel>
             </StackPanel>
         </Expander>
-        <Border x:Name="EditBorder" Grid.Row="1" Tapped="EditBorder_OnTapped" Margin="4,4,4,4" CornerRadius="4">
+        <Border x:Name="EditBorder" Grid.Row="1" Margin="4,4,4,4" CornerRadius="4">
             <ScrollViewer x:Name="EditScrollViewer" PointerWheelChanged="EditScrollViewer_OnPointerWheelChanged">
                 <StackPanel x:Name="EditPanel">
                     <StackPanel.ChildrenTransitions>

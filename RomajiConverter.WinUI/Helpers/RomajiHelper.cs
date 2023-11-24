@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using MeCab;
+using Newtonsoft.Json;
 using RomajiConverter.WinUI.Extensions;
 using RomajiConverter.WinUI.Models;
 using WanaKanaSharp;
@@ -27,6 +29,7 @@ public static class RomajiHelper
     {
         //词典路径
         var dicPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "unidic");
+        //var dicPath = "C:\\Users\\JT-XXB-05\\Downloads\\unidic-csj-202302";
         var parameter = new MeCabParam
         {
             DicDir = dicPath,
@@ -190,6 +193,9 @@ public static class RomajiHelper
                         KanaHelper.ToHiragana(features[ChooseIndexByType(features[0])]),
                         WanaKana.ToRomaji(features[ChooseIndexByType(features[0])]),
                         !IsJapanese(item.Surface));
+                    var (replaceHiragana, replaceRomaji) = GetReplaceData(item);
+                    unit.ReplaceHiragana = replaceHiragana;
+                    unit.ReplaceRomaji = replaceRomaji;
                 }
             }
             else if (item.Stat != MeCabNodeStat.Bos && item.Stat != MeCabNodeStat.Eos)
@@ -198,9 +204,6 @@ public static class RomajiHelper
                     item.Surface,
                     item.Surface,
                     false);
-                var (replaceHiragana, replaceRomaji) = GetReplaceData(item);
-                unit.ReplaceHiragana = replaceHiragana;
-                unit.ReplaceRomaji = replaceRomaji;
             }
 
             if (unit != null)
@@ -247,15 +250,15 @@ public static class RomajiHelper
     /// </summary>
     /// <param name="node"></param>
     /// <returns></returns>
-    private static (string[] replaceHiragana, string[] replaceRomaji) GetReplaceData(MeCabNode node)
+    private static (ObservableCollection<string> replaceHiragana, ObservableCollection<string> replaceRomaji) GetReplaceData(MeCabNode node)
     {
         var length = node.Length;
-        var features = CustomSplit(node.Feature);
-        var replaceHiragana = new List<string>();
-        var replaceRomaji = new List<string>();
+        var replaceHiragana = new ObservableCollection<string>();
+        var replaceRomaji = new ObservableCollection<string>();
 
-        while (node != null)
+        while (node != null && node.Length == length)
         {
+            var features = CustomSplit(node.Feature);
             var hiragana = KanaHelper.ToHiragana(features[ChooseIndexByType(features[0])]);
             var romaji = WanaKana.ToRomaji(features[ChooseIndexByType(features[0])]);
             if (replaceHiragana.Contains(hiragana) == false)
@@ -266,7 +269,7 @@ public static class RomajiHelper
             node = node.BNext;
         }
 
-        return (replaceHiragana.ToArray(), replaceRomaji.ToArray());
+        return (replaceHiragana, replaceRomaji);
     }
 
     /// <summary>
