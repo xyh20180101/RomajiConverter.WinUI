@@ -250,21 +250,21 @@ public static class RomajiHelper
     /// </summary>
     /// <param name="node"></param>
     /// <returns></returns>
-    private static (ObservableCollection<string> replaceHiragana, ObservableCollection<string> replaceRomaji) GetReplaceData(MeCabNode node)
+    private static (ObservableCollection<ReplaceString> replaceHiragana, ObservableCollection<ReplaceString> replaceRomaji) GetReplaceData(MeCabNode node)
     {
         var length = node.Length;
-        var replaceHiragana = new ObservableCollection<string>();
-        var replaceRomaji = new ObservableCollection<string>();
+        var replaceHiragana = new ObservableCollection<ReplaceString>();
+        var replaceRomaji = new ObservableCollection<ReplaceString>();
 
         while (node != null && node.Length == length)
         {
             var features = CustomSplit(node.Feature);
             var hiragana = KanaHelper.ToHiragana(features[ChooseIndexByType(features[0])]);
             var romaji = WanaKana.ToRomaji(features[ChooseIndexByType(features[0])]);
-            if (replaceHiragana.Contains(hiragana) == false)
+            if (replaceHiragana.Any(p => p.Value == hiragana) == false)
             {
-                replaceHiragana.Add(hiragana);
-                replaceRomaji.Add(romaji);
+                replaceHiragana.Add(new ReplaceString(hiragana, true));
+                replaceRomaji.Add(new ReplaceString(romaji, true));
             }
             node = node.BNext;
         }

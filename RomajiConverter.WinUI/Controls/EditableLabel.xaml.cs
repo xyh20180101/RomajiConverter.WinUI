@@ -9,6 +9,9 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System.Collections.ObjectModel;
+using Windows.UI;
+using Microsoft.UI.Xaml.Media;
+using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Controls;
 
@@ -17,8 +20,8 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
     public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(nameof(SelectedIndex), typeof(int),
         typeof(EditableLabel), new PropertyMetadata(0));
 
-    public static readonly DependencyProperty ReplaceTextProperty = DependencyProperty.Register(nameof(ReplaceText), typeof(ObservableCollection<string>),
-        typeof(EditableLabel), new PropertyMetadata(new ObservableCollection<string>()));
+    public static readonly DependencyProperty ReplaceTextProperty = DependencyProperty.Register(nameof(ReplaceText), typeof(ObservableCollection<ReplaceString>),
+        typeof(EditableLabel), new PropertyMetadata(new ObservableCollection<ReplaceString>()));
 
     public static readonly DependencyProperty MyFontSizeProperty =
         DependencyProperty.Register(nameof(MyFontSize), typeof(double), typeof(EditableLabel),
@@ -38,9 +41,9 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
         set => SetValue(SelectedIndexProperty, value);
     }
 
-    public ObservableCollection<string> ReplaceText
+    public ObservableCollection<ReplaceString> ReplaceText
     {
-        get => (ObservableCollection<string>)GetValue(ReplaceTextProperty);
+        get => (ObservableCollection<ReplaceString>)GetValue(ReplaceTextProperty);
         set => SetValue(ReplaceTextProperty, value);
     }
 
@@ -61,6 +64,10 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
             OnPropertyChanged("EditBoxVisibility");
         }
     }
+
+    public SolidColorBrush BorderBrushColor => ReplaceText.Count > 1
+        ? new SolidColorBrush(Color.FromArgb(0xAA, 0xAA, 0xAA, 0xAA))
+        : new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
     public Visibility EditLabelVisibility => IsEdit ? Visibility.Collapsed : Visibility.Visible;
 
@@ -107,12 +114,5 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
     {
         //if (e.NewFocusedElement is not ComboBoxItem)
         //ToSave();
-    }
-
-    private void EditBox_OnTextSubmitted(ComboBox sender, ComboBoxTextSubmittedEventArgs args)
-    {
-        if (ReplaceText.Contains(args.Text)) return;
-        ReplaceText.Insert(0, args.Text);
-        SelectedIndex = 0;
     }
 }

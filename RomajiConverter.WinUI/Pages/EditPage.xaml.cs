@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.System;
 using Windows.UI;
 using CommunityToolkit.WinUI.UI.Controls;
@@ -11,6 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using RomajiConverter.WinUI.Controls;
 using RomajiConverter.WinUI.Enums;
 using RomajiConverter.WinUI.Extensions;
+using RomajiConverter.WinUI.Models;
 using RomajiConverter.WinUI.ValueConverters;
 
 namespace RomajiConverter.WinUI.Pages;
@@ -37,7 +41,7 @@ public sealed partial class EditPage : Page
     /// <summary>
     /// 渲染编辑面板
     /// </summary>
-    public void RenderEditPanel()
+    public async void RenderEditPanel()
     {
         EditPanel.Children.Clear();
 
@@ -93,6 +97,9 @@ public sealed partial class EditPage : Page
                 EditPanel.Children.Add(separator);
             }
         }
+
+        await Task.Delay(1);
+        EditScrollViewer.ChangeView(0, 0, null, false);
     }
 
     /// <summary>

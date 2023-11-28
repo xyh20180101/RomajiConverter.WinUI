@@ -11,8 +11,8 @@ public class ConvertedUnit : INotifyPropertyChanged
     private bool _isKanji;
     private string _japanese;
     private string _romaji;
-    private ObservableCollection<string> _replaceRomaji;
-    private ObservableCollection<string> _replaceHiragana;
+    private ObservableCollection<ReplaceString> _replaceRomaji;
+    private ObservableCollection<ReplaceString> _replaceHiragana;
 
     public ConvertedUnit(string japanese, string hiragana, string romaji, bool isKanji)
     {
@@ -20,8 +20,8 @@ public class ConvertedUnit : INotifyPropertyChanged
         Romaji = romaji;
         Hiragana = hiragana;
         IsKanji = isKanji;
-        ReplaceHiragana =new ObservableCollection<string> { hiragana };
-        ReplaceRomaji = new ObservableCollection<string> { romaji };
+        ReplaceHiragana = new ObservableCollection<ReplaceString> { new(hiragana, true) };
+        ReplaceRomaji = new ObservableCollection<ReplaceString> { new(romaji, true) };
     }
 
     public string Japanese
@@ -46,7 +46,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<string> ReplaceRomaji
+    public ObservableCollection<ReplaceString> ReplaceRomaji
     {
         get => _replaceRomaji;
         set
@@ -68,7 +68,7 @@ public class ConvertedUnit : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<string> ReplaceHiragana
+    public ObservableCollection<ReplaceString> ReplaceHiragana
     {
         get => _replaceHiragana;
         set

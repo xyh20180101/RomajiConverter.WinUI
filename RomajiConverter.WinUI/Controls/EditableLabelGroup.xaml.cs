@@ -5,7 +5,9 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using RomajiConverter.WinUI.Enums;
+using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
+using WanaKanaSharp;
 
 namespace RomajiConverter.WinUI.Controls;
 
@@ -109,8 +111,8 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
         set
         {
             _selectedIndex = value;
-            Unit.Romaji = Unit.ReplaceRomaji[SelectedIndex];
-            Unit.Hiragana = Unit.ReplaceHiragana[SelectedIndex];
+            Unit.Romaji = Unit.ReplaceRomaji[SelectedIndex].Value;
+            Unit.Hiragana = Unit.ReplaceHiragana[SelectedIndex].Value;
             OnPropertyChanged();
         }
     }

@@ -8,13 +8,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid>
-        <StackPanel>
+    <StackPanel>
             <local:EditableLabel x:Name="RomajiLabel"
                                  SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}"
                                  Visibility="{x:Bind RomajiVisibility,Mode=OneWay}"
                                  MyFontSize="{x:Bind MyFontSize,Mode=OneWay}"
-                                 ReplaceText="{x:Bind Unit.ReplaceRomaji,Mode=TwoWay}">
+                                 ReplaceText="{x:Bind Unit.ReplaceRomaji,Mode=OneWay}">
                 <local:EditableLabel.OpacityTransition>
                     <ScalarTransition />
                 </local:EditableLabel.OpacityTransition>
@@ -22,7 +21,7 @@
             <local:EditableLabel x:Name="HiraganaLabel"
                                  SelectedIndex="{x:Bind SelectedIndex,Mode=TwoWay}"
                                  MyFontSize="{x:Bind MyFontSize,Mode=OneWay}"
-                                 ReplaceText="{x:Bind Unit.ReplaceHiragana,Mode=TwoWay}">
+                                 ReplaceText="{x:Bind Unit.ReplaceHiragana,Mode=OneWay}">
                 <local:EditableLabel.OpacityTransition>
                     <ScalarTransition />
                 </local:EditableLabel.OpacityTransition>
@@ -31,5 +30,4 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
         </StackPanel>
-    </Grid>
 </UserControl>
