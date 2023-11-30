@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.System;
 using Windows.UI;
 using CommunityToolkit.WinUI.UI.Controls;
@@ -14,13 +13,31 @@ using Microsoft.UI.Xaml.Media;
 using RomajiConverter.WinUI.Controls;
 using RomajiConverter.WinUI.Enums;
 using RomajiConverter.WinUI.Extensions;
-using RomajiConverter.WinUI.Models;
 using RomajiConverter.WinUI.ValueConverters;
 
 namespace RomajiConverter.WinUI.Pages;
 
 public sealed partial class EditPage : Page
 {
+    private static readonly object Lock = new();
+
+    private static readonly Binding FontSizeBinding = new()
+    {
+        Source = App.Config,
+        Path = new PropertyPath("EditPanelFontSize"),
+        Mode = BindingMode.OneWay
+    };
+
+    private static readonly Binding SeparatorMarginBinding = new()
+    {
+        Source = App.Config,
+        Path = new PropertyPath("EditPanelFontSize"),
+        Mode = BindingMode.OneWay,
+        Converter = new FontSizeToMarginValueConverter()
+    };
+
+    private static readonly SolidColorBrush SeparatorBackground = new(Color.FromArgb(170, 170, 170, 170));
+
     public EditPage()
     {
         InitializeComponent();
@@ -28,6 +45,13 @@ public sealed partial class EditPage : Page
         EditRomajiCheckBox.Toggled += EditToggleSwitch_OnToggled;
         EditHiraganaCheckBox.Toggled += EditToggleSwitch_OnToggled;
         IsOnlyShowKanjiCheckBox.Toggled += EditToggleSwitch_OnToggled;
+        BorderVisibilityComboBox.SelectionChanged += BorderVisibilityComboBox_OnSelectionChanged;
+
+        var resourceLoader = ResourceLoader.GetForViewIndependentUse();
+        BorderVisibilityComboBox.Items.Add(resourceLoader.GetString("BorderVisibility_Visible"));
+        BorderVisibilityComboBox.Items.Add(resourceLoader.GetString("BorderVisibility_Highlight"));
+        BorderVisibilityComboBox.Items.Add(resourceLoader.GetString("BorderVisibility_Hidden"));
+        BorderVisibilityComboBox.SelectedIndex = 1;
     }
 
     public OutputPage MainOutputPage { get; set; }
@@ -41,65 +65,76 @@ public sealed partial class EditPage : Page
     /// <summary>
     /// 渲染编辑面板
     /// </summary>
-    public async void RenderEditPanel()
+    public void RenderEditPanel()
     {
-        EditPanel.Children.Clear();
-
-        var fontSizeBinding = new Binding
+        lock (Lock)
         {
-            Source = App.Config,
-            Path = new PropertyPath("EditPanelFontSize"),
-            Mode = BindingMode.OneWay
-        };
-
-        var separatorMarginBinding = new Binding
-        {
-            Source = App.Config,
-            Path = new PropertyPath("EditPanelFontSize"),
-            Mode = BindingMode.OneWay,
-            Converter = new FontSizeToMarginValueConverter()
-        };
-
-        for (var i = 0; i < App.ConvertedLineList.Count; i++)
-        {
-            var item = App.ConvertedLineList[i];
-
-            var line = new WrapPanel();
-            foreach (var unit in item.Units)
-            {
-                var group = new EditableLabelGroup(unit);
-                group.RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                group.SetBinding(EditableLabelGroup.MyFontSizeProperty, fontSizeBinding);
-                if (EditHiraganaCheckBox.IsOn)
+            foreach (var children in EditPanel.Children)
+                if (children.GetType() == typeof(WrapPanel))
                 {
-                    if (IsOnlyShowKanjiCheckBox.IsOn && group.Unit.IsKanji == false)
-                        group.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                    var wrapPanel = (WrapPanel)children;
+                    foreach (var uiElement in wrapPanel.Children)
+                    {
+                        var editableLabelGroup = (EditableLabelGroup)uiElement;
+                        editableLabelGroup.Destroy();
+                    }
+
+                    wrapPanel.Children.Clear();
+                }
+                else if (children.GetType() == typeof(Grid))
+                {
+                    var grid = (Grid)children;
+                    grid.ClearValue(MarginProperty);
+                    grid.ClearValue(Panel.BackgroundProperty);
+                }
+
+            EditPanel.Children.Clear();
+            GC.Collect();
+
+            for (var i = 0; i < App.ConvertedLineList.Count; i++)
+            {
+                var item = App.ConvertedLineList[i];
+
+                var line = new WrapPanel();
+                foreach (var unit in item.Units)
+                {
+                    var group = new EditableLabelGroup(unit)
+                    {
+                        RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed,
+                        BorderVisibilitySetting = (BorderVisibilitySetting)BorderVisibilityComboBox.SelectedIndex
+                    };
+                    group.SetBinding(EditableLabelGroup.MyFontSizeProperty, FontSizeBinding);
+                    if (EditHiraganaCheckBox.IsOn)
+                    {
+                        if (IsOnlyShowKanjiCheckBox.IsOn && group.Unit.IsKanji == false)
+                            group.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                        else
+                            group.HiraganaVisibility = HiraganaVisibility.Visible;
+                    }
                     else
-                        group.HiraganaVisibility = HiraganaVisibility.Visible;
-                }
-                else
-                {
-                    group.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                    {
+                        group.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                    }
+
+                    line.Children.Add(group);
                 }
 
-                line.Children.Add(group);
+                EditPanel.Children.Add(line);
+
+                if (item.Units.Length != 0 && i < App.ConvertedLineList.Count - 1)
+                {
+                    var separator = new Grid
+                    {
+                        Height = 1,
+                        Background = SeparatorBackground
+                    };
+                    separator.SetBinding(MarginProperty, SeparatorMarginBinding);
+                    EditPanel.Children.Add(separator);
+                }
             }
 
-            EditPanel.Children.Add(line);
-            if (item.Units.Any() && i < App.ConvertedLineList.Count - 1)
-            {
-                var separator = new Grid
-                {
-                    Height = 1,
-                    Background = new SolidColorBrush(Color.FromArgb(170, 170, 170, 170))
-                };
-                separator.SetBinding(MarginProperty, separatorMarginBinding);
-                EditPanel.Children.Add(separator);
-            }
+            EditScrollViewer.ChangeView(0, 0, null, false);
         }
-
-        await Task.Delay(1);
-        EditScrollViewer.ChangeView(0, 0, null, false);
     }
 
     /// <summary>
@@ -154,6 +189,28 @@ public sealed partial class EditPage : Page
     }
 
     /// <summary>
+    /// 下拉框选择事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BorderVisibilityComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        foreach (object children in EditPanel.Children)
+        {
+            WrapPanel wrapPanel;
+            if (children.GetType() == typeof(WrapPanel))
+                wrapPanel = (WrapPanel)children;
+            else
+                continue;
+
+            foreach (EditableLabelGroup editableLabelGroup in wrapPanel.Children)
+            {
+                editableLabelGroup.BorderVisibilitySetting = (BorderVisibilitySetting)BorderVisibilityComboBox.SelectedIndex;
+            }
+        }
+    }
+
+    /// <summary>
     /// 生成文本按钮事件
     /// </summary>
     /// <param name="sender"></param>
@@ -179,18 +236,5 @@ public sealed partial class EditPage : Page
                 App.Config.EditPanelFontSize *= 1.1;
             e.Handled = true;
         }
-    }
-
-    private void EditGrid_OnTapped(object sender, TappedRoutedEventArgs e)
-    {
-        var element = (DependencyObject)e.OriginalSource;
-        while (element != null)
-        {
-            if (element is EditableLabel)
-                return;
-            element = VisualTreeHelper.GetParent(element);
-        }
-
-        Focus(FocusState.Programmatic);
     }
 }

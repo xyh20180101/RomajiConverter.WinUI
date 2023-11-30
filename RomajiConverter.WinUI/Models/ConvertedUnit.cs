@@ -20,8 +20,8 @@ public class ConvertedUnit : INotifyPropertyChanged
         Romaji = romaji;
         Hiragana = hiragana;
         IsKanji = isKanji;
-        ReplaceHiragana = new ObservableCollection<ReplaceString> { new(hiragana, true) };
-        ReplaceRomaji = new ObservableCollection<ReplaceString> { new(romaji, true) };
+        ReplaceHiragana = new ObservableCollection<ReplaceString> { new(1, hiragana, true) };
+        ReplaceRomaji = new ObservableCollection<ReplaceString> { new(1, romaji, true) };
     }
 
     public string Japanese

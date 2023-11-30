@@ -126,6 +126,15 @@
   <data name="BackButton.Label" xml:space="preserve">
     <value>返回</value>
   </data>
+  <data name="BorderVisibility_Hidden" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="BorderVisibility_Highlight" xml:space="preserve">
+    <value>有多个读音时显示</value>
+  </data>
+  <data name="BorderVisibility_Visible" xml:space="preserve">
+    <value>全部显示</value>
+  </data>
   <data name="CHCheckBox.Header" xml:space="preserve">
     <value>中文</value>
   </data>

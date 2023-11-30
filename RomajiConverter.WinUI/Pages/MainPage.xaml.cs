@@ -113,10 +113,8 @@ public sealed partial class MainPage : Page
         var file = await fileSavePicker.PickSaveFileAsync();
         if (file != null)
         {
-            CachedFileManager.DeferUpdates(file);
             await FileIO.WriteTextAsync(file,
                 JsonConvert.SerializeObject(App.ConvertedLineList, Formatting.Indented));
-            await CachedFileManager.CompleteUpdatesAsync(file);
         }
     }
 
@@ -182,6 +180,7 @@ public sealed partial class MainPage : Page
         {
             Effect = SlideNavigationTransitionEffect.FromRight
         });
+        GC.Collect();
     }
 
     #endregion

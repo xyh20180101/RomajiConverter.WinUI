@@ -20,7 +20,7 @@
             <RepositionThemeTransition />
         </TransitionCollection>
     </Page.Transitions>
-    <Grid x:Name="EditGrid" Tapped="EditGrid_OnTapped">
+    <Grid x:Name="EditGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -36,6 +36,8 @@
                                   Header="平假名" IsOn="False" />
                     <ToggleSwitch x:Uid="IsOnlyShowKanjiCheckBox" x:Name="IsOnlyShowKanjiCheckBox" MinWidth="100"
                                   Header="仅汉字假名" IsOn="False" />
+                    <ComboBox x:Uid="BorderVisibilityComboBox" x:Name="BorderVisibilityComboBox" MinWidth="100"
+                              Header="边框显示"></ComboBox>
                 </controls1:WrapPanel>
             </StackPanel>
         </Expander>

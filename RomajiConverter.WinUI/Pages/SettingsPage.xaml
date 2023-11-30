@@ -8,7 +8,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
     xmlns:winUi="using:RomajiConverter.WinUI"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled"
+     Loaded="SettingsPage_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -18,7 +20,7 @@
                     HorizontalAlignment="Left" Height="44">
             <AppBarButton x:Uid="BackButton" x:Name="BackButton" Icon="Back" Label="返回" Tapped="BackButton_OnTapped" />
         </CommandBar>
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer x:Name="SettingScrollViewer" Grid.Row="1">
             <StackPanel Margin="8,0,8,16">
                 <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,4,4,4" FontWeight="SemiBold" Text="生成图片选项" />
                 <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="8,4,8,4" Description="" Header="字体">

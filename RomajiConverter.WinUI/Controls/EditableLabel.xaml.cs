@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Windows.System;
-using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.UI;
 using Microsoft.UI.Xaml.Media;
 using RomajiConverter.WinUI.Models;
+using RomajiConverter.WinUI.Enums;
 
 namespace RomajiConverter.WinUI.Controls;
 
 public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
 {
-    public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(nameof(SelectedIndex), typeof(int),
-        typeof(EditableLabel), new PropertyMetadata(0));
+    public static readonly DependencyProperty SelectedTextProperty = DependencyProperty.Register(nameof(SelectedText), typeof(ReplaceString),
+        typeof(EditableLabel), new PropertyMetadata(new ReplaceString(-1, string.Empty, false)));
 
     public static readonly DependencyProperty ReplaceTextProperty = DependencyProperty.Register(nameof(ReplaceText), typeof(ObservableCollection<ReplaceString>),
         typeof(EditableLabel), new PropertyMetadata(new ObservableCollection<ReplaceString>()));
@@ -26,6 +26,10 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
     public static readonly DependencyProperty MyFontSizeProperty =
         DependencyProperty.Register(nameof(MyFontSize), typeof(double), typeof(EditableLabel),
             new PropertyMetadata(14d));
+
+    public static readonly DependencyProperty BorderVisibilitySettingProperty =
+        DependencyProperty.Register(nameof(BorderVisibilitySetting), typeof(BorderVisibilitySetting), typeof(EditableLabel),
+            new PropertyMetadata(BorderVisibilitySetting.Hidden));
 
     private bool _isEdit;
 
@@ -35,10 +39,10 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
         IsEdit = false;
     }
 
-    public int SelectedIndex
+    public ReplaceString SelectedText
     {
-        get => (int)GetValue(SelectedIndexProperty);
-        set => SetValue(SelectedIndexProperty, value);
+        get => (ReplaceString)GetValue(SelectedTextProperty);
+        set => SetValue(SelectedTextProperty, value);
     }
 
     public ObservableCollection<ReplaceString> ReplaceText
@@ -60,14 +64,32 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
         {
             if (value == _isEdit) return;
             _isEdit = value;
-            OnPropertyChanged("EditLabelVisibility");
-            OnPropertyChanged("EditBoxVisibility");
+            OnPropertyChanged(nameof(EditLabelVisibility));
+            OnPropertyChanged(nameof(EditBoxVisibility));
         }
     }
 
-    public SolidColorBrush BorderBrushColor => ReplaceText.Count > 1
-        ? new SolidColorBrush(Color.FromArgb(0xAA, 0xAA, 0xAA, 0xAA))
-        : new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+    public SolidColorBrush BorderBrushColor
+    {
+        get
+        {
+            if (IsEdit || BorderVisibilitySetting == BorderVisibilitySetting.Hidden) 
+                return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+            if (BorderVisibilitySetting == BorderVisibilitySetting.Visible || ReplaceText.Count > 1)
+                return new SolidColorBrush(Color.FromArgb(0xAA, 0xAA, 0xAA, 0xAA));
+            return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+        }
+    }
+
+    public BorderVisibilitySetting BorderVisibilitySetting
+    {
+        get => (BorderVisibilitySetting)GetValue(BorderVisibilitySettingProperty);
+        set
+        {
+            SetValue(BorderVisibilitySettingProperty, value);
+            OnPropertyChanged(nameof(BorderBrushColor));
+        }
+    }
 
     public Visibility EditLabelVisibility => IsEdit ? Visibility.Collapsed : Visibility.Visible;
 
@@ -75,9 +97,11 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-    public void ToEdit()
+    public async void ToEdit()
     {
         IsEdit = true;
+        await Task.Delay(10);
+        EditBox.IsDropDownOpen = true;
     }
 
     public void ToSave()
@@ -96,23 +120,29 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
         e.Handled = true;
     }
 
-    private void EditBox_OnKeyDown(object sender, KeyRoutedEventArgs e)
-    {
-        if (e.Key == VirtualKey.Enter || e.Key == VirtualKey.Escape)
-        {
-            EditBox.IsEnabled = false;
-            EditBox.IsEnabled = true;
-        }
-    }
-
     private void EditBox_OnDropDownClosed(object sender, object e)
     {
         ToSave();
     }
 
-    private void EditBox_OnLosingFocus(object sender, LosingFocusEventArgs e)
+    private void EditBox_OnTextSubmitted(ComboBox sender, ComboBoxTextSubmittedEventArgs args)
     {
-        //if (e.NewFocusedElement is not ComboBoxItem)
-        //ToSave();
+        if (ReplaceText.Any(p => p.Value == args.Text)) return;
+        var newText = new ReplaceString(0, args.Text, false);
+        ReplaceText.Insert(0, newText);
+        SelectedText = newText;
+        args.Handled = true;
+    }
+
+    public void Destroy()
+    {
+        EditLabel.DoubleTapped -= EditLabel_OnDoubleTapped;
+        EditBox.DropDownClosed -= EditBox_OnDropDownClosed;
+        EditBox.TextSubmitted -= EditBox_OnTextSubmitted;
+        Bindings.StopTracking();
+        ClearValue(SelectedTextProperty);
+        ClearValue(ReplaceTextProperty);
+        ClearValue(MyFontSizeProperty);
+        ClearValue(BorderVisibilitySettingProperty);
     }
 }

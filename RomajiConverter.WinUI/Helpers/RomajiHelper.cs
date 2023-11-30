@@ -90,7 +90,7 @@ public static class RomajiHelper
                 //变体处理
                 if (isAutoVariant)
                 {
-                    var regex = new Regex("[^a-zA-Z0-9 ]");
+                    var regex = new Regex("[^a-zA-Z0-9 ]", RegexOptions.Compiled);
 
                     var romajis = string.Join("", units.Select(p => p.Romaji)); //整个句子的罗马音
 
@@ -104,10 +104,10 @@ public static class RomajiHelper
                             if (match.Success == false) continue; //遍历非英文字符
 
                             tempSentence =
-                                tempSentence.Replace(match.Value, VariantHelper.GetVariant(match.Value)); //尝试替换后的句子
+                                tempSentence.Replace(match.Value[0], VariantHelper.GetVariant(match.Value[0])); //尝试替换后的句子
                             convertedLine.Japanese =
-                                convertedLine.Japanese.Replace(match.Value,
-                                    VariantHelper.GetVariant(match.Value)); //顺便更新一下这个字段
+                                convertedLine.Japanese.Replace(match.Value[0],
+                                    VariantHelper.GetVariant(match.Value[0])); //顺便更新一下这个字段
 
                             tempRomaji =
                                 string.Join("", SentenceToRomaji(tempSentence).Select(p => p.Romaji)); //尝试替换后的句子的罗马音
@@ -255,6 +255,7 @@ public static class RomajiHelper
         var length = node.Length;
         var replaceHiragana = new ObservableCollection<ReplaceString>();
         var replaceRomaji = new ObservableCollection<ReplaceString>();
+        var id = 1;
 
         while (node != null && node.Length == length)
         {
@@ -263,8 +264,9 @@ public static class RomajiHelper
             var romaji = WanaKana.ToRomaji(features[ChooseIndexByType(features[0])]);
             if (replaceHiragana.Any(p => p.Value == hiragana) == false)
             {
-                replaceHiragana.Add(new ReplaceString(hiragana, true));
-                replaceRomaji.Add(new ReplaceString(romaji, true));
+                replaceHiragana.Add(new ReplaceString(id, hiragana, true));
+                replaceRomaji.Add(new ReplaceString(id, romaji, true));
+                id++;
             }
             node = node.BNext;
         }
