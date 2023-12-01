@@ -27,7 +27,7 @@ public static class CloudMusicHelper
     {
         HistoryPath =
             $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\AppData\\Local\\Netease\\CloudMusic\\webdata\\file\\history";
-        New3ClientHistoryPath = 
+        New3ClientHistoryPath =
             $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\AppData\\Local\\Netease\\CloudMusic\\Library\\webdb.dat";
     }
 
@@ -49,16 +49,9 @@ public static class CloudMusicHelper
         }
         catch (Exception e)
         {
-            try
-            {
-                //旧版本获取songId方法
-                var history = JArray.Parse(File.ReadAllText(HistoryPath));
-                return history[0]["track"]["id"].ToString();
-            }
-            catch (Exception exception)
-            {
-                throw;
-            }
+            //旧版本获取songId方法
+            var history = JArray.Parse(File.ReadAllText(HistoryPath));
+            return history[0]["track"]["id"].ToString();
         }
     }
 
@@ -76,6 +69,7 @@ public static class CloudMusicHelper
             var resourceLoader = ResourceLoader.GetForViewIndependentUse();
             throw new Exception(resourceLoader.GetString("GetLyricsError"));
         }
+
         var chnLrc = Lyrics.Parse(content["tlyric"]["lyric"].ToString());
         var lrcList = jpnLrc.Lyrics.Lines.Select(line => new ReturnLrc
             { Time = line.Timestamp.ToString("mm:ss.fff"), JLrc = line.Content }).ToList();

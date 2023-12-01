@@ -126,6 +126,18 @@
   <data name="BackButton.Label" xml:space="preserve">
     <value>Back</value>
   </data>
+  <data name="BorderVisibilityComboBox.Header" xml:space="preserve">
+    <value>Border Visibility</value>
+  </data>
+  <data name="BorderVisibility_Hidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="BorderVisibility_Highlight" xml:space="preserve">
+    <value>Visible when there are multiple pronunciations</value>
+  </data>
+  <data name="BorderVisibility_Visible" xml:space="preserve">
+    <value>Visible</value>
+  </data>
   <data name="CHCheckBox.Header" xml:space="preserve">
     <value>Chinese</value>
   </data>

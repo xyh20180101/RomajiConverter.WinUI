@@ -36,10 +36,12 @@
                                   Header="平假名" IsOn="False" />
                     <ToggleSwitch x:Uid="IsOnlyShowKanjiCheckBox" x:Name="IsOnlyShowKanjiCheckBox" MinWidth="100"
                                   Header="仅汉字假名" IsOn="False" />
+                    <ComboBox x:Uid="BorderVisibilityComboBox" x:Name="BorderVisibilityComboBox" MinWidth="100"
+                              Header="边框显示" />
                 </controls1:WrapPanel>
             </StackPanel>
         </Expander>
-        <Border x:Name="EditBorder" Grid.Row="1" Tapped="EditBorder_OnTapped" Margin="4,4,4,4" CornerRadius="4">
+        <Border x:Name="EditBorder" Grid.Row="1" Margin="4,4,4,4" CornerRadius="4">
             <ScrollViewer x:Name="EditScrollViewer" PointerWheelChanged="EditScrollViewer_OnPointerWheelChanged">
                 <StackPanel x:Name="EditPanel">
                     <StackPanel.ChildrenTransitions>

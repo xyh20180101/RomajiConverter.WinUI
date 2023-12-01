@@ -7,14 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RomajiConverter.WinUI", "Ro
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM64 = Debug|ARM64
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|ARM64 = Release|ARM64
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|Any CPU.Build.0 = Debug|x64
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|ARM64.ActiveCfg = Debug|ARM64
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|ARM64.Build.0 = Debug|ARM64
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|ARM64.Deploy.0 = Debug|ARM64
@@ -24,6 +28,8 @@ Global
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|x86.ActiveCfg = Debug|x86
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|x86.Build.0 = Debug|x86
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Debug|x86.Deploy.0 = Debug|x86
+		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Release|Any CPU.ActiveCfg = Release|x64
+		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Release|Any CPU.Build.0 = Release|x64
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Release|ARM64.ActiveCfg = Release|ARM64
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Release|ARM64.Build.0 = Release|ARM64
 		{9923BF6E-729E-447A-A5DB-85E64154F8EB}.Release|ARM64.Deploy.0 = Release|ARM64

@@ -8,26 +8,27 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid>
-        <StackPanel>
-            <local:EditableLabel x:Name="RomajiLabel"
-                                 Text="{x:Bind Unit.Romaji,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 Visibility="{x:Bind RomajiVisibility,Mode=OneWay}"
-                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}">
-                <local:EditableLabel.OpacityTransition>
-                    <ScalarTransition />
-                </local:EditableLabel.OpacityTransition>
-            </local:EditableLabel>
-            <local:EditableLabel x:Name="HiraganaLabel"
-                                 Text="{x:Bind Unit.Hiragana,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 MyFontSize="{x:Bind MyFontSize,Mode=OneWay}">
-                <local:EditableLabel.OpacityTransition>
-                    <ScalarTransition />
-                </local:EditableLabel.OpacityTransition>
-            </local:EditableLabel>
-            <TextBlock Padding="4,4,4,4" Text="{x:Bind Unit.Japanese,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                       FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
-        </StackPanel>
-    </Grid>
+    <StackPanel>
+        <local:EditableLabel x:Name="RomajiLabel"
+                             SelectedText="{x:Bind SelectedRomaji,Mode=TwoWay}"
+                             MyFontSize="{x:Bind MyFontSize,Mode=OneWay}"
+                             ReplaceText="{x:Bind Unit.ReplaceRomaji,Mode=OneWay}"
+                             BorderVisibilitySetting="{x:Bind BorderVisibilitySetting,Mode=OneWay}">
+            <local:EditableLabel.OpacityTransition>
+                <ScalarTransition />
+            </local:EditableLabel.OpacityTransition>
+        </local:EditableLabel>
+        <local:EditableLabel x:Name="HiraganaLabel"
+                             SelectedText="{x:Bind SelectedHiragana,Mode=TwoWay}"
+                             MyFontSize="{x:Bind MyFontSize,Mode=OneWay}"
+                             ReplaceText="{x:Bind Unit.ReplaceHiragana,Mode=OneWay}"
+                             BorderVisibilitySetting="{x:Bind BorderVisibilitySetting,Mode=OneWay}">
+            <local:EditableLabel.OpacityTransition>
+                <ScalarTransition />
+            </local:EditableLabel.OpacityTransition>
+        </local:EditableLabel>
+        <TextBlock x:Name="EditTextBlock" Padding="4,4,4,4" Text="{x:Bind Unit.Japanese}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontSize="{x:Bind MyFontSize,Mode=OneWay}" />
+    </StackPanel>
 </UserControl>
