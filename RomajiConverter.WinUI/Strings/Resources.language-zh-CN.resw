@@ -126,6 +126,9 @@
   <data name="BackButton.Label" xml:space="preserve">
     <value>返回</value>
   </data>
+  <data name="BorderVisibilityComboBox.Header" xml:space="preserve">
+    <value>边框显示</value>
+  </data>
   <data name="BorderVisibility_Hidden" xml:space="preserve">
     <value>隐藏</value>
   </data>

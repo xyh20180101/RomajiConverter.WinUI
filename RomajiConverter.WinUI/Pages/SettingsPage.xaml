@@ -10,7 +10,7 @@
     xmlns:winUi="using:RomajiConverter.WinUI"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
-     Loaded="SettingsPage_OnLoaded">
+    Loaded="SettingsPage_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -57,7 +57,8 @@
                                  LostFocus="FontColorTextBox_OnLostFocus" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionBackgroundColorSetting" Margin="8,4,8,4" Description="" Header="背景颜色">
+                <toolkit:SettingsCard x:Uid="ImageOptionBackgroundColorSetting" Margin="8,4,8,4" Description=""
+                                      Header="背景颜色">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE790;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -96,7 +97,8 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionPagePaddingSetting" Margin="8,4,8,4" Description="" Header="页面内边距">
+                <toolkit:SettingsCard x:Uid="ImageOptionPagePaddingSetting" Margin="8,4,8,4" Description=""
+                                      Header="页面内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF573;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -120,7 +122,8 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionLineMarginSetting" Margin="8,4,8,4" Description="" Header="行外边距">
+                <toolkit:SettingsCard x:Uid="ImageOptionLineMarginSetting" Margin="8,4,8,4" Description=""
+                                      Header="行外边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xEA37;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -132,7 +135,8 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionLinePaddingSetting" Margin="8,4,8,4" Description="" Header="行内边距">
+                <toolkit:SettingsCard x:Uid="ImageOptionLinePaddingSetting" Margin="8,4,8,4" Description=""
+                                      Header="行内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF168;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -144,7 +148,8 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionIsOpenExplorerAfterSaveImageSetting" Margin="8,4,8,4" Description="" Header="生成图片后打开文件夹">
+                <toolkit:SettingsCard x:Uid="ImageOptionIsOpenExplorerAfterSaveImageSetting" Margin="8,4,8,4"
+                                      Description="" Header="生成图片后打开文件夹">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE838;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -152,14 +157,16 @@
                                   IsOn="{x:Bind winUi:App.Config.IsOpenExplorerAfterSaveImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
                 <TextBlock x:Uid="TextOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成文本选项" />
-                <toolkit:SettingsCard x:Uid="TextOptionLeftParenthesisSetting" Margin="8,4,8,4" Description="" Header="左括号符号">
+                <toolkit:SettingsCard x:Uid="TextOptionLeftParenthesisSetting" Margin="8,4,8,4" Description=""
+                                      Header="左括号符号">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE973;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <TextBox x:Name="LeftParenthesisTextBox" MaxLength="5" TextWrapping="Wrap"
                              Text="{x:Bind winUi:App.Config.LeftParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="TextOptionRightParenthesisSetting" Margin="8,4,8,4" Description="" Header="右括号符号">
+                <toolkit:SettingsCard x:Uid="TextOptionRightParenthesisSetting" Margin="8,4,8,4" Description=""
+                                      Header="右括号符号">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE974;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -171,7 +178,8 @@
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE72C;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <Button x:Uid="OtherOptionResetSettingButton" x:Name="ResetButton" Content="恢复默认设置" Tapped="ResetButton_OnTapped" />
+                    <Button x:Uid="OtherOptionResetSettingButton" x:Name="ResetButton" Content="恢复默认设置"
+                            Tapped="ResetButton_OnTapped" />
                 </toolkit:SettingsCard>
                 <toolkit:SettingsExpander x:Uid="VersionSettingExpander" Margin="8,4,8,4" Header="应用版本">
                     <toolkit:SettingsExpander.HeaderIcon>
@@ -180,15 +188,18 @@
                     <toolkit:SettingsExpander.Items>
                         <toolkit:SettingsCard x:Uid="VersionSetting" x:Name="VersionSetting" Header="检查更新">
                             <Grid>
-                                <Button x:Uid="UpdateButton" x:Name="UpdateButton" Content="检查更新" Tapped="UpdateButton_OnTapped"/>
-                                <ProgressRing x:Name="UpdateRing" Margin="0,0,24,0" IsActive="False" Visibility="Collapsed"/>
+                                <Button x:Uid="UpdateButton" x:Name="UpdateButton" Content="检查更新"
+                                        Tapped="UpdateButton_OnTapped" />
+                                <ProgressRing x:Name="UpdateRing" Margin="0,0,24,0" IsActive="False"
+                                              Visibility="Collapsed" />
                             </Grid>
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard x:Uid="RepositorySetting" x:Name="RepositorySetting" Header="Github" IsClickEnabled="True" Tapped="RepositorySetting_OnTapped">
-                            <TextBlock Text="https://github.com/xyh20180101/RomajiConverter.WinUI"></TextBlock>
+                        <toolkit:SettingsCard x:Uid="RepositorySetting" x:Name="RepositorySetting" Header="Github"
+                                              IsClickEnabled="True" Tapped="RepositorySetting_OnTapped">
+                            <TextBlock Text="https://github.com/xyh20180101/RomajiConverter.WinUI" />
                         </toolkit:SettingsCard>
                     </toolkit:SettingsExpander.Items>
-                    <TextBlock x:Name="VersionTextBlock"></TextBlock>
+                    <TextBlock x:Name="VersionTextBlock" />
                 </toolkit:SettingsExpander>
             </StackPanel>
         </ScrollViewer>

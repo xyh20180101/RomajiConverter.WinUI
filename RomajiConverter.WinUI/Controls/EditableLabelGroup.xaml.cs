@@ -1,23 +1,21 @@
-using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
 using RomajiConverter.WinUI.Enums;
-using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
-using WanaKanaSharp;
 
 namespace RomajiConverter.WinUI.Controls;
 
 public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyChanged
 {
-    public static readonly DependencyProperty UnitProperty = DependencyProperty.Register(nameof(Unit), typeof(ConvertedUnit),
+    public static readonly DependencyProperty UnitProperty = DependencyProperty.Register(nameof(Unit),
+        typeof(ConvertedUnit),
         typeof(EditableLabelGroup), new PropertyMetadata(null));
 
-    public static readonly DependencyProperty RomajiVisibilityProperty = DependencyProperty.Register(nameof(RomajiVisibility),
+    public static readonly DependencyProperty RomajiVisibilityProperty = DependencyProperty.Register(
+        nameof(RomajiVisibility),
         typeof(Visibility), typeof(EditableLabelGroup), new PropertyMetadata(Visibility.Collapsed));
 
     public static readonly DependencyProperty HiraganaVisibilityProperty =
@@ -28,8 +26,13 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
         typeof(double), typeof(EditableLabelGroup), new PropertyMetadata(14d));
 
     public static readonly DependencyProperty BorderVisibilitySettingProperty =
-        DependencyProperty.Register(nameof(BorderVisibilitySetting), typeof(BorderVisibilitySetting), typeof(EditableLabel),
+        DependencyProperty.Register(nameof(BorderVisibilitySetting), typeof(BorderVisibilitySetting),
+            typeof(EditableLabel),
             new PropertyMetadata(BorderVisibilitySetting.Hidden));
+
+    private ReplaceString _selectedHiragana;
+
+    private ReplaceString _selectedRomaji;
 
     public EditableLabelGroup(ConvertedUnit unit)
     {
@@ -39,13 +42,6 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
         SelectedRomaji = Unit.ReplaceRomaji[0];
         SelectedHiragana = Unit.ReplaceHiragana[0];
         BorderVisibilitySetting = BorderVisibilitySetting.Highlight;
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-    public void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public ConvertedUnit Unit
@@ -117,8 +113,6 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
         set => SetValue(BorderVisibilitySettingProperty, value);
     }
 
-    private ReplaceString _selectedRomaji;
-
     public ReplaceString SelectedRomaji
     {
         get => _selectedRomaji;
@@ -127,15 +121,11 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
             if (Equals(value, _selectedRomaji)) return;
             _selectedRomaji = value;
             if (_selectedRomaji.IsSystem)
-            {
                 SelectedHiragana = Unit.ReplaceHiragana.First(p => p.Id == _selectedRomaji.Id);
-            }
             Unit.Romaji = _selectedRomaji.Value;
             OnPropertyChanged();
         }
     }
-
-    private ReplaceString _selectedHiragana;
 
     public ReplaceString SelectedHiragana
     {
@@ -145,12 +135,17 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
             if (Equals(value, _selectedHiragana)) return;
             _selectedHiragana = value;
             if (_selectedHiragana.IsSystem)
-            {
                 SelectedRomaji = Unit.ReplaceRomaji.First(p => p.Id == _selectedHiragana.Id);
-            }
             Unit.Hiragana = _selectedHiragana.Value;
             OnPropertyChanged();
         }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+    public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public void Destroy()

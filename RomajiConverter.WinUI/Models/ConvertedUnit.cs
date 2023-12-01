@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -10,9 +9,9 @@ public class ConvertedUnit : INotifyPropertyChanged
     private string _hiragana;
     private bool _isKanji;
     private string _japanese;
-    private string _romaji;
-    private ObservableCollection<ReplaceString> _replaceRomaji;
     private ObservableCollection<ReplaceString> _replaceHiragana;
+    private ObservableCollection<ReplaceString> _replaceRomaji;
+    private string _romaji;
 
     public ConvertedUnit(string japanese, string hiragana, string romaji, bool isKanji)
     {

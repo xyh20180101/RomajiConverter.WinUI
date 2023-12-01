@@ -6,7 +6,7 @@
 
 ## 词典资源
 - 拉取下来的代码可以直接编译，但如果要正常运行应用，还需要词典资源文件(unidic)，该资源可以从release中的压缩包里获得
-- 词典真正的来源是 https://clrd.ninjal.ac.jp/unidic_archive/cwj/2.1.2/ 中的`unidic-mecab-2.1.2_bin.zip`，选择该版本词典的原因是文件大小相对较小，解析效果相对不错。你也可以在 https://clrd.ninjal.ac.jp/unidic/back_number.html 选择其他版本的词典，但由于我只针对`unidic-mecab-2.1.2_bin.zip`进行开发，使用其他词典代码可能会报错
+- 词典真正的来源是 https://clrd.ninjal.ac.jp/unidic_archive/cwj/2.1.2/ 中的`unidic-mecab-2.1.2_bin.zip`，选择该版本词典的原因是文件大小相对较小，解析效果相对不错。你也可以在 https://clrd.ninjal.ac.jp/unidic/back_number.html 选择其他版本的词典，在1.1.0版本后代码可以支持不同的词典资源了，不过我试了几个其实差别不大
 
 ## 网易云歌词
 - 实现过程是读取网易云客户端本地的数据文件，里面有最后播放的歌曲（当前播放的歌曲），拿到songId后请求官方的api接口（不需要鉴权）拿到歌词

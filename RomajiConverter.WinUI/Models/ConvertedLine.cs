@@ -12,7 +12,7 @@ public class ConvertedLine
         Units = Array.Empty<ConvertedUnit>();
     }
 
-    public int Index { get; set; }
+    public ushort Index { get; set; }
 
     public string Chinese { get; set; }
 

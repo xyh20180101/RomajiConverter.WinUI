@@ -1,26 +1,26 @@
-using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Windows.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Windows.UI;
 using Microsoft.UI.Xaml.Media;
-using RomajiConverter.WinUI.Models;
 using RomajiConverter.WinUI.Enums;
+using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Controls;
 
 public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
 {
-    public static readonly DependencyProperty SelectedTextProperty = DependencyProperty.Register(nameof(SelectedText), typeof(ReplaceString),
-        typeof(EditableLabel), new PropertyMetadata(new ReplaceString(-1, string.Empty, false)));
+    public static readonly DependencyProperty SelectedTextProperty = DependencyProperty.Register(nameof(SelectedText),
+        typeof(ReplaceString),
+        typeof(EditableLabel), new PropertyMetadata(new ReplaceString(0, string.Empty, false)));
 
-    public static readonly DependencyProperty ReplaceTextProperty = DependencyProperty.Register(nameof(ReplaceText), typeof(ObservableCollection<ReplaceString>),
+    public static readonly DependencyProperty ReplaceTextProperty = DependencyProperty.Register(nameof(ReplaceText),
+        typeof(ObservableCollection<ReplaceString>),
         typeof(EditableLabel), new PropertyMetadata(new ObservableCollection<ReplaceString>()));
 
     public static readonly DependencyProperty MyFontSizeProperty =
@@ -28,7 +28,8 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
             new PropertyMetadata(14d));
 
     public static readonly DependencyProperty BorderVisibilitySettingProperty =
-        DependencyProperty.Register(nameof(BorderVisibilitySetting), typeof(BorderVisibilitySetting), typeof(EditableLabel),
+        DependencyProperty.Register(nameof(BorderVisibilitySetting), typeof(BorderVisibilitySetting),
+            typeof(EditableLabel),
             new PropertyMetadata(BorderVisibilitySetting.Hidden));
 
     private bool _isEdit;
@@ -73,10 +74,10 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
     {
         get
         {
-            if (IsEdit || BorderVisibilitySetting == BorderVisibilitySetting.Hidden) 
+            if (IsEdit || BorderVisibilitySetting == BorderVisibilitySetting.Hidden)
                 return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             if (BorderVisibilitySetting == BorderVisibilitySetting.Visible || ReplaceText.Count > 1)
-                return new SolidColorBrush(Color.FromArgb(0xAA, 0xAA, 0xAA, 0xAA));
+                return new SolidColorBrush(Color.FromArgb(0xAA, 0x99, 0x99, 0x99));
             return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
         }
     }

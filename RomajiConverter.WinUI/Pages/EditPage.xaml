@@ -37,7 +37,7 @@
                     <ToggleSwitch x:Uid="IsOnlyShowKanjiCheckBox" x:Name="IsOnlyShowKanjiCheckBox" MinWidth="100"
                                   Header="仅汉字假名" IsOn="False" />
                     <ComboBox x:Uid="BorderVisibilityComboBox" x:Name="BorderVisibilityComboBox" MinWidth="100"
-                              Header="边框显示"></ComboBox>
+                              Header="边框显示" />
                 </controls1:WrapPanel>
             </StackPanel>
         </Expander>

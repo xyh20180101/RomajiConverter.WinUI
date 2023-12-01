@@ -35,7 +35,7 @@ public static class VariantHelper
             if (variantDictionary.TryGetValue(items[2], out var variant))
             {
                 var c = items[0].Split(" ")[1][0];
-                if(dictionary.ContainsKey(c)==false)
+                if (dictionary.ContainsKey(c) == false)
                     dictionary.Add(c, variant[0]);
             }
         }

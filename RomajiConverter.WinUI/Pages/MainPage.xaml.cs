@@ -112,10 +112,8 @@ public sealed partial class MainPage : Page
 
         var file = await fileSavePicker.PickSaveFileAsync();
         if (file != null)
-        {
             await FileIO.WriteTextAsync(file,
                 JsonConvert.SerializeObject(App.ConvertedLineList, Formatting.Indented));
-        }
     }
 
     /// <summary>

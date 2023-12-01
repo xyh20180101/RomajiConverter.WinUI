@@ -1,4 +1,3 @@
-using System;
 using Windows.System;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
@@ -6,8 +5,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using RomajiConverter.WinUI.Extensions;
 using RomajiConverter.WinUI.Helpers;
-using RomajiConverter.WinUI.Models;
-using System.Collections.Generic;
 
 namespace RomajiConverter.WinUI.Pages;
 

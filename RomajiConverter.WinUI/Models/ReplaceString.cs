@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace RomajiConverter.WinUI.Models;
 
-namespace RomajiConverter.WinUI.Models
+public class ReplaceString
 {
-    public class ReplaceString
+    public ReplaceString(ushort id, string value, bool isSystem)
     {
-        public int Id { get; set; }
+        Id = id;
+        Value = value;
+        IsSystem = isSystem;
+    }
 
-        public string Value { get; set; }
+    public ushort Id { get; set; }
 
-        public bool IsSystem { get; set; }
+    public string Value { get; set; }
 
-        public ReplaceString(int id, string value, bool isSystem)
-        {
-            Id = id;
-            Value = value;
-            IsSystem = isSystem;
-        }
-        
-        public override string ToString()
-        {
-            return Value;
-        }
+    public bool IsSystem { get; set; }
+
+    public override string ToString()
+    {
+        return Value;
     }
 }
