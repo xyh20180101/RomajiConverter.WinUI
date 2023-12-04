@@ -30,23 +30,47 @@
         <CommandBar x:Name="MainCommandBar" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="8,8,8,4"
                     Padding="0" DefaultLabelPosition="Right"
                     HorizontalAlignment="Left" Height="44">
-            <AppBarButton x:Uid="ImportCloudMusicButton" x:Name="ImportCloudMusicButton" Icon="Document"
-                          Label="获取网易云歌词" Click="ImportCloudMusicButton_OnClick" />
+            <AppBarButton x:Uid="ImportCloudMusicButton" x:Name="ImportCloudMusicButton"
+                          Label="获取网易云歌词" Click="ImportCloudMusicButton_OnClick">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE8A5;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
-            <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Icon="OpenFile" Label="打开"
+            <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Label="打开"
                           Tapped="ReadButton_OnTapped"
-                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}" />
-            <AppBarButton x:Uid="SaveButton" x:Name="SaveButton" Icon="Save" Label="保存" Tapped="SaveButton_OnTapped"
-                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}" />
-            <AppBarButton x:Uid="ConvertPictureButton" x:Name="ConvertPictureButton" Icon="Pictures" Label="导出图片"
+                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE8E5;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Uid="SaveButton" x:Name="SaveButton" Label="保存" Tapped="SaveButton_OnTapped"
+                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE74E;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Uid="ConvertPictureButton" x:Name="ConvertPictureButton" Label="导出图片"
                           Tapped="ConvertPictureButton_OnTapped"
-                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}" />
+                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE8B9;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator
                 Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}" />
-            <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Icon="List" Label="详细模式"
-                                IsChecked="{x:Bind winUi:App.Config.IsDetailMode,Mode=TwoWay}" />
-            <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Icon="Setting" Label="设置"
-                          Tapped="SettingButton_OnTapped" />
+            <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Label="详细模式"
+                                IsChecked="{x:Bind winUi:App.Config.IsDetailMode,Mode=TwoWay}">
+                <AppBarToggleButton.Icon>
+                    <FontIcon Glyph="&#xEA37;" />
+                </AppBarToggleButton.Icon>
+            </AppBarToggleButton>
+            <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Label="设置"
+                          Tapped="SettingButton_OnTapped">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE713;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
         </CommandBar>
         <pages:InputPage x:Name="MainInputPage" Grid.Row="1" Grid.Column="0" />
         <pages:EditPage x:Name="MainEditPage" Grid.Row="1" Grid.Column="1" />

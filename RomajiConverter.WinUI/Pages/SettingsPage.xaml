@@ -18,7 +18,11 @@
         </Grid.RowDefinitions>
         <CommandBar Grid.Row="0" Margin="8,8,4,4" Padding="0" DefaultLabelPosition="Right"
                     HorizontalAlignment="Left" Height="44">
-            <AppBarButton x:Uid="BackButton" x:Name="BackButton" Icon="Back" Label="返回" Tapped="BackButton_OnTapped" />
+            <AppBarButton x:Uid="BackButton" x:Name="BackButton" Label="返回" Tapped="BackButton_OnTapped">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE72B;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
         </CommandBar>
         <ScrollViewer x:Name="SettingScrollViewer" Grid.Row="1">
             <StackPanel Margin="8,0,8,16">
