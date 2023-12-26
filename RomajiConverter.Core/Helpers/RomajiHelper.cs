@@ -154,7 +154,6 @@ public static class RomajiHelper
                     //用户自定义词典
                     unit = new ConvertedUnit(item.Surface,
                         customResult,
-                        //WanaKana.ToRomaji(customResult),
                         KanaHelper.KatakanaToRomaji(customResult),
                         true);
                 }
@@ -163,7 +162,6 @@ public static class RomajiHelper
                     //纯假名
                     unit = new ConvertedUnit(item.Surface,
                         KanaHelper.ToHiragana(item.Surface),
-                        //WanaKana.ToRomaji(item.Surface),
                         KanaHelper.KatakanaToRomaji(item.Surface),
                         false);
                 }
@@ -186,11 +184,10 @@ public static class RomajiHelper
                 else
                 {
                     //汉字或助词
-                    var kana = item.GetPos1() == "助詞" ? item.GetPron() : item.GetKana();
+                    var kana = GetKana(item);
 
                     unit = new ConvertedUnit(item.Surface,
                         KanaHelper.ToHiragana(kana),
-                        //WanaKana.ToRomaji(item.GetPron()),
                         KanaHelper.KatakanaToRomaji(kana),
                         !IsJapanese(item.Surface));
                     var (replaceHiragana, replaceRomaji) = GetReplaceData(item);
@@ -273,18 +270,23 @@ public static class RomajiHelper
         var replaceRomaji = new ObservableCollection<ReplaceString>();
 
         ushort i = 1;
-        foreach (var meCabNode in replaceNodeList.DistinctBy(p => p.GetPron()))
+        foreach (var meCabNode in replaceNodeList.DistinctBy(GetKana))
         {
-            var pron = meCabNode.GetPron();
-            if (pron != null)
+            var kana = GetKana(meCabNode);
+            if (kana != null)
             {
-                replaceHiragana.Add(new ReplaceString(i, KanaHelper.ToHiragana(pron), true));
-                replaceRomaji.Add(new ReplaceString(i, KanaHelper.KatakanaToRomaji(pron), true));
+                replaceHiragana.Add(new ReplaceString(i, KanaHelper.ToHiragana(kana), true));
+                replaceRomaji.Add(new ReplaceString(i, KanaHelper.KatakanaToRomaji(kana), true));
                 i++;
             }
         }
 
         return (replaceHiragana, replaceRomaji);
+    }
+
+    private static string GetKana(MeCabNode node)
+    {
+        return node.GetPos1() == "助詞" ? node.GetPron() : node.GetKana();
     }
 
     /// <summary>

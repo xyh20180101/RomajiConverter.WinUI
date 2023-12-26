@@ -5,9 +5,14 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RomajiConverter.WinUI", "RomajiConverter.WinUI\RomajiConverter.WinUI.csproj", "{9923BF6E-729E-447A-A5DB-85E64154F8EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomajiConverter.Core", "RomajiConverter.Core\RomajiConverter.Core.csproj", "{A34552E2-4E1F-4E1D-B7A9-C65D1D711D33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RomajiConverter.Core", "RomajiConverter.Core\RomajiConverter.Core.csproj", "{A34552E2-4E1F-4E1D-B7A9-C65D1D711D33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomajiConverter.Test", "RomajiConverter.Test\RomajiConverter.Test.csproj", "{0E5DAA1C-A9A2-491B-BF5C-F4F01E6CDC59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RomajiConverter.Test", "RomajiConverter.Test\RomajiConverter.Test.csproj", "{0E5DAA1C-A9A2-491B-BF5C-F4F01E6CDC59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{F53F78E3-F7B5-4212-8850-A4CF699F75AC}"
+	ProjectSection(SolutionItems) = preProject
+		publish.props = publish.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

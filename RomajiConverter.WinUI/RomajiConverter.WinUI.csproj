@@ -18,8 +18,10 @@
 		<Title>RomajiConverter.WinUI</Title>
 		<Authors>WL</Authors>
 		<PackageProjectUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</PackageProjectUrl>
-		<Version>1.1.1</Version>
 	</PropertyGroup>
+	
+	<Import Project="..\publish.props" />
+	
 	<ItemGroup>
 	  <Content Remove="Assets\BadgeLogo.scale-100.png" />
 	  <Content Remove="Assets\BadgeLogo.scale-125.png" />

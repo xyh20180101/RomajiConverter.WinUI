@@ -7,6 +7,8 @@
 		<MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
 	</PropertyGroup>
 
+	<Import Project="..\publish.props" />
+
 	<ItemGroup>
 		<PackageReference Include="MeCab.DotNet" Version="1.1.0" />
 	</ItemGroup>
