@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace RomajiConverter.WinUI.Extensions;
+﻿namespace RomajiConverter.Core.Extensions;
 
 public static class StringExtension
 {

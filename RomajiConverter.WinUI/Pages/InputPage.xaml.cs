@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using RomajiConverter.WinUI.Extensions;
-using RomajiConverter.WinUI.Helpers;
+using RomajiConverter.Core.Helpers;
 
 namespace RomajiConverter.WinUI.Pages;
 

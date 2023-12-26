@@ -13,7 +13,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
 using Newtonsoft.Json;
 using RomajiConverter.WinUI.Helpers;
-using RomajiConverter.WinUI.Models;
+using RomajiConverter.Core.Models;
 using WinRT.Interop;
 
 namespace RomajiConverter.WinUI.Pages;

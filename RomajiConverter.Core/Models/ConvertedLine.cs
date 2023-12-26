@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RomajiConverter.WinUI.Models;
+﻿namespace RomajiConverter.Core.Models;
 
 public class ConvertedLine
 {

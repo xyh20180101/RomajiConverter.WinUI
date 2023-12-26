@@ -15,7 +15,6 @@
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-		<MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
 		<Title>RomajiConverter.WinUI</Title>
 		<Authors>WL</Authors>
 		<PackageProjectUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</PackageProjectUrl>
@@ -38,11 +37,6 @@
 		<None Remove="Pages\OutputPage.xaml" />
 		<None Remove="Pages\SettingsPage.xaml" />
 	</ItemGroup>
-	<ItemGroup>
-		<None Update="unidic\**">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
@@ -56,7 +50,6 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.230907" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
-		<PackageReference Include="MeCab.DotNet" Version="1.1.0" />
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
@@ -65,7 +58,6 @@
 		<PackageReference Include="Opportunity.LrcParser" Version="1.0.4" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
 		<PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
-		<PackageReference Include="WanaKanaSharp" Version="0.2.0" />
 		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
 
@@ -90,9 +82,6 @@
 		<Page Update="Controls\ScaleLabel.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>
-		<None Update="customizeDict.txt">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<Page Update="Pages\OutputPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>
@@ -105,15 +94,12 @@
 		<Page Update="Pages\SettingsPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>
-		<None Update="Variants\kSimplifiedVariant.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Variants\kTraditionalVariant.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\RomajiConverter.Core\RomajiConverter.Core.csproj" />
 	</ItemGroup>
 
 	<!-- 
