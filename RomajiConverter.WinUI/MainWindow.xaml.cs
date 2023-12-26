@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.UI.Xaml;
 using Newtonsoft.Json;
+using RomajiConverter.Core.Helpers;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Models;
 using RomajiConverter.WinUI.Pages;

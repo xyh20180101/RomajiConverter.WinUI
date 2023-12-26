@@ -17,6 +17,5 @@
 [MeCab.DotNet](https://github.com/kekyo/MeCab.DotNet)  
 [NTextCat](https://github.com/ivanakcheurov/ntextcat)  
 [LrcParser](https://github.com/OpportunityLiu/LrcParser)  
-[WanaKanaSharp](https://github.com/caguiclajmg/WanaKanaSharp)  
 [UniDic](https://clrd.ninjal.ac.jp/unidic/)  
 [unihan-database](https://github.com/unicode-org/unihan-database)

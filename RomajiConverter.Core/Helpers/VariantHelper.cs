@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace RomajiConverter.WinUI.Helpers;
+﻿namespace RomajiConverter.Core.Helpers;
 
 public static class VariantHelper
 {

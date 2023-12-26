@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using MeCab;
 using MeCab.Extension.UniDic;
-using RomajiConverter.WinUI.Extensions;
-using RomajiConverter.WinUI.Models;
-using WanaKanaSharp;
+using RomajiConverter.Core.Extensions;
+using RomajiConverter.Core.Models;
 
-namespace RomajiConverter.WinUI.Helpers;
+namespace RomajiConverter.Core.Helpers;
 
 public static class RomajiHelper
 {
@@ -159,7 +154,7 @@ public static class RomajiHelper
                     //用户自定义词典
                     unit = new ConvertedUnit(item.Surface,
                         customResult,
-                        WanaKana.ToRomaji(customResult),
+                        KanaHelper.KatakanaToRomaji(customResult),
                         true);
                 }
                 else if (features.Length > 0 && item.GetPos1() != "助詞" && IsJapanese(item.Surface))
@@ -167,7 +162,7 @@ public static class RomajiHelper
                     //纯假名
                     unit = new ConvertedUnit(item.Surface,
                         KanaHelper.ToHiragana(item.Surface),
-                        WanaKana.ToRomaji(item.Surface),
+                        KanaHelper.KatakanaToRomaji(item.Surface),
                         false);
                 }
                 else if (features.Length <= 6 || new[] { "補助記号" }.Contains(item.GetPos1()))
@@ -189,9 +184,11 @@ public static class RomajiHelper
                 else
                 {
                     //汉字或助词
+                    var kana = GetKana(item);
+
                     unit = new ConvertedUnit(item.Surface,
-                        KanaHelper.ToHiragana(item.GetPron()),
-                        WanaKana.ToRomaji(item.GetPron()),
+                        KanaHelper.ToHiragana(kana),
+                        KanaHelper.KatakanaToRomaji(kana),
                         !IsJapanese(item.Surface));
                     var (replaceHiragana, replaceRomaji) = GetReplaceData(item);
                     unit.ReplaceHiragana = replaceHiragana;
@@ -273,18 +270,23 @@ public static class RomajiHelper
         var replaceRomaji = new ObservableCollection<ReplaceString>();
 
         ushort i = 1;
-        foreach (var meCabNode in replaceNodeList.DistinctBy(p => p.GetPron()))
+        foreach (var meCabNode in replaceNodeList.DistinctBy(GetKana))
         {
-            var pron = meCabNode.GetPron();
-            if (pron != null)
+            var kana = GetKana(meCabNode);
+            if (kana != null)
             {
-                replaceHiragana.Add(new ReplaceString(i, KanaHelper.ToHiragana(pron), true));
-                replaceRomaji.Add(new ReplaceString(i, WanaKana.ToRomaji(pron), true));
+                replaceHiragana.Add(new ReplaceString(i, KanaHelper.ToHiragana(kana), true));
+                replaceRomaji.Add(new ReplaceString(i, KanaHelper.KatakanaToRomaji(kana), true));
                 i++;
             }
         }
 
         return (replaceHiragana, replaceRomaji);
+    }
+
+    private static string GetKana(MeCabNode node)
+    {
+        return node.GetPos1() == "助詞" ? node.GetPron() : node.GetKana();
     }
 
     /// <summary>

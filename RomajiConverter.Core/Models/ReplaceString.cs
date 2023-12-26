@@ -1,4 +1,4 @@
-﻿namespace RomajiConverter.WinUI.Models;
+﻿namespace RomajiConverter.Core.Models;
 
 public class ReplaceString
 {

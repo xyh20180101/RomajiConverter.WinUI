@@ -9,7 +9,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using RomajiConverter.WinUI.Enums;
-using RomajiConverter.WinUI.Models;
+using RomajiConverter.Core.Models;
 
 namespace RomajiConverter.WinUI.Controls;
 

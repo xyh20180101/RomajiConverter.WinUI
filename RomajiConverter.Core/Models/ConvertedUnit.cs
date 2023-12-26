@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace RomajiConverter.WinUI.Models;
+namespace RomajiConverter.Core.Models;
 
 public class ConvertedUnit : INotifyPropertyChanged
 {

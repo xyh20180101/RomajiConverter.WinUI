@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Windows.ApplicationModel.Resources;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Models;
 using UnhandledExceptionEventArgs = Microsoft.UI.Xaml.UnhandledExceptionEventArgs;
 

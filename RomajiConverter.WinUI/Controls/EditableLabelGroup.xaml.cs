@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using RomajiConverter.WinUI.Enums;
-using RomajiConverter.WinUI.Models;
+using RomajiConverter.Core.Models;
 
 namespace RomajiConverter.WinUI.Controls;
 

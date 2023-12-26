@@ -13,10 +13,9 @@ Here's the document for developers, if you're more interested in using the app, 
 - NetEase Cloud Music (V3.0) local data is stored in `User\AppData\Local\Netease\CloudMusic\Library\webdb.dat`, which is a sqlite file
 
 
-## 项目引用
+## Project references
 [MeCab.DotNet](https://github.com/kekyo/MeCab.DotNet)  
 [NTextCat](https://github.com/ivanakcheurov/ntextcat)  
 [LrcParser](https://github.com/OpportunityLiu/LrcParser)  
-[WanaKanaSharp](https://github.com/caguiclajmg/WanaKanaSharp)  
 [UniDic](https://clrd.ninjal.ac.jp/unidic/)  
 [unihan-database](https://github.com/unicode-org/unihan-database)
