@@ -7,6 +7,8 @@ namespace RomajiConverter.WinUI.Models;
 
 public class MyConfig : INotifyPropertyChanged
 {
+    private int _windowsWidth;
+    private int _windowsHeight;
     private string _backgroundColor;
     private double _editPanelFontSize;
     private string _fontColor;
@@ -38,6 +40,9 @@ public class MyConfig : INotifyPropertyChanged
     /// </summary>
     public void ResetSetting()
     {
+        WindowWidth = 1400;
+        WindowHeight = 800;
+
         InputTextBoxFontSize = 14;
         EditPanelFontSize = 14;
         OutputTextBoxFontSize = 14;
@@ -69,6 +74,28 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _isDetailMode) return;
             _isDetailMode = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int WindowWidth
+    {
+        get => _windowsWidth;
+        set
+        {
+            if (value == _windowsWidth) return;
+            _windowsWidth = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int WindowHeight
+    {
+        get => _windowsHeight;
+        set
+        {
+            if (value == _windowsHeight) return;
+            _windowsHeight = value;
             OnPropertyChanged();
         }
     }

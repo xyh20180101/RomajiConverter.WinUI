@@ -10,7 +10,7 @@
 	<Import Project="..\publish.props" />
 
 	<ItemGroup>
-		<PackageReference Include="MeCab.DotNet" Version="1.1.0" />
+		<PackageReference Include="MeCab.DotNet" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

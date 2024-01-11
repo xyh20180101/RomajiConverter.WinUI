@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.Core.Models;
 using WinRT.Interop;
+using RomajiConverter.WinUI.Dialogs;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -44,6 +45,19 @@ public sealed partial class MainPage : Page
     private async void ImportCloudMusicButton_OnClick(object sender, RoutedEventArgs e)
     {
         ShowLrc(await CloudMusicHelper.GetLrc(CloudMusicHelper.GetLastSongId()));
+    }
+
+    /// <summary>
+    /// 通过链接导入歌词
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void ImportUrlButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        await new ImportUrlContentDialog
+        {
+            XamlRoot = App.MainWindow.Content.XamlRoot
+        }.ShowAsync();
     }
 
     /// <summary>
