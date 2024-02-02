@@ -325,7 +325,7 @@ public static class RomajiHelper
 
         foreach (var word in wordArray)
         {
-            if (IsJapanese(word.ToString()))
+            if (word != 'ー' && IsJapanese(word.ToString()))
                 //含有日文直接返回否
                 return false;
 

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Windows.Graphics;
 using Microsoft.UI.Xaml;
 using Newtonsoft.Json;
 using RomajiConverter.Core.Helpers;
@@ -20,6 +21,7 @@ public sealed partial class MainWindow : Window
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         AppWindow.SetIcon("Assets/icon.ico");
+        AppWindow.Resize(new SizeInt32(App.Config.WindowWidth, App.Config.WindowHeight));
 
         InitHelper();
 

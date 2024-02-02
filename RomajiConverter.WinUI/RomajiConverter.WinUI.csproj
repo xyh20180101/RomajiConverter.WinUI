@@ -33,6 +33,7 @@
 		<None Remove="Controls\EditableLabel.xaml" />
 		<None Remove="Controls\EditableLabelGroup.xaml" />
 		<None Remove="Controls\ScaleLabel.xaml" />
+		<None Remove="Dialogs\ImportUrlContentDialog.xaml" />
 		<None Remove="Pages\EditPage.xaml" />
 		<None Remove="Pages\InputPage.xaml" />
 		<None Remove="Pages\MainPage.xaml" />
@@ -102,6 +103,11 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\RomajiConverter.Core\RomajiConverter.Core.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Dialogs\ImportUrlContentDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 
 	<!-- 

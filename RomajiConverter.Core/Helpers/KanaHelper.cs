@@ -47,6 +47,11 @@ public static class KanaHelper
         return stringBuilder.ToString();
     }
 
+    /// <summary>
+    /// 假名转罗马音
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
     public static string KatakanaToRomaji(string str)
     {
         var result = new StringBuilder();
@@ -67,14 +72,17 @@ public static class KanaHelper
             var word = str[i].ToString();
             if (KanaDictionary.ContainsKey(word))
             {
+                //正常转换
                 result.Append(KanaDictionary[word]);
             }
             else if (word == "ー")
             {
-                result.Append(result[^1]);
+                //长音,取前一个音
+                result.Append(result.Length > 0 ? result[^1] : word);
             }
             else
             {
+                //不能识别,保持原样
                 result.Append(word);
             }
 

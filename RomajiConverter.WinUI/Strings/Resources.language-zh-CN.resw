@@ -252,6 +252,12 @@
   <data name="KanjiHiraganaCheckBox.MinWidth" xml:space="preserve">
     <value>100</value>
   </data>
+  <data name="LyricsOptionIsUseOldLrcParser.Header" xml:space="preserve">
+    <value>使用旧版本Lrc解析器</value>
+  </data>
+  <data name="LyricsOptionTextBlock.Text" xml:space="preserve">
+    <value>获取歌词选项</value>
+  </data>
   <data name="NewLineCheckBox.Header" xml:space="preserve">
     <value>每句换行</value>
   </data>

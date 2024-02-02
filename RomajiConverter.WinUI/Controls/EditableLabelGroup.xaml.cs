@@ -27,7 +27,7 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
 
     public static readonly DependencyProperty BorderVisibilitySettingProperty =
         DependencyProperty.Register(nameof(BorderVisibilitySetting), typeof(BorderVisibilitySetting),
-            typeof(EditableLabel),
+            typeof(EditableLabelGroup),
             new PropertyMetadata(BorderVisibilitySetting.Hidden));
 
     private ReplaceString _selectedHiragana;
