@@ -61,7 +61,8 @@ public static class CloudMusicHelper
         client.BaseAddress = new Uri("http://music.163.com/");
         var jpnLrcResponse = await client.GetAsync($"api/song/media?id={songId}");
         var content = JObject.Parse(await jpnLrcResponse.Content.ReadAsStringAsync());
-        var jpnLrc = Lyrics.Parse(content["lyric"].ToString());
+        var jpnLrcText = content["lyric"].ToString();
+
         var chnLrcResponse = await client.GetAsync($"api/song/lyric?os=pc&id={songId}&tv=-1");
         content = JObject.Parse(await chnLrcResponse.Content.ReadAsStringAsync());
         if ((int?)content["code"] != 200)
@@ -69,14 +70,39 @@ public static class CloudMusicHelper
             var resourceLoader = ResourceLoader.GetForViewIndependentUse();
             throw new Exception(resourceLoader.GetString("GetLyricsError"));
         }
+        var chnLrcText = content["tlyric"]["lyric"].ToString();
 
-        var chnLrc = Lyrics.Parse(content["tlyric"]["lyric"].ToString());
-        var lrcList = jpnLrc.Lyrics.Lines.Select(line => new ReturnLrc
-            { Time = line.Timestamp.ToString("mm:ss.fff"), JLrc = line.Content }).ToList();
-        foreach (var line in chnLrc.Lyrics.Lines)
-        foreach (var lrc in lrcList.Where(lrc => lrc.Time == line.Timestamp.ToString("mm:ss.fff")))
-            lrc.CLrc = line.Content;
-        return lrcList;
+        return ParseLrc(jpnLrcText, chnLrcText);
+    }
+
+    private static List<ReturnLrc> ParseLrc(string jpnLrcText, string chnLrcText)
+    {
+        if (App.Config.IsUseOldLrcParser)
+        {
+            var jpnLrc = Lyrics.Parse(jpnLrcText);
+            var chnLrc = Lyrics.Parse(chnLrcText);
+
+            var lrcList = jpnLrc.Lyrics.Lines.Select(line => new ReturnLrc
+            { Time = line.Timestamp - DateTime.MinValue, JLrc = line.Content }).ToList();
+            foreach (var line in chnLrc.Lyrics.Lines)
+                foreach (var lrc in lrcList.Where(lrc => lrc.Time == line.Timestamp - DateTime.MinValue))
+                    lrc.CLrc = line.Content;
+
+            return lrcList;
+        }
+        else
+        {
+            var jpnLrc = LrcParser.Parse(jpnLrcText);
+            var chnLrc = LrcParser.Parse(chnLrcText);
+
+            var lrcList = jpnLrc.Select(line => new ReturnLrc
+            { Time = line.Time, JLrc = line.Text }).ToList();
+            foreach (var line in chnLrc)
+                foreach (var lrc in lrcList.Where(lrc => lrc.Time == line.Time))
+                    lrc.CLrc = line.Text;
+
+            return lrcList;
+        }
     }
 }
 
@@ -84,7 +110,7 @@ public class ReturnLrc
 {
     public ReturnLrc()
     {
-        Time = "";
+        Time = TimeSpan.Zero;
         JLrc = "";
         CLrc = "";
     }
@@ -92,7 +118,7 @@ public class ReturnLrc
     /// <summary>
     /// 时间
     /// </summary>
-    public string Time { get; set; }
+    public TimeSpan Time { get; set; }
 
     /// <summary>
     /// 日词

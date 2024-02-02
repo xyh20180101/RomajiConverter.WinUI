@@ -252,6 +252,12 @@
   <data name="KanjiHiraganaCheckBox.MinWidth" xml:space="preserve">
     <value>120</value>
   </data>
+  <data name="LyricsOptionIsUseOldLrcParser.Header" xml:space="preserve">
+    <value>Use Old Lrc Parser</value>
+  </data>
+  <data name="LyricsOptionTextBlock.Text" xml:space="preserve">
+    <value>Lyrics Option</value>
+  </data>
   <data name="NewLineCheckBox.Header" xml:space="preserve">
     <value>NewLine Per Line</value>
   </data>

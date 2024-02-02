@@ -371,7 +371,8 @@ public static class RomajiHelper
     /// <returns></returns>
     private static bool IsJapanese(string str)
     {
-        return Regex.IsMatch(str, @"^[\u3040-\u30ff]+$", RegexOptions.Compiled);
+        //跳过\u30fc长音符号,因为有时候中文歌词里也会有这个符号
+        return Regex.IsMatch(str, @"^[\u3040-\u30fb\u30fd-\u30ff]+$", RegexOptions.Compiled);
     }
 
     #endregion

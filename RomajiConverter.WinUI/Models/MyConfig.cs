@@ -24,6 +24,7 @@ public class MyConfig : INotifyPropertyChanged
     private int _pagePadding;
     private string _rightParenthesis;
     private int _textMargin;
+    private bool _isUseOldLrcParser;
 
     /// <summary>
     /// 默认设置
@@ -42,6 +43,8 @@ public class MyConfig : INotifyPropertyChanged
     {
         WindowWidth = 1400;
         WindowHeight = 800;
+
+        IsUseOldLrcParser = false;
 
         InputTextBoxFontSize = 14;
         EditPanelFontSize = 14;
@@ -96,6 +99,17 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _windowsHeight) return;
             _windowsHeight = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsUseOldLrcParser
+    {
+        get => _isUseOldLrcParser;
+        set
+        {
+            if (value == _isUseOldLrcParser) return;
+            _isUseOldLrcParser = value;
             OnPropertyChanged();
         }
     }

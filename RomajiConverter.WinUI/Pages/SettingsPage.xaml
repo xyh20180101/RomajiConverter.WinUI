@@ -26,7 +26,16 @@
         </CommandBar>
         <ScrollViewer x:Name="SettingScrollViewer" Grid.Row="1">
             <StackPanel Margin="8,0,8,16">
-                <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,4,4,4" FontWeight="SemiBold" Text="生成图片选项" />
+                <TextBlock x:Uid="LyricsOptionTextBlock" Margin="16,4,4,4" FontWeight="SemiBold" Text="获取歌词选项" />
+                <toolkit:SettingsCard x:Uid="LyricsOptionIsUseOldLrcParser" Margin="8,4,8,4"
+                                      Description="" Header="使用旧版本Lrc解析器">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE81C;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsUseOldLrcParser"
+                                  IsOn="{x:Bind winUi:App.Config.IsUseOldLrcParser,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </toolkit:SettingsCard>
+                <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成图片选项" />
                 <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="8,4,8,4" Description="" Header="字体">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D2;" />

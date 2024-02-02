@@ -51,6 +51,11 @@ Here's the user-facing document, if you're more focused on development-related c
 
 ## Update log
 
+### 1.2.1
+- Fixed an unexpected error when converting romaji
+- Fixed the issue that some songs could not get NetEase Cloud Music lyrics
+- This version re-implements the Lrc parser, if you still can't get NetEase Cloud Music lyrics, please feedback, and change to the old parser in the settings then try again
+
 ### 1.2.0
 - Fixed a problem where conversion of long vowel symbol to hiragana was incorrect (`ー` became `゜`)
 
