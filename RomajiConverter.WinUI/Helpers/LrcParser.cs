@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace RomajiConverter.WinUI.Helpers;
@@ -32,6 +33,6 @@ public static class LrcParser
                 result.Add((time, text));
             }
         }
-        return result;
+        return result.OrderBy(p => p.Time).ToList();
     }
 }
