@@ -8,9 +8,6 @@ using Microsoft.UI.Xaml.Controls;
 using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 using RomajiConverter.WinUI.Models;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace RomajiConverter.WinUI.Dialogs;
 
 public sealed partial class ImportUrlContentDialog : ContentDialog, INotifyPropertyChanged
@@ -71,11 +68,11 @@ public sealed partial class ImportUrlContentDialog : ContentDialog, INotifyPrope
     }
 
     /*
-     * GetLrc·½·¨ºÄÊ±,µ¼ÖÂ¹Ø±Õ´°¿ÚÊ±LrcResultÈÔÎª¿Õ
-     * ½â¾ö·½·¨:½ûÓÃPrimaryButtonµÄCloseÂß¼­,ÊÖ¶¯ÔÚOnPrimaryButtonClick·½·¨ÖĞ¹Ø±Õ´°¿Ú
+     * GetLrcæ–¹æ³•è€—æ—¶,å¯¼è‡´å…³é—­çª—å£æ—¶LrcResultä»ä¸ºç©º
+     * è§£å†³æ–¹æ³•:ç¦ç”¨PrimaryButtonçš„Closeé€»è¾‘,æ‰‹åŠ¨åœ¨OnPrimaryButtonClickæ–¹æ³•ä¸­å…³é—­çª—å£
      *
-     * ÓÉÓÚHideÎŞ·¨Ö¸¶¨ContentDialogResult,ÔÚËùÓĞÇé¿öÏÂContentDialogResult¶¼½«ÎªNone
-     * Òò´ËMainPageĞèÒªÅĞ¶ÏLrcResultÊÇ·ñÎª¿Õ,¿ÕÔò²»ÖØĞÂäÖÈ¾¸è´Ê
+     * ç”±äºHideæ— æ³•æŒ‡å®šContentDialogResult,åœ¨æ‰€æœ‰æƒ…å†µä¸‹ContentDialogResultéƒ½å°†ä¸ºNone
+     * å› æ­¤MainPageéœ€è¦åˆ¤æ–­LrcResultæ˜¯å¦ä¸ºç©º,ç©ºåˆ™ä¸é‡æ–°æ¸²æŸ“æ­Œè¯
      */
     private async void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
