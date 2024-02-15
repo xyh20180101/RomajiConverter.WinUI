@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Uid="ImportUrlContentDialog"
-    Title="通过链接导入"
+    Title="通过链接导入歌词"
     PrimaryButtonText="确认"
     CloseButtonText="取消"
     DefaultButton="Primary">

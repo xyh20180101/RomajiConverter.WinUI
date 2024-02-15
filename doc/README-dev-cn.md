@@ -12,6 +12,9 @@
 - 实现过程是读取网易云客户端本地的数据文件，里面有最后播放的歌曲（当前播放的歌曲），拿到songId后请求官方的api接口（不需要鉴权）拿到歌词
 - 网易云（3.0版本）本地数据保存在`文档\AppData\Local\Netease\CloudMusic\Library\webdb.dat`，是sqlite文件
 
+## QQ音乐歌词 & 酷狗歌词
+- 访问歌曲分享链接，获取歌曲Id等信息，通过官方接口获取歌词和中文翻译
+
 
 ## 项目引用
 [MeCab.DotNet](https://github.com/kekyo/MeCab.DotNet)  
