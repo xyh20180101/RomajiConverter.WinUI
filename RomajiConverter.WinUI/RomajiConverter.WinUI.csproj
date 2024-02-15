@@ -19,15 +19,15 @@
 		<Authors>WL</Authors>
 		<PackageProjectUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</PackageProjectUrl>
 	</PropertyGroup>
-	
+
 	<Import Project="..\publish.props" />
-	
+
 	<ItemGroup>
-	  <Content Remove="Assets\BadgeLogo.scale-100.png" />
-	  <Content Remove="Assets\BadgeLogo.scale-125.png" />
-	  <Content Remove="Assets\BadgeLogo.scale-150.png" />
-	  <Content Remove="Assets\BadgeLogo.scale-200.png" />
-	  <Content Remove="Assets\BadgeLogo.scale-400.png" />
+		<Content Remove="Assets\BadgeLogo.scale-100.png" />
+		<Content Remove="Assets\BadgeLogo.scale-125.png" />
+		<Content Remove="Assets\BadgeLogo.scale-150.png" />
+		<Content Remove="Assets\BadgeLogo.scale-200.png" />
+		<Content Remove="Assets\BadgeLogo.scale-400.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="Controls\EditableLabel.xaml" />
@@ -77,37 +77,37 @@
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Controls\EditableLabel.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Controls\EditableLabelGroup.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Controls\ScaleLabel.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Pages\OutputPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Pages\EditPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Pages\InputPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="Pages\SettingsPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</Page>
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Properties\PublishProfiles\" />
+		<Folder Include="Properties\PublishProfiles\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\RomajiConverter.Core\RomajiConverter.Core.csproj" />
+		<ProjectReference Include="..\RomajiConverter.Core\RomajiConverter.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Page Update="Dialogs\ImportUrlContentDialog.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
+		<Page Update="Dialogs\ImportUrlContentDialog.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
 	</ItemGroup>
 
 	<!-- 
@@ -115,7 +115,8 @@
     Explorer "Package and Publish" context menu entry to be enabled for this project even if 
     the Windows App SDK Nuget package has not yet been restored.
   -->
-	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+	<PropertyGroup
+		Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
 		<HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
 	</PropertyGroup>
 </Project>

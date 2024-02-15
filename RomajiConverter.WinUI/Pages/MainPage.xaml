@@ -36,8 +36,8 @@
                     <FontIcon Glyph="&#xE8A5;" />
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton x:Uid="ImportUrlButton" x:Name="ImportUrlButton" Visibility="Collapsed"
-                          Label="通过链接导入" Click="ImportUrlButton_OnClick">
+            <AppBarButton x:Uid="ImportUrlButton" x:Name="ImportUrlButton"
+                          Label="通过链接导入歌词" Click="ImportUrlButton_OnClick">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE71B;" />
                 </AppBarButton.Icon>

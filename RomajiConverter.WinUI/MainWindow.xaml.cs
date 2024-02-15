@@ -4,7 +4,7 @@ using Windows.Graphics;
 using Microsoft.UI.Xaml;
 using Newtonsoft.Json;
 using RomajiConverter.Core.Helpers;
-using RomajiConverter.WinUI.Helpers;
+using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 using RomajiConverter.WinUI.Models;
 using RomajiConverter.WinUI.Pages;
 
@@ -14,7 +14,7 @@ public sealed partial class MainWindow : Window
 {
     public MainWindow()
     {
-        InitConfig();//必须在InitializeComponent前执行
+        InitConfig(); //必须在InitializeComponent前执行
 
         InitializeComponent();
 
@@ -49,7 +49,7 @@ public sealed partial class MainWindow : Window
 
     private void InitHelper()
     {
-        CloudMusicHelper.Init();
+        CloudMusicLyricsHelper.Init();
         RomajiHelper.Init();
         VariantHelper.Init();
     }

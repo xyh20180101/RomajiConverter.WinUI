@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -12,10 +13,12 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
 using Newtonsoft.Json;
-using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.Core.Models;
-using WinRT.Interop;
 using RomajiConverter.WinUI.Dialogs;
+using RomajiConverter.WinUI.Helpers;
+using RomajiConverter.WinUI.Helpers.LyricsHelpers;
+using RomajiConverter.WinUI.Models;
+using WinRT.Interop;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -44,7 +47,7 @@ public sealed partial class MainPage : Page
     /// <param name="e"></param>
     private async void ImportCloudMusicButton_OnClick(object sender, RoutedEventArgs e)
     {
-        ShowLrc(await CloudMusicHelper.GetLrc(CloudMusicHelper.GetLastSongId()));
+        ShowLrc(await CloudMusicLyricsHelper.GetLrc(CloudMusicLyricsHelper.GetLastSongId()));
     }
 
     /// <summary>
@@ -54,24 +57,34 @@ public sealed partial class MainPage : Page
     /// <param name="e"></param>
     private async void ImportUrlButton_OnClick(object sender, RoutedEventArgs e)
     {
-        await new ImportUrlContentDialog
+        var dialog = new ImportUrlContentDialog
         {
             XamlRoot = App.MainWindow.Content.XamlRoot
-        }.ShowAsync();
+        };
+        var dialogResult = await dialog.ShowAsync();
+
+        if (dialog.LrcResult.Count != 0) ShowLrc(dialog.LrcResult);
     }
 
     /// <summary>
     /// 显示歌词
     /// </summary>
     /// <param name="lrc"></param>
-    private void ShowLrc(List<ReturnLrc> lrc)
+    private void ShowLrc(List<MultilingualLrc> lrc)
     {
         var stringBuilder = new StringBuilder();
-        foreach (var item in lrc)
-        {
-            stringBuilder.AppendLine(item.JLrc);
-            stringBuilder.AppendLine(item.CLrc);
-        }
+
+        if (lrc.Select(p => p.CLrc).All(p => p.Length == 0))
+            // 没有翻译
+            foreach (var item in lrc)
+                stringBuilder.AppendLine(item.JLrc);
+        else
+            // 有翻译
+            foreach (var item in lrc)
+            {
+                stringBuilder.AppendLine(item.JLrc);
+                stringBuilder.AppendLine(item.CLrc);
+            }
 
         MainInputPage.SetTextBoxText(stringBuilder.ToString());
     }

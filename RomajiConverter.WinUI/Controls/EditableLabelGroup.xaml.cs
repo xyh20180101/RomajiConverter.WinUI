@@ -3,8 +3,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using RomajiConverter.WinUI.Enums;
 using RomajiConverter.Core.Models;
+using RomajiConverter.WinUI.Enums;
 
 namespace RomajiConverter.WinUI.Controls;
 

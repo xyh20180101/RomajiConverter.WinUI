@@ -12,6 +12,8 @@ Here's the document for developers, if you're more interested in using the app, 
 - The implementation process is to read the local data file of the NetEase Cloud Music client, which contains the last played song (the currently played song), after getting the songId, request the official api interface (no authentication required) to get the lyrics
 - NetEase Cloud Music (V3.0) local data is stored in `User\AppData\Local\Netease\CloudMusic\Library\webdb.dat`, which is a sqlite file
 
+## QQ Music Lyrics & KuGou Lyrics
+- Access the song sharing link, get the song ID and other information, and get the lyrics and Chinese translation through the official interface
 
 ## Project references
 [MeCab.DotNet](https://github.com/kekyo/MeCab.DotNet)  

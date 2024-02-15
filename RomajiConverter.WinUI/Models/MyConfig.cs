@@ -7,8 +7,6 @@ namespace RomajiConverter.WinUI.Models;
 
 public class MyConfig : INotifyPropertyChanged
 {
-    private int _windowsWidth;
-    private int _windowsHeight;
     private string _backgroundColor;
     private double _editPanelFontSize;
     private string _fontColor;
@@ -17,6 +15,7 @@ public class MyConfig : INotifyPropertyChanged
     private double _inputTextBoxFontSize;
     private bool _isDetailMode;
     private bool _isOpenExplorerAfterSaveImage;
+    private bool _isUseOldLrcParser;
     private string _leftParenthesis;
     private int _lineMargin;
     private int _linePadding;
@@ -24,7 +23,8 @@ public class MyConfig : INotifyPropertyChanged
     private int _pagePadding;
     private string _rightParenthesis;
     private int _textMargin;
-    private bool _isUseOldLrcParser;
+    private int _windowsHeight;
+    private int _windowsWidth;
 
     /// <summary>
     /// 默认设置
