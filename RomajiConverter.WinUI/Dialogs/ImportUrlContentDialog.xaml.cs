@@ -25,7 +25,20 @@ namespace RomajiConverter.WinUI.Dialogs
         public ImportUrlContentDialog()
         {
             this.InitializeComponent();
+            Url = "";
             ErrorText = "";
+        }
+
+        private string _url;
+        public string Url
+        {
+            get => _url;
+            set
+            {
+                if (value == _url) return;
+                _url = value;
+                OnPropertyChanged();
+            }
         }
 
         private string _errorText;

@@ -8,10 +8,11 @@ using Windows.ApplicationModel.Resources;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json.Linq;
 using Opportunity.LrcParser;
+using RomajiConverter.WinUI.Models;
 
-namespace RomajiConverter.WinUI.Helpers;
+namespace RomajiConverter.WinUI.Helpers.LyricsHelpers;
 
-public static class CloudMusicHelper
+public static class CloudMusicLyricsHelper
 {
     /// <summary>
     /// 旧版本的历史文件路径
@@ -55,7 +56,7 @@ public static class CloudMusicHelper
         }
     }
 
-    public static async Task<List<ReturnLrc>> GetLrc(string songId)
+    public static async Task<List<MultilingualLrc>> GetLrc(string songId)
     {
         var client = new HttpClient();
         client.BaseAddress = new Uri("http://music.163.com/");
@@ -75,14 +76,14 @@ public static class CloudMusicHelper
         return ParseLrc(jpnLrcText, chnLrcText);
     }
 
-    private static List<ReturnLrc> ParseLrc(string jpnLrcText, string chnLrcText)
+    private static List<MultilingualLrc> ParseLrc(string jpnLrcText, string chnLrcText)
     {
         if (App.Config.IsUseOldLrcParser)
         {
             var jpnLrc = Lyrics.Parse(jpnLrcText);
             var chnLrc = Lyrics.Parse(chnLrcText);
 
-            var lrcList = jpnLrc.Lyrics.Lines.Select(line => new ReturnLrc
+            var lrcList = jpnLrc.Lyrics.Lines.Select(line => new MultilingualLrc
             { Time = line.Timestamp - DateTime.MinValue, JLrc = line.Content }).ToList();
             foreach (var line in chnLrc.Lyrics.Lines)
                 foreach (var lrc in lrcList.Where(lrc => lrc.Time == line.Timestamp - DateTime.MinValue))
@@ -95,7 +96,7 @@ public static class CloudMusicHelper
             var jpnLrc = LrcParser.Parse(jpnLrcText);
             var chnLrc = LrcParser.Parse(chnLrcText);
 
-            var lrcList = jpnLrc.Select(line => new ReturnLrc
+            var lrcList = jpnLrc.Select(line => new MultilingualLrc
             { Time = line.Time, JLrc = line.Text }).ToList();
             foreach (var line in chnLrc)
                 foreach (var lrc in lrcList.Where(lrc => lrc.Time == line.Time))
@@ -104,29 +105,4 @@ public static class CloudMusicHelper
             return lrcList;
         }
     }
-}
-
-public class ReturnLrc
-{
-    public ReturnLrc()
-    {
-        Time = TimeSpan.Zero;
-        JLrc = "";
-        CLrc = "";
-    }
-
-    /// <summary>
-    /// 时间
-    /// </summary>
-    public TimeSpan Time { get; set; }
-
-    /// <summary>
-    /// 日词
-    /// </summary>
-    public string JLrc { get; set; }
-
-    /// <summary>
-    /// 中词
-    /// </summary>
-    public string CLrc { get; set; }
 }

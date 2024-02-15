@@ -18,7 +18,7 @@
     <StackPanel>
         <TextBlock Margin="0,8" Text="目前支持酷狗、QQ音乐"></TextBlock>
         <TextBlock Margin="0,8" Text="歌曲分享链接："></TextBlock>
-        <TextBox Margin="0,8,0,0" TextWrapping="Wrap"></TextBox>
+        <TextBox Margin="0,8,0,0" TextWrapping="Wrap" Text="{x:Bind Url,Mode=TwoWay}"></TextBox>
         <TextBlock Margin="0,4" Foreground="#ff0000" Text="{x:Bind ErrorText}"></TextBlock>
     </StackPanel>
 </ContentDialog>

@@ -16,6 +16,8 @@ using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.Core.Models;
 using WinRT.Interop;
 using RomajiConverter.WinUI.Dialogs;
+using RomajiConverter.WinUI.Helpers.LyricsHelpers;
+using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -44,7 +46,7 @@ public sealed partial class MainPage : Page
     /// <param name="e"></param>
     private async void ImportCloudMusicButton_OnClick(object sender, RoutedEventArgs e)
     {
-        ShowLrc(await CloudMusicHelper.GetLrc(CloudMusicHelper.GetLastSongId()));
+        ShowLrc(await CloudMusicLyricsHelper.GetLrc(CloudMusicLyricsHelper.GetLastSongId()));
     }
 
     /// <summary>
@@ -54,17 +56,31 @@ public sealed partial class MainPage : Page
     /// <param name="e"></param>
     private async void ImportUrlButton_OnClick(object sender, RoutedEventArgs e)
     {
-        await new ImportUrlContentDialog
+        var dialog = new ImportUrlContentDialog
         {
             XamlRoot = App.MainWindow.Content.XamlRoot
-        }.ShowAsync();
+        };
+        var dialogResult = await dialog.ShowAsync();
+
+        if (dialogResult == ContentDialogResult.Primary)
+        {
+            List<MultilingualLrc> lrc;
+            var url = dialog.Url;
+            if (url.Contains("kugou.com"))
+                lrc = await KuGouMusicLyricsHelper.GetLrc(url);
+            else if (url.Contains("y.qq.com"))
+                lrc = new List<MultilingualLrc>();
+            else
+                return;
+            ShowLrc(lrc);
+        }
     }
 
     /// <summary>
     /// 显示歌词
     /// </summary>
     /// <param name="lrc"></param>
-    private void ShowLrc(List<ReturnLrc> lrc)
+    private void ShowLrc(List<MultilingualLrc> lrc)
     {
         var stringBuilder = new StringBuilder();
         foreach (var item in lrc)
