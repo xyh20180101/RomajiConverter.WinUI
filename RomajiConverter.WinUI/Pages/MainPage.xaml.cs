@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -12,12 +13,12 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
 using Newtonsoft.Json;
-using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.Core.Models;
-using WinRT.Interop;
 using RomajiConverter.WinUI.Dialogs;
+using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 using RomajiConverter.WinUI.Models;
+using WinRT.Interop;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -62,18 +63,7 @@ public sealed partial class MainPage : Page
         };
         var dialogResult = await dialog.ShowAsync();
 
-        if (dialogResult == ContentDialogResult.Primary)
-        {
-            List<MultilingualLrc> lrc;
-            var url = dialog.Url;
-            if (url.Contains("kugou.com"))
-                lrc = await KuGouMusicLyricsHelper.GetLrc(url);
-            else if (url.Contains("y.qq.com"))
-                lrc = new List<MultilingualLrc>();
-            else
-                return;
-            ShowLrc(lrc);
-        }
+        if (dialog.LrcResult.Count != 0) ShowLrc(dialog.LrcResult);
     }
 
     /// <summary>
@@ -83,11 +73,18 @@ public sealed partial class MainPage : Page
     private void ShowLrc(List<MultilingualLrc> lrc)
     {
         var stringBuilder = new StringBuilder();
-        foreach (var item in lrc)
-        {
-            stringBuilder.AppendLine(item.JLrc);
-            stringBuilder.AppendLine(item.CLrc);
-        }
+
+        if (lrc.Select(p => p.CLrc).All(p => p.Length == 0))
+            // 没有翻译
+            foreach (var item in lrc)
+                stringBuilder.AppendLine(item.JLrc);
+        else
+            // 有翻译
+            foreach (var item in lrc)
+            {
+                stringBuilder.AppendLine(item.JLrc);
+                stringBuilder.AppendLine(item.CLrc);
+            }
 
         MainInputPage.SetTextBoxText(stringBuilder.ToString());
     }

@@ -234,6 +234,27 @@
   <data name="ImportCloudMusicButton.Label" xml:space="preserve">
     <value>获取网易云歌词</value>
   </data>
+  <data name="ImportUrlButton.Label" xml:space="preserve">
+    <value>通过链接导入歌词</value>
+  </data>
+  <data name="ImportUrlContentDialog.CloseButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ImportUrlContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="ImportUrlContentDialog.Title" xml:space="preserve">
+    <value>通过链接导入歌词</value>
+  </data>
+  <data name="ImportUrlContentDialogTextBlock1.Text" xml:space="preserve">
+    <value>目前支持网易云、QQ音乐、酷狗</value>
+  </data>
+  <data name="ImportUrlContentDialogTextBlock2.Text" xml:space="preserve">
+    <value>歌曲分享链接：</value>
+  </data>
+  <data name="InvalidUrl" xml:space="preserve">
+    <value>链接无效</value>
+  </data>
   <data name="IsOnlyShowKanjiCheckBox.Header" xml:space="preserve">
     <value>仅汉字假名</value>
   </data>

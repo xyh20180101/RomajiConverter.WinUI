@@ -4,9 +4,9 @@ using Windows.Graphics;
 using Microsoft.UI.Xaml;
 using Newtonsoft.Json;
 using RomajiConverter.Core.Helpers;
+using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 using RomajiConverter.WinUI.Models;
 using RomajiConverter.WinUI.Pages;
-using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 
 namespace RomajiConverter.WinUI;
 
@@ -14,7 +14,7 @@ public sealed partial class MainWindow : Window
 {
     public MainWindow()
     {
-        InitConfig();//必须在InitializeComponent前执行
+        InitConfig(); //必须在InitializeComponent前执行
 
         InitializeComponent();
 

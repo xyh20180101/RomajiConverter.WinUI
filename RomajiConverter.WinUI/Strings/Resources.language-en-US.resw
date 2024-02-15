@@ -234,6 +234,27 @@
   <data name="ImportCloudMusicButton.Label" xml:space="preserve">
     <value>Get CloudMusic Lyrics</value>
   </data>
+  <data name="ImportUrlButton.Label" xml:space="preserve">
+    <value>Import Lyics From Url</value>
+  </data>
+  <data name="ImportUrlContentDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ImportUrlContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ImportUrlContentDialog.Title" xml:space="preserve">
+    <value>Import Lyics From Url</value>
+  </data>
+  <data name="ImportUrlContentDialogTextBlock1.Text" xml:space="preserve">
+    <value>At present, NetEase Cloud, QQ Music, and KuGou are supported</value>
+  </data>
+  <data name="ImportUrlContentDialogTextBlock2.Text" xml:space="preserve">
+    <value>Song sharing url:</value>
+  </data>
+  <data name="InvalidUrl" xml:space="preserve">
+    <value>Invalid Url</value>
+  </data>
   <data name="IsOnlyShowKanjiCheckBox.Header" xml:space="preserve">
     <value>Only Kanji Hiragana</value>
   </data>

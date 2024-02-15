@@ -3,8 +3,8 @@ using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using RomajiConverter.WinUI.Extensions;
 using RomajiConverter.Core.Helpers;
+using RomajiConverter.WinUI.Extensions;
 
 namespace RomajiConverter.WinUI.Pages;
 

@@ -1,63 +1,113 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Web;
+using Windows.ApplicationModel.Resources;
+using Microsoft.UI.Xaml.Controls;
+using RomajiConverter.WinUI.Helpers.LyricsHelpers;
+using RomajiConverter.WinUI.Models;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace RomajiConverter.WinUI.Dialogs
+namespace RomajiConverter.WinUI.Dialogs;
+
+public sealed partial class ImportUrlContentDialog : ContentDialog, INotifyPropertyChanged
 {
-    public sealed partial class ImportUrlContentDialog : ContentDialog, INotifyPropertyChanged
+    private string _errorText;
+
+    private string _url;
+
+    public ImportUrlContentDialog()
     {
-        public ImportUrlContentDialog()
-        {
-            this.InitializeComponent();
-            Url = "";
-            ErrorText = "";
-        }
+        InitializeComponent();
+        Url = string.Empty;
+        ErrorText = string.Empty;
 
-        private string _url;
-        public string Url
+        PrimaryButtonClick += OnPrimaryButtonClick;
+        Closing += OnClosing;
+    }
+
+    public string Url
+    {
+        get => _url;
+        set
         {
-            get => _url;
-            set
+            if (value == _url) return;
+            _url = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string ErrorText
+    {
+        get => _errorText;
+        set
+        {
+            if (value == _errorText) return;
+            _errorText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public List<MultilingualLrc> LrcResult { get; set; } = new();
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void TextBox_OnTextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+    {
+        ErrorText = string.Empty;
+    }
+
+    private void OnClosing(ContentDialog sender, ContentDialogClosingEventArgs args)
+    {
+        args.Cancel = args.Result == ContentDialogResult.Primary;
+    }
+
+    /*
+     * GetLrc方法耗时,导致关闭窗口时LrcResult仍为空
+     * 解决方法:禁用PrimaryButton的Close逻辑,手动在OnPrimaryButtonClick方法中关闭窗口
+     *
+     * 由于Hide无法指定ContentDialogResult,在所有情况下ContentDialogResult都将为None
+     * 因此MainPage需要判断LrcResult是否为空,空则不重新渲染歌词
+     */
+    private async void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    {
+        var url = Url;
+
+        try
+        {
+            if (url.Contains("music.163.com"))
             {
-                if (value == _url) return;
-                _url = value;
-                OnPropertyChanged();
+                var songId = HttpUtility.ParseQueryString(new Uri(url).Query)["id"];
+
+                LrcResult = await CloudMusicLyricsHelper.GetLrc(songId);
+            }
+            else if (url.Contains("kugou.com"))
+            {
+                LrcResult = await KuGouMusicLyricsHelper.GetLrc(url);
+            }
+            else if (url.Contains("y.qq.com"))
+            {
+                LrcResult = await QQMusicLyricsHelper.GetLrc(url);
+            }
+            else
+            {
+                throw new Exception(ResourceLoader.GetForViewIndependentUse().GetString("InvalidUrl"));
             }
         }
-
-        private string _errorText;
-        public string ErrorText
+        catch (Exception e)
         {
-            get => _errorText;
-            set
-            {
-                if (value == _errorText) return;
-                _errorText = value;
-                OnPropertyChanged();
-            }
+            ErrorText = e.Message;
+            return;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        Hide();
     }
 }

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ContentDialog
     x:Class="RomajiConverter.WinUI.Dialogs.ImportUrlContentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,18 +8,20 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    x:Uid="ImportUrlContentDialog"
     Title="通过链接导入"
     PrimaryButtonText="确认"
     CloseButtonText="取消"
     DefaultButton="Primary">
     <ContentDialog.Resources>
-        <Style TargetType="local:ImportUrlContentDialog" 
-               BasedOn="{StaticResource DefaultContentDialogStyle}"/>
+        <Style TargetType="local:ImportUrlContentDialog"
+               BasedOn="{StaticResource DefaultContentDialogStyle}" />
     </ContentDialog.Resources>
     <StackPanel>
-        <TextBlock Margin="0,8" Text="目前支持酷狗、QQ音乐"></TextBlock>
-        <TextBlock Margin="0,8" Text="歌曲分享链接："></TextBlock>
-        <TextBox Margin="0,8,0,0" TextWrapping="Wrap" Text="{x:Bind Url,Mode=TwoWay}"></TextBox>
-        <TextBlock Margin="0,4" Foreground="#ff0000" Text="{x:Bind ErrorText}"></TextBlock>
+        <TextBlock x:Uid="ImportUrlContentDialogTextBlock1" Margin="0,8" Text="目前支持网易云、QQ音乐、酷狗" />
+        <TextBlock x:Uid="ImportUrlContentDialogTextBlock2" Margin="0,8" Text="歌曲分享链接：" />
+        <TextBox Margin="0,8,0,0" TextWrapping="Wrap" Text="{x:Bind Url,Mode=TwoWay}"
+                 TextChanging="TextBox_OnTextChanging" />
+        <TextBlock Margin="0,4" Foreground="#C42B1C" Text="{x:Bind ErrorText,Mode=OneWay}" />
     </StackPanel>
 </ContentDialog>

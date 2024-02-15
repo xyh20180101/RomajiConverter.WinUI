@@ -28,11 +28,14 @@ public static class LrcParser
                 var hour = timeMatch.Groups["hour"].Success ? int.Parse(timeMatch.Groups["hour"].Value) : 0;
                 var minute = timeMatch.Groups["minute"].Success ? int.Parse(timeMatch.Groups["minute"].Value) : 0;
                 var second = timeMatch.Groups["second"].Success ? int.Parse(timeMatch.Groups["second"].Value) : 0;
-                var millisecond = timeMatch.Groups["millisecond"].Success ? int.Parse(timeMatch.Groups["millisecond"].Value) : 0;
+                var millisecond = timeMatch.Groups["millisecond"].Success
+                    ? int.Parse(timeMatch.Groups["millisecond"].Value)
+                    : 0;
                 var time = new TimeSpan(0, hour, minute, second, millisecond);
                 result.Add((time, text));
             }
         }
+
         return result.OrderBy(p => p.Time).ToList();
     }
 }

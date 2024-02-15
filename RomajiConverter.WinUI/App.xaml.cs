@@ -17,13 +17,12 @@ namespace RomajiConverter.WinUI;
 /// </summary>
 public partial class App : Application
 {
+    public const string ConfigFileName = "config.json";
     public static MainWindow MainWindow;
 
     public static MyConfig Config = new();
 
     public static List<ConvertedLine> ConvertedLineList = new();
-
-    public const string ConfigFileName = "config.json";
 
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code

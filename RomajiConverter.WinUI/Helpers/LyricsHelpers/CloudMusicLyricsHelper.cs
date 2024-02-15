@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json.Linq;
-using Opportunity.LrcParser;
 using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Helpers.LyricsHelpers;
 
-public static class CloudMusicLyricsHelper
+public class CloudMusicLyricsHelper : LyricsHelper
 {
     /// <summary>
     /// 旧版本的历史文件路径
@@ -58,51 +56,24 @@ public static class CloudMusicLyricsHelper
 
     public static async Task<List<MultilingualLrc>> GetLrc(string songId)
     {
-        var client = new HttpClient();
-        client.BaseAddress = new Uri("http://music.163.com/");
-        var jpnLrcResponse = await client.GetAsync($"api/song/media?id={songId}");
-        var content = JObject.Parse(await jpnLrcResponse.Content.ReadAsStringAsync());
-        var jpnLrcText = content["lyric"].ToString();
-
-        var chnLrcResponse = await client.GetAsync($"api/song/lyric?os=pc&id={songId}&tv=-1");
-        content = JObject.Parse(await chnLrcResponse.Content.ReadAsStringAsync());
-        if ((int?)content["code"] != 200)
+        try
         {
-            var resourceLoader = ResourceLoader.GetForViewIndependentUse();
-            throw new Exception(resourceLoader.GetString("GetLyricsError"));
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("http://music.163.com/");
+            var jpnLrcResponse = await client.GetAsync($"api/song/media?id={songId}");
+            var content = JObject.Parse(await jpnLrcResponse.Content.ReadAsStringAsync());
+            var jpnLrcText = content["lyric"].ToString();
+
+            var chnLrcResponse = await client.GetAsync($"api/song/lyric?os=pc&id={songId}&tv=-1");
+            content = JObject.Parse(await chnLrcResponse.Content.ReadAsStringAsync());
+
+            var chnLrcText = content["tlyric"]["lyric"].ToString();
+
+            return ParseLrc(jpnLrcText, chnLrcText);
         }
-        var chnLrcText = content["tlyric"]["lyric"].ToString();
-
-        return ParseLrc(jpnLrcText, chnLrcText);
-    }
-
-    private static List<MultilingualLrc> ParseLrc(string jpnLrcText, string chnLrcText)
-    {
-        if (App.Config.IsUseOldLrcParser)
+        catch
         {
-            var jpnLrc = Lyrics.Parse(jpnLrcText);
-            var chnLrc = Lyrics.Parse(chnLrcText);
-
-            var lrcList = jpnLrc.Lyrics.Lines.Select(line => new MultilingualLrc
-            { Time = line.Timestamp - DateTime.MinValue, JLrc = line.Content }).ToList();
-            foreach (var line in chnLrc.Lyrics.Lines)
-                foreach (var lrc in lrcList.Where(lrc => lrc.Time == line.Timestamp - DateTime.MinValue))
-                    lrc.CLrc = line.Content;
-
-            return lrcList;
-        }
-        else
-        {
-            var jpnLrc = LrcParser.Parse(jpnLrcText);
-            var chnLrc = LrcParser.Parse(chnLrcText);
-
-            var lrcList = jpnLrc.Select(line => new MultilingualLrc
-            { Time = line.Time, JLrc = line.Text }).ToList();
-            foreach (var line in chnLrc)
-                foreach (var lrc in lrcList.Where(lrc => lrc.Time == line.Time))
-                    lrc.CLrc = line.Text;
-
-            return lrcList;
+            throw new Exception(ResourceLoader.GetForViewIndependentUse().GetString("GetLyricsError"));
         }
     }
 }
