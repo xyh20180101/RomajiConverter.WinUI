@@ -231,6 +231,9 @@
   <data name="ImageOptionTextMarginSetting.Header" xml:space="preserve">
     <value>Text Margin</value>
   </data>
+  <data name="ImageOptionWordMarginSetting.Header" xml:space="preserve">
+    <value>Word Margin</value>
+  </data>
   <data name="ImportCloudMusicButton.Label" xml:space="preserve">
     <value>Get CloudMusic Lyrics</value>
   </data>

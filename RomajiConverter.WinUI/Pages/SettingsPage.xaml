@@ -8,9 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
     xmlns:winUi="using:RomajiConverter.WinUI"
+    xmlns:valueConverters="using:RomajiConverter.WinUI.ValueConverters"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="SettingsPage_OnLoaded">
+    <Page.Resources>
+        <valueConverters:DoubleToStringValueConverter x:Key="DoubleToStringValueConverter"></valueConverters:DoubleToStringValueConverter>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -132,6 +136,18 @@
                                 Width="200"
                                 Value="{x:Bind winUi:App.Config.TextMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBox x:Name="TextMarginTextBox" Text="{x:Bind TextMarginSlider.Value,Mode=TwoWay}"
+                                 VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
+                    </StackPanel>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="ImageOptionWordMarginSetting" Margin="8,4,8,4" Description="" Header="词间距">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xECA5;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal">
+                        <Slider x:Name="WordMarginSlider" Margin="0,0,8,0" StepFrequency="0.1" Minimum="0" Maximum="1"
+                                Width="200" SnapsTo="StepValues"
+                                Value="{x:Bind winUi:App.Config.WordMargin,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox x:Name="WordMarginTextBox" Text="{x:Bind WordMarginSlider.Value,Mode=TwoWay,Converter={StaticResource DoubleToStringValueConverter}}"
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>

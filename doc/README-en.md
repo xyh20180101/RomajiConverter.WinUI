@@ -16,6 +16,7 @@ Here's the user-facing document, if you're more focused on development-related c
 - Supported versions of project settings: Windows 10 1809 (Build 17763) or above
 - Developer-tested system versions: Windows 10 22H2 (19045), Windows 11 22H2 (22621)
 - If your version of Windows is not in the above scope, you can view the project [RomajiConverter](https://github.com/xyh20180101/RomajiConverter)（Support Win7 or above）
+- **If you need an Android App, check this [RomajiConverter.App](https://github.com/xyh20180101/RomajiConverter.App)**
 
 ## Function
 - Convert kana and kanji to romaji
@@ -53,6 +54,10 @@ Here's the user-facing document, if you're more focused on development-related c
 - Selecting the framework-dependent version requires installing [.net core 8.0 desktop runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0), while the self-contained version does not
 
 ## Update log
+
+### 1.2.3
+- Added word margin to the Image Option
+- Optimized the function of importing lyrics from url
 
 ### 1.2.2
 - Added the function of importing lyrics from url, supporting NetEase Cloud, QQ Music, and KuGou

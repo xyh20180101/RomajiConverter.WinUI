@@ -63,12 +63,14 @@ public sealed partial class OutputPage : Page
                     var rightParenthesis = App.Config.RightParenthesis;
 
                     var kanjiUnitList = item.Units.Where(p => p.IsKanji);
+                    var replacedIndex = 0;
                     foreach (var kanjiUnit in kanjiUnitList)
                     {
-                        var kanjiIndex = japanese.IndexOf(kanjiUnit.Japanese);
+                        var kanjiIndex = japanese.IndexOf(kanjiUnit.Japanese, replacedIndex);
                         var hiraganaIndex = kanjiIndex + kanjiUnit.Japanese.Length;
                         japanese = japanese.Insert(hiraganaIndex,
                             $"{leftParenthesis}{kanjiUnit.Hiragana}{rightParenthesis}");
+                        replacedIndex = hiraganaIndex;
                     }
 
                     output.AppendLine(japanese);
