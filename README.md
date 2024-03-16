@@ -16,6 +16,7 @@
 - 项目设置的受支持版本：Windows 10 1809（内部版本17763）及以上
 - 经过开发者测试的系统版本：Windows 10 22H2（19045）、Windows 11 22H2（22621）
 - 如果你的Windows版本不在以上范围，可以查看该项目[RomajiConverter](https://github.com/xyh20180101/RomajiConverter)（支持Win7以上）
+- **如果你需要Android版本，请查看[RomajiConverter.App](https://github.com/xyh20180101/RomajiConverter.App)**
 
 ## 功能
 - 将假名、汉字转换为罗马音
@@ -53,6 +54,10 @@
 - 选择框架依赖版需要安装[.net core 8.0桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)，独立版则不需要
 
 ## 更新日志
+
+### 1.2.3
+- 生成图片选项新增词间距
+- 优化链接歌词导入功能
 
 ### 1.2.2
 - 新增通过链接导入歌词功能，支持网易云、QQ音乐、酷狗

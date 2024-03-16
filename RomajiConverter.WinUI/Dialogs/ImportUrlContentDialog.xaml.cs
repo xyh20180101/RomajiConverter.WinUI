@@ -7,6 +7,7 @@ using Windows.ApplicationModel.Resources;
 using Microsoft.UI.Xaml.Controls;
 using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 using RomajiConverter.WinUI.Models;
+using System.Text.RegularExpressions;
 
 namespace RomajiConverter.WinUI.Dialogs;
 
@@ -76,10 +77,12 @@ public sealed partial class ImportUrlContentDialog : ContentDialog, INotifyPrope
      */
     private async void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        var url = Url;
+        var urlRegex = new Regex("http[^\\s]*", RegexOptions.Compiled);
 
         try
         {
+            var url = urlRegex.Match(Url ?? string.Empty).Value;
+
             if (url.Contains("music.163.com"))
             {
                 var songId = HttpUtility.ParseQueryString(new Uri(url).Query)["id"];

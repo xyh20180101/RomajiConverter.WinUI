@@ -25,6 +25,7 @@ public class MyConfig : INotifyPropertyChanged
     private int _textMargin;
     private int _windowsHeight;
     private int _windowsWidth;
+    private float _wordMargin;
 
     /// <summary>
     /// 默认设置
@@ -59,6 +60,7 @@ public class MyConfig : INotifyPropertyChanged
         BackgroundColor = Color.White.ToHexString();
         PagePadding = 24;
         TextMargin = 0;
+        WordMargin = 0.5f;
         LineMargin = 48;
         LinePadding = 12;
     }
@@ -246,6 +248,17 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _textMargin) return;
             _textMargin = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public float WordMargin
+    {
+        get => _wordMargin;
+        set
+        {
+            if (value.Equals(_wordMargin)) return;
+            _wordMargin = value;
             OnPropertyChanged();
         }
     }

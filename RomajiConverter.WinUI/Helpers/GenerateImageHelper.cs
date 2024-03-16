@@ -25,7 +25,7 @@ public static class GenerateImageHelper
         var background = setting.BackgroundColor;
 
         //(最长句的渲染长度,该句的单元数)
-        var longestLine = list.Select(p => new { MaxLength = p.Sum(q => GetUnitLength(q, font)), UnitCount = p.Length })
+        var longestLine = list.Select(p => new { MaxLength = p.Sum(q => GetUnitLength(q, font, setting.WordMargin)), UnitCount = p.Length })
             .MaxBy(p => p.MaxLength);
 
         //最长句子的渲染长度
@@ -54,7 +54,7 @@ public static class GenerateImageHelper
             var startX = pagePadding + textMargin;
             foreach (var unit in line)
             {
-                var unitLength = GetUnitLength(unit, font);
+                var unitLength = GetUnitLength(unit, font, setting.WordMargin);
                 var renderXArray = unit.Select(str => startX + GetStringXOffset(str, font, unitLength)).ToArray();
                 var renderYArray = unit.Select((str, index) =>
                     pagePadding + (fontSize * unit.Length + linePadding + lineMargin) * i +
@@ -73,11 +73,12 @@ public static class GenerateImageHelper
     /// </summary>
     /// <param name="unit"></param>
     /// <param name="font"></param>
+    /// <param name="wordMargin"></param>
     /// <returns></returns>
-    private static int GetUnitLength(string[] unit, Font font)
+    private static int GetUnitLength(string[] unit, Font font, float wordMargin)
     {
         using var g = Graphics.FromImage(new Bitmap(1, 1));
-        return unit.Any() ? unit.Max(p => (int)g.MeasureString(p, font).Width) : 0;
+        return unit.Any() ? unit.Max(p => (int)g.MeasureString(p, font).Width) + (int)(font.Size * wordMargin) : 0;
     }
 
     /// <summary>
@@ -105,6 +106,7 @@ public static class GenerateImageHelper
             FontPixelSize = config.FontPixelSize;
             PagePadding = config.PagePadding;
             TextMargin = config.TextMargin;
+            WordMargin = config.WordMargin;
             LineMargin = config.LineMargin;
             LinePadding = config.LinePadding;
             BackgroundColor = (Color)new ColorConverter().ConvertFromString(config.BackgroundColor);
@@ -118,6 +120,8 @@ public static class GenerateImageHelper
         public int PagePadding { get; set; }
 
         public int TextMargin { get; set; }
+
+        public float WordMargin { get; set; }
 
         public int LineMargin { get; set; }
 

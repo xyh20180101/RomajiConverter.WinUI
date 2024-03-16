@@ -231,6 +231,9 @@
   <data name="ImageOptionTextMarginSetting.Header" xml:space="preserve">
     <value>字间距</value>
   </data>
+  <data name="ImageOptionWordMarginSetting.Header" xml:space="preserve">
+    <value>词间距</value>
+  </data>
   <data name="ImportCloudMusicButton.Label" xml:space="preserve">
     <value>获取网易云歌词</value>
   </data>
