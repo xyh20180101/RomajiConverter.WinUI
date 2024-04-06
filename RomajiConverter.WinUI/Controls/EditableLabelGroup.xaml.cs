@@ -39,8 +39,8 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
         InitializeComponent();
         Unit = unit;
         MyFontSize = 14;
-        SelectedRomaji = Unit.ReplaceRomaji[0];
-        SelectedHiragana = Unit.ReplaceHiragana[0];
+        SelectedRomaji = Unit.ReplaceRomaji.FirstOrDefault(p => p.Id == unit.SelectId) ?? Unit.ReplaceRomaji[0];
+        SelectedHiragana = Unit.ReplaceHiragana.FirstOrDefault(p => p.Id == unit.SelectId) ?? Unit.ReplaceHiragana[0];
         BorderVisibilitySetting = BorderVisibilitySetting.Highlight;
     }
 
@@ -120,9 +120,10 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
         {
             if (Equals(value, _selectedRomaji)) return;
             _selectedRomaji = value;
-            if (_selectedRomaji.IsSystem)
-                SelectedHiragana = Unit.ReplaceHiragana.First(p => p.Id == _selectedRomaji.Id);
-            Unit.Romaji = _selectedRomaji.Value;
+            if ((_selectedRomaji?.IsSystem ?? true) && (SelectedHiragana?.IsSystem ?? true))
+                SelectedHiragana = Unit.ReplaceHiragana.FirstOrDefault(p => p.Id == _selectedRomaji?.Id);
+            Unit.Romaji = _selectedRomaji?.Value ?? string.Empty;
+            Unit.SelectId = _selectedRomaji?.Id ?? 1;
             OnPropertyChanged();
         }
     }
@@ -134,9 +135,10 @@ public sealed partial class EditableLabelGroup : UserControl, INotifyPropertyCha
         {
             if (Equals(value, _selectedHiragana)) return;
             _selectedHiragana = value;
-            if (_selectedHiragana.IsSystem)
-                SelectedRomaji = Unit.ReplaceRomaji.First(p => p.Id == _selectedHiragana.Id);
-            Unit.Hiragana = _selectedHiragana.Value;
+            if ((_selectedHiragana?.IsSystem ?? true) && (SelectedRomaji?.IsSystem ?? true))
+                SelectedRomaji = Unit.ReplaceRomaji.FirstOrDefault(p => p.Id == _selectedHiragana?.Id);
+            Unit.Hiragana = _selectedHiragana?.Value ?? string.Empty;
+            Unit.SelectId = _selectedHiragana?.Id ?? 1;
             OnPropertyChanged();
         }
     }
