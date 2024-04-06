@@ -129,8 +129,14 @@ public sealed partial class EditableLabel : UserControl, INotifyPropertyChanged
     private void EditBox_OnTextSubmitted(ComboBox sender, ComboBoxTextSubmittedEventArgs args)
     {
         if (ReplaceText.Any(p => p.Value == args.Text)) return;
-        var newText = new ReplaceString(0, args.Text, false);
+        var newText = ReplaceText.FirstOrDefault(p => p.Id == 0);
+
+        if (newText != null)
+            ReplaceText.Remove(newText);
+
+        newText = new ReplaceString(0, args.Text, false);
         ReplaceText.Insert(0, newText);
+
         SelectedText = newText;
         args.Handled = true;
     }

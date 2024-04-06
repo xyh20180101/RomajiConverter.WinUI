@@ -55,6 +55,9 @@ Here's the user-facing document, if you're more focused on development-related c
 
 ## Update log
 
+### 1.2.4
+- Fixed the issue that the editing result was not saved when saving the lyrics json
+
 ### 1.2.3
 - Added word margin to the Image Option
 - Optimized the function of importing lyrics from url
