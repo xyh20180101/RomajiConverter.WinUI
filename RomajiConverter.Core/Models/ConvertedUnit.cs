@@ -2,110 +2,111 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace RomajiConverter.Core.Models;
-
-public class ConvertedUnit : INotifyPropertyChanged
+namespace RomajiConverter.Core.Models
 {
-    private string _hiragana;
-    private bool _isKanji;
-    private string _japanese;
-    private ObservableCollection<ReplaceString> _replaceHiragana;
-    private ObservableCollection<ReplaceString> _replaceRomaji;
-    private string _romaji;
-    private ushort _selectId;
-
-    public ConvertedUnit(string japanese, string hiragana, string romaji, bool isKanji)
+    public class ConvertedUnit : INotifyPropertyChanged
     {
-        Japanese = japanese;
-        Romaji = romaji;
-        Hiragana = hiragana;
-        IsKanji = isKanji;
-        SelectId = 1;
-        ReplaceHiragana = new ObservableCollection<ReplaceString> { new(1, hiragana, true) };
-        ReplaceRomaji = new ObservableCollection<ReplaceString> { new(1, romaji, true) };
-    }
+        private string _hiragana;
+        private bool _isKanji;
+        private string _japanese;
+        private ObservableCollection<ReplaceString> _replaceHiragana;
+        private ObservableCollection<ReplaceString> _replaceRomaji;
+        private string _romaji;
+        private ushort _selectId;
 
-    public string Japanese
-    {
-        get => _japanese;
-        set
+        public ConvertedUnit(string japanese, string hiragana, string romaji, bool isKanji)
         {
-            if (value == _japanese) return;
-            _japanese = value;
-            OnPropertyChanged();
+            Japanese = japanese;
+            Romaji = romaji;
+            Hiragana = hiragana;
+            IsKanji = isKanji;
+            SelectId = 1;
+            ReplaceHiragana = new ObservableCollection<ReplaceString> { new ReplaceString(1, hiragana, true) };
+            ReplaceRomaji = new ObservableCollection<ReplaceString> { new ReplaceString(1, romaji, true) };
         }
-    }
 
-    public string Romaji
-    {
-        get => _romaji;
-        set
+        public string Japanese
         {
-            if (value == _romaji) return;
-            _romaji = value;
-            OnPropertyChanged();
+            get => _japanese;
+            set
+            {
+                if (value == _japanese) return;
+                _japanese = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public ObservableCollection<ReplaceString> ReplaceRomaji
-    {
-        get => _replaceRomaji;
-        set
+        public string Romaji
         {
-            if (Equals(value, _replaceRomaji)) return;
-            _replaceRomaji = value;
-            OnPropertyChanged();
+            get => _romaji;
+            set
+            {
+                if (value == _romaji) return;
+                _romaji = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public string Hiragana
-    {
-        get => _hiragana;
-        set
+        public ObservableCollection<ReplaceString> ReplaceRomaji
         {
-            if (value == _hiragana) return;
-            _hiragana = value;
-            OnPropertyChanged();
+            get => _replaceRomaji;
+            set
+            {
+                if (Equals(value, _replaceRomaji)) return;
+                _replaceRomaji = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public ObservableCollection<ReplaceString> ReplaceHiragana
-    {
-        get => _replaceHiragana;
-        set
+        public string Hiragana
         {
-            if (Equals(value, _replaceHiragana)) return;
-            _replaceHiragana = value;
-            OnPropertyChanged();
+            get => _hiragana;
+            set
+            {
+                if (value == _hiragana) return;
+                _hiragana = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public bool IsKanji
-    {
-        get => _isKanji;
-        set
+        public ObservableCollection<ReplaceString> ReplaceHiragana
         {
-            if (value == _isKanji) return;
-            _isKanji = value;
-            OnPropertyChanged();
+            get => _replaceHiragana;
+            set
+            {
+                if (Equals(value, _replaceHiragana)) return;
+                _replaceHiragana = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public ushort SelectId
-    {
-        get => _selectId;
-        set
+        public bool IsKanji
         {
-            if (value == _selectId) return;
-            _selectId = value;
-            OnPropertyChanged();
+            get => _isKanji;
+            set
+            {
+                if (value == _isKanji) return;
+                _isKanji = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public ushort SelectId
+        {
+            get => _selectId;
+            set
+            {
+                if (value == _selectId) return;
+                _selectId = value;
+                OnPropertyChanged();
+            }
+        }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

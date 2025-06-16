@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winUi="using:RomajiConverter.WinUI"
     xmlns:controls="using:RomajiConverter.WinUI.Controls"
-    xmlns:controls1="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:valueConverters="using:RomajiConverter.WinUI.ValueConverters"
+    xmlns:controls1="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
     <Page.Resources>

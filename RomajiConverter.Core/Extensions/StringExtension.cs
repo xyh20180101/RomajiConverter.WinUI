@@ -1,16 +1,20 @@
-﻿namespace RomajiConverter.Core.Extensions;
+﻿using System;
+using System.Linq;
 
-public static class StringExtension
+namespace RomajiConverter.Core.Extensions
 {
-    public static string RemoveEmptyLine(this string str)
+    public static class StringExtension
     {
-        var strArray = str.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-        strArray = strArray.Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
-        return string.Join(Environment.NewLine, strArray);
-    }
+        public static string RemoveEmptyLine(this string str)
+        {
+            var strArray = str.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            strArray = strArray.Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
+            return string.Join(Environment.NewLine, strArray);
+        }
 
-    public static string[] LineToUnits(this string str)
-    {
-        return str.Split(new[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries);
+        public static string[] LineToUnits(this string str)
+        {
+            return str.Split(new[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries);
+        }
     }
 }

@@ -1,34 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<PackageId>RomajiConverter.Core</PackageId>
+		<Version>1.0.4</Version>
+		<Authors>WL</Authors>
+		<RepositoryUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</PackageProjectUrl>
+		<PackageLicenseExpression>GPL-2.0-or-later</PackageLicenseExpression>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
 	</PropertyGroup>
-
-	<Import Project="..\publish.props" />
 
 	<ItemGroup>
 		<PackageReference Include="MeCab.DotNet" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="unidic\**">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+		<Content Include="RomajiConverter.Core.targets" PackagePath="build/RomajiConverter.Core.targets" />
+		<None Include="docs\README.md" Pack="true" PackagePath="\" />
+		<Content Include="unidic\*" Pack="true" PackagePath="contentFiles\any\any\unidic\" PackageCopyToOutput="true" />
+		<Content Include="customizeDict.txt" Pack="true" PackagePath="contentFiles\any\any\" PackageCopyToOutput="true" />
+		<Content Include="Variants\kSimplifiedVariant.txt" Pack="true" PackagePath="contentFiles\any\any\Variants\" PackageCopyToOutput="true" />
+		<Content Include="Variants\kTraditionalVariant.txt" Pack="true" PackagePath="contentFiles\any\any\Variants\" PackageCopyToOutput="true" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="customizeDict.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Variants\kSimplifiedVariant.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Variants\kTraditionalVariant.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>

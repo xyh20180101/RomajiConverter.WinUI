@@ -3,7 +3,7 @@ using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.System;
 using Windows.UI;
-using CommunityToolkit.WinUI.UI.Controls;
+using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
