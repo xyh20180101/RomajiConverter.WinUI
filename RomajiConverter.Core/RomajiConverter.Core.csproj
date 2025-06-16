@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
 		<PackageId>RomajiConverter.Core</PackageId>
-		<Version>1.0.4</Version>
+		<Version>1.0.9</Version>
 		<Authors>WL</Authors>
 		<RepositoryUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</PackageProjectUrl>
@@ -20,9 +20,9 @@
 	<ItemGroup>
 		<Content Include="RomajiConverter.Core.targets" PackagePath="build/RomajiConverter.Core.targets" />
 		<None Include="docs\README.md" Pack="true" PackagePath="\" />
-		<Content Include="unidic\*" Pack="true" PackagePath="contentFiles\any\any\unidic\" PackageCopyToOutput="true" />
-		<Content Include="customizeDict.txt" Pack="true" PackagePath="contentFiles\any\any\" PackageCopyToOutput="true" />
-		<Content Include="Variants\kSimplifiedVariant.txt" Pack="true" PackagePath="contentFiles\any\any\Variants\" PackageCopyToOutput="true" />
-		<Content Include="Variants\kTraditionalVariant.txt" Pack="true" PackagePath="contentFiles\any\any\Variants\" PackageCopyToOutput="true" />
+		<Content Include="unidic\*" Pack="true" PackagePath="contentFiles\any\any\unidic\" PackageCopyToOutput="true" CopyToOutputDirectory="Always" />
+		<Content Include="customizeDict.txt" Pack="true" PackagePath="contentFiles\any\any\" PackageCopyToOutput="true" CopyToOutputDirectory="Always" />
+		<Content Include="Variants\kSimplifiedVariant.txt" Pack="true" PackagePath="contentFiles\any\any\Variants\" PackageCopyToOutput="true" CopyToOutputDirectory="Always" />
+		<Content Include="Variants\kTraditionalVariant.txt" Pack="true" PackagePath="contentFiles\any\any\Variants\" PackageCopyToOutput="true" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 </Project>

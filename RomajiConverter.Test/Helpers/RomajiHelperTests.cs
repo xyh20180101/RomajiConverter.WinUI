@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RomajiConverter.Core.Helpers;
 using System;
 using System.Collections.Generic;
@@ -178,6 +178,16 @@ namespace RomajiConverter.Test.Helpers
             var result_romaji = string.Join(" ", romajiList);
 
             Assert.AreEqual(hiragana, result_hiragana);
+            Assert.AreEqual(romaji, result_romaji);
+        }
+
+        [TestMethod]
+        [DataRow("あ\r\n \r\nい", "a\r\ni")]
+        public void ToRomajiTest(string sentence, string romaji)
+        {
+            var lines = RomajiHelper.ToRomaji(sentence);
+
+            var result_romaji = string.Join("\r\n", lines.Select(p=>string.Join(" ", p.Units.Select(q => q.Romaji))));
             Assert.AreEqual(romaji, result_romaji);
         }
     }

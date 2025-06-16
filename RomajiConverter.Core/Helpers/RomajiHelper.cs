@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MeCab;
 using MeCab.Extension.UniDic;
@@ -59,7 +59,8 @@ namespace RomajiConverter.Core.Helpers
         /// <returns></returns>
         public static List<ConvertedLine> ToRomaji(string text, bool isAutoVariant = false, float chineseRate = 1f)
         {
-            var lineTextList = text.RemoveEmptyLine().Split(Environment.NewLine.ToArray());
+            var lineTextList = text.Split(Environment.NewLine.ToArray())
+                .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
 
             var convertedText = new List<ConvertedLine>();
 
