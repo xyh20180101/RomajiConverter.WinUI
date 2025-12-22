@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.ObjectModel;
 
 namespace RomajiConverter.Core.Models
 {
@@ -9,7 +9,7 @@ namespace RomajiConverter.Core.Models
             Index = 0;
             Chinese = "";
             Japanese = "";
-            Units = Array.Empty<ConvertedUnit>();
+            Units = new ObservableCollection<ConvertedUnit>();
         }
 
         public ushort Index { get; set; }
@@ -18,6 +18,6 @@ namespace RomajiConverter.Core.Models
 
         public string Japanese { get; set; }
 
-        public ConvertedUnit[] Units { get; set; }
+        public ObservableCollection<ConvertedUnit> Units { get; set; }
     }
 }

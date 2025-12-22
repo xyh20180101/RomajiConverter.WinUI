@@ -13,9 +13,11 @@ namespace RomajiConverter.Core.Models
         private ObservableCollection<ReplaceString> _replaceRomaji;
         private string _romaji;
         private ushort _selectId;
+        private ushort _lineIndex;
 
-        public ConvertedUnit(string japanese, string hiragana, string romaji, bool isKanji)
+        public ConvertedUnit(ushort lineIndex, string japanese, string hiragana, string romaji, bool isKanji)
         {
+            LineIndex = lineIndex;
             Japanese = japanese;
             Romaji = romaji;
             Hiragana = hiragana;
@@ -23,6 +25,17 @@ namespace RomajiConverter.Core.Models
             SelectId = 1;
             ReplaceHiragana = new ObservableCollection<ReplaceString> { new ReplaceString(1, hiragana, true) };
             ReplaceRomaji = new ObservableCollection<ReplaceString> { new ReplaceString(1, romaji, true) };
+        }
+
+        public ushort LineIndex
+        {
+            get => _lineIndex;
+            set
+            {
+                if (value == _lineIndex) return;
+                _lineIndex = value;
+                OnPropertyChanged();
+            }
         }
 
         public string Japanese

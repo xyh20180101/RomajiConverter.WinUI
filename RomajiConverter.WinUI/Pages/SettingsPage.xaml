@@ -30,14 +30,26 @@
         </CommandBar>
         <ScrollViewer x:Name="SettingScrollViewer" Grid.Row="1">
             <StackPanel Margin="8,0,8,16">
-                <TextBlock x:Uid="LyricsOptionTextBlock" Margin="16,4,4,4" FontWeight="SemiBold" Text="获取歌词选项" />
-                <toolkit:SettingsCard x:Uid="LyricsOptionIsUseOldLrcParser" Margin="8,4,8,4"
-                                      Description="" Header="使用旧版本Lrc解析器">
+                <TextBlock x:Uid="AIOptionsTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="AI选项" />
+                <toolkit:SettingsCard x:Uid="AISelectSetting" Margin="8,4,8,4" Description="" Header="选择AI接入点">
                     <toolkit:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE81C;" />
+                        <FontIcon Glyph="&#xF4A5;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="IsUseOldLrcParser"
-                                  IsOn="{x:Bind winUi:App.Config.IsUseOldLrcParser,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox x:Name="AISelectComboBox" SelectedItem="{x:Bind winUi:App.Config.AISelect,Mode=TwoWay}" />
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="DeepSeekApiKeySetting" Margin="8,4,8,4" Description="" Header="DeepSeek ApiKey">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8D7;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <TextBox x:Name="DeepSeekApiKeyTextBox" MaxLength="100" TextWrapping="NoWrap"
+                         Text="{x:Bind winUi:App.Config.DeepSeekApiKey,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="ZhipuApiKeySetting" Margin="8,4,8,4" Description="" Header="Zhipu ApiKey">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8D7;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <TextBox x:Name="ZhipuApiKeyTextBox" MaxLength="100" TextWrapping="NoWrap"
+                             Text="{x:Bind winUi:App.Config.ZhipuApiKey,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
                 <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成图片选项" />
                 <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="8,4,8,4" Description="" Header="字体">

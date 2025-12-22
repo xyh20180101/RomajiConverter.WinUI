@@ -43,6 +43,13 @@
                 </AppBarButton.Icon>
             </AppBarButton>
             <AppBarSeparator />
+            <AppBarToggleButton x:Uid="AIModeButton" x:Name="AIModeButton" Label="AI模式"
+                                IsChecked="{x:Bind winUi:App.Config.IsAIMode,Mode=TwoWay}">
+                <AppBarToggleButton.Icon>
+                    <FontIcon Glyph="&#xF4A5;" />
+                </AppBarToggleButton.Icon>
+            </AppBarToggleButton>
+            <AppBarSeparator />
             <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Label="打开"
                           Tapped="ReadButton_OnTapped"
                           Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}">
@@ -63,8 +70,6 @@
                     <FontIcon Glyph="&#xE8B9;" />
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarSeparator
-                Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}" />
             <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Label="详细模式"
                                 IsChecked="{x:Bind winUi:App.Config.IsDetailMode,Mode=TwoWay}">
                 <AppBarToggleButton.Icon>

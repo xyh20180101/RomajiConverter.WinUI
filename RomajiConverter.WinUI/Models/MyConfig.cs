@@ -1,31 +1,37 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using RomajiConverter.Core.Helpers;
 using RomajiConverter.WinUI.Extensions;
 
 namespace RomajiConverter.WinUI.Models;
 
 public class MyConfig : INotifyPropertyChanged
 {
-    private string _backgroundColor;
+    private bool _isDetailMode;
+    private int _windowsWidth;
+    private int _windowsHeight;
+    private double _inputTextBoxFontSize;
     private double _editPanelFontSize;
-    private string _fontColor;
+    private double _outputTextBoxFontSize;
+    private bool _isOpenExplorerAfterSaveImage;
+    private string _leftParenthesis;
+    private string _rightParenthesis;
+
+    private bool _isAIMode;
+    private AIServiceProvider _aiSelect = AIServiceProvider.DeepSeek;
+    private string _deepseekApiKey;
+    private string _zhipuApiKey;
+    
     private string _fontFamilyName;
     private int _fontPixelSize;
-    private double _inputTextBoxFontSize;
-    private bool _isDetailMode;
-    private bool _isOpenExplorerAfterSaveImage;
-    private bool _isUseOldLrcParser;
-    private string _leftParenthesis;
+    private string _fontColor;
+    private string _backgroundColor;
+    private int _pagePadding;
+    private int _textMargin;
+    private float _wordMargin;
     private int _lineMargin;
     private int _linePadding;
-    private double _outputTextBoxFontSize;
-    private int _pagePadding;
-    private string _rightParenthesis;
-    private int _textMargin;
-    private int _windowsHeight;
-    private int _windowsWidth;
-    private float _wordMargin;
 
     /// <summary>
     /// 默认设置
@@ -44,8 +50,6 @@ public class MyConfig : INotifyPropertyChanged
     {
         WindowWidth = 1400;
         WindowHeight = 800;
-
-        IsUseOldLrcParser = false;
 
         InputTextBoxFontSize = 14;
         EditPanelFontSize = 14;
@@ -101,17 +105,6 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _windowsHeight) return;
             _windowsHeight = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public bool IsUseOldLrcParser
-    {
-        get => _isUseOldLrcParser;
-        set
-        {
-            if (value == _isUseOldLrcParser) return;
-            _isUseOldLrcParser = value;
             OnPropertyChanged();
         }
     }
@@ -178,6 +171,54 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _rightParenthesis) return;
             _rightParenthesis = value;
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
+    #region AI设置
+
+    public bool IsAIMode
+    {
+        get => _isAIMode;
+        set
+        {
+            if (value == _isAIMode) return;
+            _isAIMode = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public AIServiceProvider AISelect
+    {
+        get => _aiSelect;
+        set
+        {
+            if (value == _aiSelect) return;
+            _aiSelect = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string DeepSeekApiKey
+    {
+        get => _deepseekApiKey;
+        set
+        {
+            if (value == _deepseekApiKey) return;
+            _deepseekApiKey = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string ZhipuApiKey
+    {
+        get => _zhipuApiKey;
+        set
+        {
+            if (value == _zhipuApiKey) return;
+            _zhipuApiKey = value;
             OnPropertyChanged();
         }
     }

@@ -32,8 +32,6 @@
         <controls:ScaleLabel Grid.Row="0" Grid.Column="0"
                              ScaleText="{x:Bind winUi:App.Config.InputTextBoxFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
                              HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8" />
-        <CheckBox x:Uid="AutoVariantCheckBox" x:Name="AutoVariantCheckBox" Grid.Row="1" Margin="8,4,4,8"
-                  Content="识别变体" />
         <Button x:Uid="ConvertButton" x:Name="ConvertButton" Grid.Row="1" Content="转换" HorizontalAlignment="Right"
                 Margin="4,4,4,8" Click="ConvertButton_OnClick" />
     </Grid>

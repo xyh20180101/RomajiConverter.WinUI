@@ -48,6 +48,8 @@ public class CloudMusicLyricsHelper : LyricsHelper
         }
         catch (Exception e)
         {
+            if(!File.Exists(HistoryPath))
+                throw new Exception(ResourceLoader.GetForViewIndependentUse().GetString("FileNotExist"));
             //旧版本获取songId方法
             var history = JArray.Parse(File.ReadAllText(HistoryPath));
             return history[0]["track"]["id"].ToString();

@@ -1,13 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Windows.ApplicationModel.Resources;
-using Windows.Storage;
-using Windows.Storage.Pickers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -18,6 +8,18 @@ using RomajiConverter.WinUI.Dialogs;
 using RomajiConverter.WinUI.Helpers;
 using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 using RomajiConverter.WinUI.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Windows.ApplicationModel.Resources;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using RomajiConverter.Core.Helpers;
 using WinRT.Interop;
 
 namespace RomajiConverter.WinUI.Pages;
@@ -47,7 +49,22 @@ public sealed partial class MainPage : Page
     /// <param name="e"></param>
     private async void ImportCloudMusicButton_OnClick(object sender, RoutedEventArgs e)
     {
-        ShowLrc(await CloudMusicLyricsHelper.GetLrc(CloudMusicLyricsHelper.GetLastSongId()));
+        try
+        {
+            ShowLrc(await CloudMusicLyricsHelper.GetLrc(CloudMusicLyricsHelper.GetLastSongId()));
+        }
+        catch (Exception ex)
+        {
+            var resourceLoader = ResourceLoader.GetForViewIndependentUse();
+            await new ContentDialog
+            {
+                XamlRoot = Content.XamlRoot,
+                Title = resourceLoader.GetString("Exception"),
+                Content = ex.Message,
+                CloseButtonText = resourceLoader.GetString("Close"),
+                DefaultButton = ContentDialogButton.Close
+            }.ShowAsync();
+        }
     }
 
     /// <summary>
@@ -110,9 +127,7 @@ public sealed partial class MainPage : Page
         if (file != null)
             try
             {
-                App.ConvertedLineList =
-                    JsonConvert.DeserializeObject<List<ConvertedLine>>(await File.ReadAllTextAsync(file.Path));
-                MainEditPage.RenderEditPanel();
+                App.ConvertedLineList = JsonConvert.DeserializeObject<ObservableCollection<ConvertedLine>>(await File.ReadAllTextAsync(file.Path));
             }
             catch (JsonSerializationException exception)
             {

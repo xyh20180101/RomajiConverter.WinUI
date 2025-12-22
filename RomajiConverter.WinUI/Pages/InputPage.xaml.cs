@@ -24,14 +24,22 @@ public sealed partial class InputPage : Page
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ConvertButton_OnClick(object sender, RoutedEventArgs e)
+    private async void ConvertButton_OnClick(object sender, RoutedEventArgs e)
     {
-        App.ConvertedLineList = RomajiHelper.ToRomaji(InputTextBox.Text, AutoVariantCheckBox.IsChecked.Value);
-
-        if (App.Config.IsDetailMode)
-            MainEditPage.RenderEditPanel();
+        if (App.Config.IsAIMode)
+        {
+            var apiKey = "";
+            switch (App.Config.AISelect)
+            {
+                case AIServiceProvider.DeepSeek: apiKey = App.Config.DeepSeekApiKey; break;
+                case AIServiceProvider.Zhipu: apiKey = App.Config.ZhipuApiKey; break;
+            }
+            await RomajiAIHelper.ToRomaji(App.ConvertedLineList, InputTextBox.Text, App.Config.AISelect, apiKey);
+        }
         else
-            MainOutputPage.RenderText();
+        {
+            await RomajiHelper.ToRomaji(App.ConvertedLineList, InputTextBox.Text);
+        }
     }
 
     /// <summary>

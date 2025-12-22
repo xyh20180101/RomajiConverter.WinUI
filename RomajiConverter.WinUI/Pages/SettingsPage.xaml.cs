@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
 using Newtonsoft.Json.Linq;
+using RomajiConverter.Core.Helpers;
 using RomajiConverter.WinUI.Extensions;
 
 namespace RomajiConverter.WinUI.Pages;
@@ -19,6 +20,7 @@ public sealed partial class SettingsPage : Page
     public SettingsPage()
     {
         InitializeComponent();
+        InitAISelect();
         InitFontFamily();
         VersionTextBlock.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
     }
@@ -30,6 +32,11 @@ public sealed partial class SettingsPage : Page
             Effect = SlideNavigationTransitionEffect.FromLeft
         });
         GC.Collect();
+    }
+
+    private void InitAISelect()
+    {
+        AISelectComboBox.ItemsSource = Enum.GetValues(typeof(AIServiceProvider));
     }
 
     /// <summary>
