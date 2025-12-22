@@ -226,6 +226,7 @@ public sealed partial class EditPage : Page
                 }
             case NotifyCollectionChangedAction.Reset:
                 {
+                    if (e.OldItems == null || e.OldItems.Count == 0) break;
                     var unit = (ConvertedUnit)e.OldItems[0];
                     var wrapPanel = (WrapPanel)EditPanel.Children[unit.LineIndex * 2];
 
