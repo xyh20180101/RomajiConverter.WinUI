@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.System;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
@@ -19,6 +22,8 @@ public sealed partial class InputPage : Page
 
     public OutputPage MainOutputPage { get; set; }
 
+    private CancellationTokenSource _convertCancellationTokenSource = null;
+
     /// <summary>
     /// 转换按钮事件
     /// </summary>
@@ -26,19 +31,39 @@ public sealed partial class InputPage : Page
     /// <param name="e"></param>
     private async void ConvertButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (App.Config.IsAIMode)
+        _convertCancellationTokenSource = new CancellationTokenSource();
+
+        try
         {
-            var apiKey = "";
-            switch (App.Config.AISelect)
+            App.ConvertedLineList.Clear();
+
+            StopButton.IsEnabled = true;
+            ConvertButton.IsEnabled = false;
+            MainEditPage.ShowLoading(true);
+
+            if (App.Config.IsAIMode)
             {
-                case AIServiceProvider.DeepSeek: apiKey = App.Config.DeepSeekApiKey; break;
-                case AIServiceProvider.Zhipu: apiKey = App.Config.ZhipuApiKey; break;
+                var apiKey = App.Config.AISelect switch
+                {
+                    AIServiceProvider.DeepSeek => App.Config.DeepSeekApiKey,
+                    AIServiceProvider.Zhipu => App.Config.ZhipuApiKey,
+                    _ => ""
+                };
+                await RomajiAIHelper.ToRomajiStreaming(App.ConvertedLineList, InputTextBox.Text, App.Config.AISelect,
+                    apiKey, _convertCancellationTokenSource.Token);
             }
-            await RomajiAIHelper.ToRomaji(App.ConvertedLineList, InputTextBox.Text, App.Config.AISelect, apiKey);
+            else
+            {
+                await RomajiHelper.ToRomaji(App.ConvertedLineList, InputTextBox.Text);
+            }
         }
-        else
+        catch (TaskCanceledException exception) { }
+        catch (OperationCanceledException exception) { }
+        finally
         {
-            await RomajiHelper.ToRomaji(App.ConvertedLineList, InputTextBox.Text);
+            MainEditPage.ShowLoading(false);
+            ConvertButton.IsEnabled = true;
+            StopButton.IsEnabled = false;
         }
     }
 
@@ -69,5 +94,10 @@ public sealed partial class InputPage : Page
     public void SetTextBoxText(string str)
     {
         InputTextBox.Text = str;
+    }
+
+    private void StopButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        _convertCancellationTokenSource?.Cancel();
     }
 }

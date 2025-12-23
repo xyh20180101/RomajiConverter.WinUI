@@ -1,8 +1,3 @@
-using System.Collections.Specialized;
-using System.Linq;
-using Windows.ApplicationModel.Resources;
-using Windows.System;
-using Windows.UI;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
@@ -15,6 +10,12 @@ using RomajiConverter.WinUI.Controls;
 using RomajiConverter.WinUI.Enums;
 using RomajiConverter.WinUI.Extensions;
 using RomajiConverter.WinUI.ValueConverters;
+using System.Collections.Specialized;
+using System.Linq;
+using Windows.ApplicationModel.Resources;
+using Windows.System;
+using Windows.UI;
+using Microsoft.UI.Xaml.Media.Animation;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -71,9 +72,13 @@ public sealed partial class EditPage : Page
                 {
                     ((ConvertedLine)e.NewItems[0]).Units.CollectionChanged += UnitsOnCollectionChanged;
 
-                    var line = new WrapPanel();
+                    var line = new WrapPanel
+                    {
+                        ChildrenTransitions = [new AddDeleteThemeTransition()]
+                    };
                     var separator = new Grid
                     {
+                        ChildrenTransitions = [new AddDeleteThemeTransition()],
                         Height = 1,
                         Background = SeparatorBackground
                     };
@@ -108,7 +113,10 @@ public sealed partial class EditPage : Page
                     ((ConvertedLine)e.OldItems[0]).Units.CollectionChanged -= UnitsOnCollectionChanged;
                     ((ConvertedLine)e.NewItems[0]).Units.CollectionChanged += UnitsOnCollectionChanged;
 
-                    var line = new WrapPanel();
+                    var line = new WrapPanel
+                    {
+                        ChildrenTransitions = [new AddDeleteThemeTransition()]
+                    };
 
                     EditPanel.Children.RemoveAt(e.OldStartingIndex * 2);
                     EditPanel.Children.Insert(e.NewStartingIndex * 2, line);
@@ -157,6 +165,7 @@ public sealed partial class EditPage : Page
 
                     var group = new EditableLabelGroup(unit)
                     {
+                        OpacityTransition = new ScalarTransition(),
                         RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed,
                         BorderVisibilitySetting = (BorderVisibilitySetting)BorderVisibilityComboBox.SelectedIndex
                     };
@@ -172,6 +181,7 @@ public sealed partial class EditPage : Page
                     {
                         group.HiraganaVisibility = HiraganaVisibility.Collapsed;
                     }
+
                     wrapPanel.Children.Insert(e.NewStartingIndex, group);
                     break;
                 }
@@ -193,6 +203,7 @@ public sealed partial class EditPage : Page
 
                     var group = new EditableLabelGroup(unit)
                     {
+                        OpacityTransition = new ScalarTransition(),
                         RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed,
                         BorderVisibilitySetting = (BorderVisibilitySetting)BorderVisibilityComboBox.SelectedIndex
                     };
@@ -339,6 +350,24 @@ public sealed partial class EditPage : Page
             else if (pointer.Properties.MouseWheelDelta > 0 && App.Config.EditPanelFontSize < 53.1)
                 App.Config.EditPanelFontSize *= 1.1;
             e.Handled = true;
+        }
+    }
+
+    public void ShowLoading(bool isShow)
+    {
+        if (isShow)
+        {
+            EditPanel.Children.Insert(EditPanel.Children.Count, new ProgressRing
+            {
+                IsActive = true
+            });
+        }
+        else
+        {
+            if (EditPanel.Children.LastOrDefault() is ProgressRing ring)
+            {
+                EditPanel.Children.RemoveAt(EditPanel.Children.Count - 1);
+            }
         }
     }
 }

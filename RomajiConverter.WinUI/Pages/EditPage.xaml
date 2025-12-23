@@ -56,7 +56,6 @@
                              ScaleText="{x:Bind winUi:App.Config.EditPanelFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
                              HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8" />
         <Grid Grid.Row="2" Margin="4,4,4,8">
-            <Button x:Uid="StopButton" x:Name="StopButton" Content="停止" HorizontalAlignment="Left"/>
             <Button x:Uid="ConvertTextButton" x:Name="ConvertTextButton" Content="生成文本" HorizontalAlignment="Right"
                     Tapped="ConvertTextButton_OnTapped" />
         </Grid>
