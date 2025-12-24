@@ -120,8 +120,8 @@
   <data name="AIOptionsTextBlock.Text" xml:space="preserve">
     <value>AI选项</value>
   </data>
-  <data name="ApiKeyNotConfig" xml:space="preserve">
-    <value>ApiKey未配置</value>
+  <data name="OpenAINotConfig" xml:space="preserve">
+    <value>OpenAI配置项未设置</value>
   </data>
   <data name="AppTitleTextBlock.Text" xml:space="preserve">
     <value>罗马音转换器</value>
@@ -302,6 +302,9 @@
   </data>
   <data name="NotValidLyricsFile" xml:space="preserve">
     <value>无效的歌词json文件</value>
+  </data>
+  <data name="OpenAIModelNameSetting.Header" xml:space="preserve">
+    <value>模型</value>
   </data>
   <data name="OtherOptionResetSetting.Header" xml:space="preserve">
     <value>恢复默认设置</value>

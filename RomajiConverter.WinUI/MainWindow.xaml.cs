@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Windows.Graphics;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
 using Newtonsoft.Json;
 using RomajiConverter.Core.Helpers;
 using RomajiConverter.WinUI.Helpers.LyricsHelpers;
@@ -22,6 +23,14 @@ public sealed partial class MainWindow : Window
         SetTitleBar(AppTitleBar);
         AppWindow.SetIcon("Assets/icon.ico");
         AppWindow.Resize(new SizeInt32(App.Config.WindowWidth, App.Config.WindowHeight));
+
+        App.Config.PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(App.Config.MicaKind))
+            {
+                SystemBackdrop = new MicaBackdrop { Kind = App.Config.MicaKind };
+            }
+        };
 
         InitHelper();
 

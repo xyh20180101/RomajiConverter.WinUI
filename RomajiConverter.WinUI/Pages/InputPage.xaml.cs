@@ -1,13 +1,19 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Windows.System;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using RomajiConverter.Core.Helpers;
+using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Extensions;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
+using Windows.System;
+using CommunityToolkit.WinUI;
+using DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue;
+using DispatcherQueuePriority = Microsoft.UI.Dispatching.DispatcherQueuePriority;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -43,18 +49,25 @@ public sealed partial class InputPage : Page
 
             if (App.Config.IsAIMode)
             {
-                var apiKey = App.Config.AISelect switch
+                var config = App.Config.OpenAIConfigs.FirstOrDefault(p => p.IsSelected);
+                if (config is null)
                 {
-                    AIServiceProvider.DeepSeek => App.Config.DeepSeekApiKey,
-                    AIServiceProvider.Zhipu => App.Config.ZhipuApiKey,
-                    _ => ""
-                };
-                await RomajiAIHelper.ToRomajiStreaming(App.ConvertedLineList, InputTextBox.Text, App.Config.AISelect,
-                    apiKey, _convertCancellationTokenSource.Token);
+                    var resourceLoader = ResourceLoader.GetForViewIndependentUse();
+                    await new ContentDialog
+                    {
+                        XamlRoot = XamlRoot,
+                        Title = resourceLoader.GetString("Tip"),
+                        Content = resourceLoader.GetString("OpenAINotConfig"),
+                        CloseButtonText = resourceLoader.GetString("Close"),
+                        DefaultButton = ContentDialogButton.Close
+                    }.ShowAsync();
+                    return;
+                }
+                await RomajiAIHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text, config.BaseUrl, config.Model, config.ApiKey, _convertCancellationTokenSource.Token);
             }
             else
             {
-                await RomajiHelper.ToRomaji(App.ConvertedLineList, InputTextBox.Text);
+                await RomajiHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text);
             }
         }
         catch (TaskCanceledException exception) { }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentDialog
+    x:Class="RomajiConverter.WinUI.Dialogs.AddOpenAIConfigContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RomajiConverter.WinUI.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Uid="AddOpenAIConfigContentDialog"
+    Title="添加OpenAI配置"
+    PrimaryButtonText="确认"
+    CloseButtonText="取消"
+    DefaultButton="Primary">
+    <ContentDialog.Resources>
+        <Style TargetType="local:AddOpenAIConfigContentDialog"
+               BasedOn="{StaticResource DefaultContentDialogStyle}" />
+    </ContentDialog.Resources>
+    <StackPanel>
+        <TextBlock x:Uid="AddOpenAIConfigContentDialogTextBlock1" Margin="0,8" Text="名称" />
+        <TextBox Margin="0,0,0,0" TextWrapping="Wrap" Text="{x:Bind OpenAIConfig.Name,Mode=TwoWay}" />
+        <TextBlock x:Uid="AddOpenAIConfigContentDialogTextBlock2" Margin="0,8" Text="Base Url" />
+        <TextBox Margin="0,0,0,0" TextWrapping="Wrap" Text="{x:Bind OpenAIConfig.BaseUrl,Mode=TwoWay}" />
+        <TextBlock x:Uid="AddOpenAIConfigContentDialogTextBlock3" Margin="0,8" Text="模型" />
+        <TextBox Margin="0,0,0,0" TextWrapping="Wrap" Text="{x:Bind OpenAIConfig.Model,Mode=TwoWay}" />
+        <TextBlock x:Uid="AddOpenAIConfigContentDialogTextBlock4" Margin="0,8" Text="Api Key" />
+        <TextBox Margin="0,0,0,0" TextWrapping="Wrap" Text="{x:Bind OpenAIConfig.ApiKey,Mode=TwoWay}" />
+    </StackPanel>
+</ContentDialog>

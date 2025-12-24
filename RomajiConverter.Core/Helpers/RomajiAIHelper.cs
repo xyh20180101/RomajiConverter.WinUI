@@ -28,32 +28,7 @@ namespace RomajiConverter.Core.Helpers
 输出：その 陽(ひ) が 落ち(おち) た 瞬間(しゅんかん) を";
 
         private static Regex _formatRegex = new Regex(@"^(.*?)\((.*?)\)$", RegexOptions.Compiled);
-
-        private static ChatClient GetChatClient(AIServiceProvider aiServiceProvider, string apiKey)
-        {
-            var url = "";
-            var modelName = "";
-            switch (aiServiceProvider)
-            {
-                case AIServiceProvider.DeepSeek:
-                    url = "https://api.deepseek.com";
-                    modelName = "deepseek-chat";
-                    break;
-                case AIServiceProvider.Zhipu:
-                    url = "https://open.bigmodel.cn/api/paas/v4/";
-                    modelName = "glm-4.5-flash";
-                    break;
-            }
-            return new ChatClient(
-                model: modelName,
-                credential: new ApiKeyCredential(apiKey),
-                options: new OpenAIClientOptions
-                {
-                    Endpoint = new Uri(url)
-                }
-            );
-        }
-        public static async Task ToRomaji(ObservableCollection<ConvertedLine> convertedLines, string text, AIServiceProvider aiServiceProvider, string apiKey, CancellationToken cancellationToken = default, float chineseRate = 1f)
+        public static async Task ToRomaji(ObservableCollection<ConvertedLine> convertedLines, string text, string openAIUrl, string openAIModelName, string openAIApiKey, CancellationToken cancellationToken = default, float chineseRate = 1f)
         {
             var lineTextList = text.Split(Environment.NewLine.ToArray())
                 .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
@@ -81,7 +56,14 @@ namespace RomajiConverter.Core.Helpers
             if (cacheList.Count == 0) return;
 
             //获取ai结果
-            var client = GetChatClient(aiServiceProvider, apiKey);
+            var client = new ChatClient(
+                model: openAIModelName,
+                credential: new ApiKeyCredential(openAIApiKey),
+                options: new OpenAIClientOptions
+                {
+                    Endpoint = new Uri(openAIUrl)
+                }
+            );
 
             var messages = new List<ChatMessage>
             {
@@ -111,7 +93,7 @@ namespace RomajiConverter.Core.Helpers
             }
         }
 
-        public static async Task ToRomajiStreaming(ObservableCollection<ConvertedLine> convertedLines, string text, AIServiceProvider aiServiceProvider, string apiKey, CancellationToken cancellationToken = default, float chineseRate = 1f)
+        public static async Task ToRomajiStreamingAsync(ObservableCollection<ConvertedLine> convertedLines, string text, string openAIUrl, string openAIModelName, string openAIApiKey, CancellationToken cancellationToken = default, float chineseRate = 1f)
         {
             var lineTextList = text.Split(Environment.NewLine.ToArray())
                 .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
@@ -139,7 +121,14 @@ namespace RomajiConverter.Core.Helpers
             if (cacheList.Count == 0) return;
 
             //获取ai结果
-            var client = GetChatClient(aiServiceProvider, apiKey);
+            var client = new ChatClient(
+                model: openAIModelName,
+                credential: new ApiKeyCredential(openAIApiKey),
+                options: new OpenAIClientOptions
+                {
+                    Endpoint = new Uri(openAIUrl)
+                }
+            );
 
             var messages = new List<ChatMessage>
             {
@@ -221,11 +210,5 @@ namespace RomajiConverter.Core.Helpers
                     true)
                 : new ConvertedUnit(lineIndex, unitString, KanaHelper.ToHiragana(unitString), KanaHelper.KatakanaToRomaji(unitString), false);
         }
-    }
-
-    public enum AIServiceProvider
-    {
-        DeepSeek,
-        Zhipu
     }
 }

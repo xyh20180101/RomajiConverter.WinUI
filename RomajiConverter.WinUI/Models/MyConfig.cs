@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.UI.Composition.SystemBackdrops;
+using RomajiConverter.WinUI.Extensions;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using RomajiConverter.Core.Helpers;
-using RomajiConverter.WinUI.Extensions;
 
 namespace RomajiConverter.WinUI.Models;
 
@@ -19,9 +20,7 @@ public class MyConfig : INotifyPropertyChanged
     private string _rightParenthesis;
 
     private bool _isAIMode;
-    private AIServiceProvider _aiSelect = AIServiceProvider.DeepSeek;
-    private string _deepseekApiKey;
-    private string _zhipuApiKey;
+    private ObservableCollection<OpenAIConfig> _openAIConfigs = [];
     
     private string _fontFamilyName;
     private int _fontPixelSize;
@@ -32,6 +31,8 @@ public class MyConfig : INotifyPropertyChanged
     private float _wordMargin;
     private int _lineMargin;
     private int _linePadding;
+
+    private MicaKind _micaKind;
 
     /// <summary>
     /// 默认设置
@@ -67,6 +68,8 @@ public class MyConfig : INotifyPropertyChanged
         WordMargin = 0.5f;
         LineMargin = 48;
         LinePadding = 12;
+
+        MicaKind = MicaKind.BaseAlt;
     }
 
     public void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -190,35 +193,13 @@ public class MyConfig : INotifyPropertyChanged
         }
     }
 
-    public AIServiceProvider AISelect
+    public ObservableCollection<OpenAIConfig> OpenAIConfigs
     {
-        get => _aiSelect;
+        get => _openAIConfigs;
         set
         {
-            if (value == _aiSelect) return;
-            _aiSelect = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string DeepSeekApiKey
-    {
-        get => _deepseekApiKey;
-        set
-        {
-            if (value == _deepseekApiKey) return;
-            _deepseekApiKey = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string ZhipuApiKey
-    {
-        get => _zhipuApiKey;
-        set
-        {
-            if (value == _zhipuApiKey) return;
-            _zhipuApiKey = value;
+            if (value == _openAIConfigs) return;
+            _openAIConfigs = value;
             OnPropertyChanged();
         }
     }
@@ -327,4 +308,15 @@ public class MyConfig : INotifyPropertyChanged
     }
 
     #endregion
+
+    public MicaKind MicaKind
+    {
+        get => _micaKind;
+        set
+        {
+            if (value == _micaKind) return;
+            _micaKind = value;
+            OnPropertyChanged();
+        }
+    }
 }

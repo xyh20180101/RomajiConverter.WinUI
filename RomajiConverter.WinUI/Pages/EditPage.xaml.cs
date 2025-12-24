@@ -82,6 +82,7 @@ public sealed partial class EditPage : Page
                         Height = 1,
                         Background = SeparatorBackground
                     };
+                    
                     separator.SetBinding(MarginProperty, SeparatorMarginBinding);
 
                     EditPanel.Children.Insert(e.NewStartingIndex * 2, line);
