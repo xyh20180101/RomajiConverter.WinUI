@@ -1,10 +1,12 @@
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation.Text;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Animation;
 using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Controls;
 using RomajiConverter.WinUI.Enums;
@@ -15,7 +17,6 @@ using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.System;
 using Windows.UI;
-using Microsoft.UI.Xaml.Media.Animation;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -70,40 +71,20 @@ public sealed partial class EditPage : Page
         {
             case NotifyCollectionChangedAction.Add:
                 {
-                    ((ConvertedLine)e.NewItems[0]).Units.CollectionChanged += UnitsOnCollectionChanged;
-
-                    var line = new WrapPanel
-                    {
-                        ChildrenTransitions = [new AddDeleteThemeTransition()]
-                    };
-                    var separator = new Grid
-                    {
-                        ChildrenTransitions = [new AddDeleteThemeTransition()],
-                        Height = 1,
-                        Background = SeparatorBackground
-                    };
-                    
-                    separator.SetBinding(MarginProperty, SeparatorMarginBinding);
+                    var lineData = (ConvertedLine)e.NewItems[0];
+                    var line = GetLine(lineData);
+                    lineData.Units.CollectionChanged += UnitsOnCollectionChanged;
 
                     EditPanel.Children.Insert(e.NewStartingIndex * 2, line);
-                    EditPanel.Children.Insert(e.NewStartingIndex * 2 + 1, separator);
+                    EditPanel.Children.Insert(e.NewStartingIndex * 2 + 1, GetSeparator());
                     break;
                 }
             case NotifyCollectionChangedAction.Remove:
                 {
                     ((ConvertedLine)e.OldItems[0]).Units.CollectionChanged -= UnitsOnCollectionChanged;
 
-                    var wrapPanel = (WrapPanel)EditPanel.Children[e.OldStartingIndex * 2];
-                    foreach (var uiElement in wrapPanel.Children)
-                    {
-                        var editableLabelGroup = (EditableLabelGroup)uiElement;
-                        editableLabelGroup.Destroy();
-                    }
-                    wrapPanel.Children.Clear();
-
-                    var grid = (Grid)EditPanel.Children[e.OldStartingIndex * 2 + 1];
-                    grid.ClearValue(MarginProperty);
-                    grid.ClearValue(Panel.BackgroundProperty);
+                    DestroyLine((WrapPanel)EditPanel.Children[e.OldStartingIndex * 2]);
+                    DestroySeparator((Grid)EditPanel.Children[e.OldStartingIndex * 2 + 1]);
 
                     EditPanel.Children.RemoveAt(e.OldStartingIndex * 2);
                     EditPanel.Children.RemoveAt(e.OldStartingIndex * 2 + 1);
@@ -111,13 +92,13 @@ public sealed partial class EditPage : Page
                 }
             case NotifyCollectionChangedAction.Replace:
                 {
+                    var lineData = (ConvertedLine)e.NewItems[0];
+                    var line = GetLine(lineData);
+
                     ((ConvertedLine)e.OldItems[0]).Units.CollectionChanged -= UnitsOnCollectionChanged;
                     ((ConvertedLine)e.NewItems[0]).Units.CollectionChanged += UnitsOnCollectionChanged;
 
-                    var line = new WrapPanel
-                    {
-                        ChildrenTransitions = [new AddDeleteThemeTransition()]
-                    };
+                    DestroySeparator((Grid)EditPanel.Children[e.OldStartingIndex * 2 + 1]);
 
                     EditPanel.Children.RemoveAt(e.OldStartingIndex * 2);
                     EditPanel.Children.Insert(e.NewStartingIndex * 2, line);
@@ -131,28 +112,57 @@ public sealed partial class EditPage : Page
             case NotifyCollectionChangedAction.Reset:
                 {
                     foreach (var children in EditPanel.Children)
-                        if (children.GetType() == typeof(WrapPanel))
+                        if (children is WrapPanel wrapPanel)
                         {
-                            var wrapPanel = (WrapPanel)children;
-                            foreach (var uiElement in wrapPanel.Children)
-                            {
-                                var editableLabelGroup = (EditableLabelGroup)uiElement;
-                                editableLabelGroup.Destroy();
-                            }
-
-                            wrapPanel.Children.Clear();
+                            DestroyLine(wrapPanel);
                         }
-                        else if (children.GetType() == typeof(Grid))
+                        else if (children is Grid grid)
                         {
-                            var grid = (Grid)children;
-                            grid.ClearValue(MarginProperty);
-                            grid.ClearValue(Panel.BackgroundProperty);
+                            DestroySeparator(grid);
                         }
-
                     EditPanel.Children.Clear();
                     break;
                 }
         }
+    }
+
+    private WrapPanel GetLine(ConvertedLine data)
+    {
+        var wrapPanel = new WrapPanel
+        {
+            ChildrenTransitions = [new AddDeleteThemeTransition()]
+        };
+        foreach (var unitData in data.Units)
+            wrapPanel.Children.Add(GetUnit(unitData));
+        return wrapPanel;
+    }
+
+    private void DestroyLine(WrapPanel wrapPanel)
+    {
+        foreach (var uiElement in wrapPanel.Children)
+        {
+            var editableLabelGroup = (EditableLabelGroup)uiElement;
+            editableLabelGroup.Destroy();
+        }
+        wrapPanel.Children.Clear();
+    }
+
+    private Grid GetSeparator()
+    {
+        var separator = new Grid
+        {
+            ChildrenTransitions = [new AddDeleteThemeTransition()],
+            Height = 1,
+            Background = SeparatorBackground
+        };
+        separator.SetBinding(MarginProperty, SeparatorMarginBinding);
+        return separator;
+    }
+
+    private void DestroySeparator(Grid grid)
+    {
+        grid.ClearValue(MarginProperty);
+        grid.ClearValue(Panel.BackgroundProperty);
     }
 
     private void UnitsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -161,71 +171,31 @@ public sealed partial class EditPage : Page
         {
             case NotifyCollectionChangedAction.Add:
                 {
-                    var unit = (ConvertedUnit)e.NewItems[0];
-                    var wrapPanel = (WrapPanel)EditPanel.Children[unit.LineIndex * 2];
+                    var unitData = (ConvertedUnit)e.NewItems[0];
+                    var line = (WrapPanel)EditPanel.Children[unitData.LineIndex * 2];
 
-                    var group = new EditableLabelGroup(unit)
-                    {
-                        OpacityTransition = new ScalarTransition(),
-                        RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed,
-                        BorderVisibilitySetting = (BorderVisibilitySetting)BorderVisibilityComboBox.SelectedIndex
-                    };
-                    group.SetBinding(EditableLabelGroup.MyFontSizeProperty, FontSizeBinding);
-                    if (EditHiraganaCheckBox.IsOn)
-                    {
-                        if (IsOnlyShowKanjiCheckBox.IsOn && group.Unit.IsKanji == false)
-                            group.HiraganaVisibility = HiraganaVisibility.Hidden;
-                        else
-                            group.HiraganaVisibility = HiraganaVisibility.Visible;
-                    }
-                    else
-                    {
-                        group.HiraganaVisibility = HiraganaVisibility.Collapsed;
-                    }
-
-                    wrapPanel.Children.Insert(e.NewStartingIndex, group);
+                    line.Children.Insert(e.NewStartingIndex, GetUnit(unitData));
                     break;
                 }
             case NotifyCollectionChangedAction.Remove:
                 {
-                    var unit = (ConvertedUnit)e.OldItems[0];
-                    var wrapPanel = (WrapPanel)EditPanel.Children[unit.LineIndex * 2];
+                    var unitData = (ConvertedUnit)e.OldItems[0];
+                    var line = (WrapPanel)EditPanel.Children[unitData.LineIndex * 2];
 
-                    var group = (EditableLabelGroup)wrapPanel.Children[e.OldStartingIndex];
-                    group.Destroy();
+                    ((EditableLabelGroup)line.Children[e.OldStartingIndex]).Destroy();
 
-                    wrapPanel.Children.RemoveAt(e.OldStartingIndex);
+                    line.Children.RemoveAt(e.OldStartingIndex);
                     break;
                 }
             case NotifyCollectionChangedAction.Replace:
                 {
-                    var unit = (ConvertedUnit)e.NewItems[0];
-                    var wrapPanel = (WrapPanel)EditPanel.Children[unit.LineIndex * 2];
+                    var unitData = (ConvertedUnit)e.NewItems[0];
+                    var line = (WrapPanel)EditPanel.Children[unitData.LineIndex * 2];
 
-                    var group = new EditableLabelGroup(unit)
-                    {
-                        OpacityTransition = new ScalarTransition(),
-                        RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed,
-                        BorderVisibilitySetting = (BorderVisibilitySetting)BorderVisibilityComboBox.SelectedIndex
-                    };
-                    group.SetBinding(EditableLabelGroup.MyFontSizeProperty, FontSizeBinding);
-                    if (EditHiraganaCheckBox.IsOn)
-                    {
-                        if (IsOnlyShowKanjiCheckBox.IsOn && group.Unit.IsKanji == false)
-                            group.HiraganaVisibility = HiraganaVisibility.Hidden;
-                        else
-                            group.HiraganaVisibility = HiraganaVisibility.Visible;
-                    }
-                    else
-                    {
-                        group.HiraganaVisibility = HiraganaVisibility.Collapsed;
-                    }
+                    ((EditableLabelGroup)line.Children[e.OldStartingIndex]).Destroy();
 
-                    var oldGroup = (EditableLabelGroup)wrapPanel.Children[e.OldStartingIndex];
-                    oldGroup.Destroy();
-
-                    wrapPanel.Children.Insert(e.NewStartingIndex, group);
-                    wrapPanel.Children.RemoveAt(e.OldStartingIndex);
+                    line.Children.Insert(e.NewStartingIndex, GetUnit(unitData));
+                    line.Children.RemoveAt(e.OldStartingIndex);
                     break;
                 }
             case NotifyCollectionChangedAction.Move:
@@ -244,14 +214,36 @@ public sealed partial class EditPage : Page
 
                     foreach (var uiElement in wrapPanel.Children)
                     {
-                        var editableLabelGroup = (EditableLabelGroup)uiElement;
-                        editableLabelGroup.Destroy();
+                        ((EditableLabelGroup)uiElement).Destroy();
                     }
 
                     wrapPanel.Children.Clear();
                     break;
                 }
         }
+    }
+
+    private EditableLabelGroup GetUnit(ConvertedUnit data)
+    {
+        var group = new EditableLabelGroup(data)
+        {
+            OpacityTransition = new ScalarTransition(),
+            RomajiVisibility = EditRomajiCheckBox.IsOn ? Visibility.Visible : Visibility.Collapsed,
+            BorderVisibilitySetting = (BorderVisibilitySetting)BorderVisibilityComboBox.SelectedIndex
+        };
+        group.SetBinding(EditableLabelGroup.MyFontSizeProperty, FontSizeBinding);
+        if (EditHiraganaCheckBox.IsOn)
+        {
+            if (IsOnlyShowKanjiCheckBox.IsOn && group.Unit.IsKanji == false)
+                group.HiraganaVisibility = HiraganaVisibility.Hidden;
+            else
+                group.HiraganaVisibility = HiraganaVisibility.Visible;
+        }
+        else
+        {
+            group.HiraganaVisibility = HiraganaVisibility.Collapsed;
+        }
+        return group;
     }
 
     /// <summary>
