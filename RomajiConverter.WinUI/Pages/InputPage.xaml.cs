@@ -1,9 +1,9 @@
+using CommunityToolkit.WinUI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using RomajiConverter.Core.Helpers;
-using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Extensions;
 using System;
 using System.Linq;
@@ -11,9 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.System;
-using CommunityToolkit.WinUI;
+using RomajiConverter.Core.Options;
 using DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue;
-using DispatcherQueuePriority = Microsoft.UI.Dispatching.DispatcherQueuePriority;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -42,11 +41,13 @@ public sealed partial class InputPage : Page
         try
         {
             App.ConvertedLineList.Clear();
+            MainOutputPage.ClearText();
 
             StopButton.IsEnabled = true;
             ConvertButton.IsEnabled = false;
             MainEditPage.ShowLoading(true);
 
+            var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
             if (App.Config.IsAIMode)
             {
                 var config = App.Config.OpenAIConfigs.FirstOrDefault(p => p.IsSelected);
@@ -63,11 +64,28 @@ public sealed partial class InputPage : Page
                     }.ShowAsync();
                     return;
                 }
-                await RomajiAIHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text, config.BaseUrl, config.Model, config.ApiKey, _convertCancellationTokenSource.Token);
+                await RomajiAIHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text, new ToRomajiAIOptions
+                {
+                    IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation,
+                    BaseUrl = config.BaseUrl,
+                    Model = config.Model,
+                    ApiKey = config.ApiKey,
+                    Prompt = App.Config.Prompt
+                }, _convertCancellationTokenSource.Token);
             }
             else
             {
-                await RomajiHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text);
+                var enumerable = RomajiHelper.ToRomaji(InputTextBox.Text, new ToRomajiOptions { IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation });
+                using var enumerator = enumerable.GetEnumerator();
+                while (!_convertCancellationTokenSource.IsCancellationRequested)
+                {
+                    if (await Task.Run(() => !enumerator.MoveNext())) break;
+
+                    await dispatcherQueue.EnqueueAsync(() =>
+                    {
+                        App.ConvertedLineList.Add(enumerator.Current);
+                    });
+                }
             }
         }
         catch (TaskCanceledException exception) { }

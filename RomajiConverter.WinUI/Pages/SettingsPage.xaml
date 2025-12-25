@@ -49,11 +49,25 @@
                         </DataTemplate>
                     </toolkit:SettingsExpander.ItemTemplate>
                     <toolkit:SettingsExpander.ItemsFooter>
-                        <toolkit:SettingsCard Padding="58,8,44,8" BorderThickness="0,1,0,0" CornerRadius="0" MinHeight="52">
-                            <Button x:Name="OpenAddOpenAIConfigWindowButton" Style="{StaticResource AccentButtonStyle}" Click="OpenAddOpenAIConfigWindowButton_OnClick">添加配置</Button>
-                        </toolkit:SettingsCard>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <toolkit:SettingsCard Grid.Row="0" Padding="58,8,44,8" BorderThickness="0,1,0,0" CornerRadius="0" MinHeight="52">
+                                <Button x:Name="OpenAddOpenAIConfigWindowButton" Style="{StaticResource AccentButtonStyle}" Click="OpenAddOpenAIConfigWindowButton_OnClick">添加配置</Button>
+                            </toolkit:SettingsCard>
+                        </Grid>
                     </toolkit:SettingsExpander.ItemsFooter>
                 </toolkit:SettingsExpander>
+                <TextBlock x:Uid="ConvertOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="转换选项" />
+                <toolkit:SettingsCard x:Uid="IsParticleAsPronunciationSetting" Margin="16,2" Header="助词假名转换" Description="启用时，は/へ/を作为助词时的假名转换为わ/え/お，罗马音转为wa/e/o">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8AB;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsParticleAsPronunciationToggleSwitch"
+                                  IsOn="{x:Bind winUi:App.Config.IsParticleAsPronunciation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </toolkit:SettingsCard>
                 <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成图片选项" />
                 <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="16,2" Description="" Header="字体">
                     <toolkit:SettingsCard.HeaderIcon>
@@ -220,7 +234,7 @@
                 <TextBlock x:Uid="OtherOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="其他" />
                 <toolkit:SettingsCard x:Uid="MicaKindSetting" Margin="16,2" Header="云母材质">
                     <toolkit:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xEA37;" />
+                        <FontIcon Glyph="&#xEF1F;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="MicaKindComboBox" SelectedItem="{x:Bind winUi:App.Config.MicaKind,Mode=TwoWay}"></ComboBox>
                 </toolkit:SettingsCard>

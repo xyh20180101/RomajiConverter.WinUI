@@ -1,7 +1,6 @@
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Automation.Text;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
@@ -17,6 +16,8 @@ using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.System;
 using Windows.UI;
+using CommunityToolkit.WinUI;
+using DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -67,6 +68,8 @@ public sealed partial class EditPage : Page
 
     private void ConvertedLineListOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
+        if (!App.Config.IsDetailMode) return;
+
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
@@ -130,7 +133,7 @@ public sealed partial class EditPage : Page
     {
         var wrapPanel = new WrapPanel
         {
-            ChildrenTransitions = [new AddDeleteThemeTransition()]
+            ChildrenTransitions = [new EntranceThemeTransition()]
         };
         foreach (var unitData in data.Units)
             wrapPanel.Children.Add(GetUnit(unitData));
@@ -151,7 +154,7 @@ public sealed partial class EditPage : Page
     {
         var separator = new Grid
         {
-            ChildrenTransitions = [new AddDeleteThemeTransition()],
+            ChildrenTransitions = [new EntranceThemeTransition()],
             Height = 1,
             Background = SeparatorBackground
         };
@@ -221,6 +224,19 @@ public sealed partial class EditPage : Page
                     break;
                 }
         }
+
+        _ = DispatcherQueue.GetForCurrentThread()
+            .EnqueueAsync(() =>
+            {
+                if (EditScrollViewer.ExtentHeight > EditScrollViewer.ViewportHeight)
+                {
+                    EditScrollViewer.ChangeView(
+                        horizontalOffset: null,
+                        verticalOffset: EditScrollViewer.ExtentHeight,
+                        zoomFactor: null,
+                        disableAnimation: true);
+                }
+            });
     }
 
     private EditableLabelGroup GetUnit(ConvertedUnit data)
@@ -254,15 +270,10 @@ public sealed partial class EditPage : Page
     private void EditToggleSwitch_OnToggled(object sender, RoutedEventArgs e)
     {
         var senderName = ((ToggleSwitch)sender).Name;
-        foreach (object children in EditPanel.Children)
+        foreach (var children in EditPanel.Children)
         {
-            WrapPanel wrapPanel;
-            if (children.GetType() == typeof(WrapPanel))
-                wrapPanel = (WrapPanel)children;
-            else
+            if (children is not WrapPanel wrapPanel)
                 continue;
-
-            var isLineContainsKanji = wrapPanel.Children.Any(p => ((EditableLabelGroup)p).Unit.IsKanji);
 
             foreach (EditableLabelGroup editableLabelGroup in wrapPanel.Children)
                 switch (senderName)
@@ -274,22 +285,16 @@ public sealed partial class EditPage : Page
                     case "EditHiraganaCheckBox":
                         if (EditHiraganaCheckBox.IsOn)
                             if (IsOnlyShowKanjiCheckBox.IsOn && !editableLabelGroup.Unit.IsKanji)
-                                if (isLineContainsKanji)
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
-                                else
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
                             else
                                 editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
                         else
                             editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
                         break;
                     case "IsOnlyShowKanjiCheckBox":
-                        if (EditHiraganaCheckBox.IsOn && editableLabelGroup.Unit.IsKanji == false)
+                        if (EditHiraganaCheckBox.IsOn && !editableLabelGroup.Unit.IsKanji)
                             if (IsOnlyShowKanjiCheckBox.IsOn)
-                                if (isLineContainsKanji)
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
-                                else
-                                    editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Collapsed;
+                                editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Hidden;
                             else
                                 editableLabelGroup.HiraganaVisibility = HiraganaVisibility.Visible;
                         break;
@@ -352,7 +357,7 @@ public sealed partial class EditPage : Page
         {
             EditPanel.Children.Insert(EditPanel.Children.Count, new ProgressRing
             {
-                IsActive = true
+                Margin = new Thickness(0, 16,0,0)
             });
         }
         else

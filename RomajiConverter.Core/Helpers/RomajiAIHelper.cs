@@ -11,24 +11,27 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using RomajiConverter.Core.Options;
 
 namespace RomajiConverter.Core.Helpers
 {
     public static class RomajiAIHelper
     {
-        private static string _prompt = @"上面是一段日文歌词，你需要逐词转换为以下格式：
+        public const string Prompt = @"上面是一段日文歌词，你需要逐词转换为以下格式：
 - 每行输出必须严格对应每行输入，禁止额外添加换行，禁止输出空行，不能因为遇到标点符号而换行，换行符必须使用单个\n
-- 对每行日文进行分词处理，每个分词之间用空格分隔
+- 对每行日文进行分词处理
 - 如果一个分词是日文且包含汉字，则需要给出平假名，用小写括号在原文后标注，格式为：日文分词(平假名)
+- 遇到作为助词的は/へ/を时，在后面添加“|”以及它的口语化假名，非助词情况下只输出原文
 - 遇到英文单词/字母、数字、标点符号、特殊符号、等非日文的unicode字符时，必须保留且单独作为一个分词，必须只输出原文，不能给出平假名
+- 每个分词之间必须用空格分隔
 - 不要包含任何解释、注释、Markdown、额外字段或文本
 - 示例仅供参考，不能直接输出，任何时候都需要根据上面给出的文本进行转换
 示例：
-输入：その陽が落ちた瞬間を
-输出：その 陽(ひ) が 落ち(おち) た 瞬間(しゅんかん) を";
+输入：はなは綺麗です
+输出：はな は|わ 綺麗(きれい) です";
 
-        private static Regex _formatRegex = new Regex(@"^(.*?)\((.*?)\)$", RegexOptions.Compiled);
-        public static async Task ToRomaji(ObservableCollection<ConvertedLine> convertedLines, string text, string openAIUrl, string openAIModelName, string openAIApiKey, CancellationToken cancellationToken = default, float chineseRate = 1f)
+        private static Regex _formatRegex = new Regex(@"^(.*?)(\((.*?)\))*?(\|(.*?))*?$", RegexOptions.Compiled);
+        public static async Task ToRomaji(ObservableCollection<ConvertedLine> convertedLines, string text, ToRomajiAIOptions options, CancellationToken cancellationToken = default)
         {
             var lineTextList = text.Split(Environment.NewLine.ToArray())
                 .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
@@ -38,7 +41,7 @@ namespace RomajiConverter.Core.Helpers
             {
                 var line = lineTextList[index];
 
-                if (RomajiHelper.IsChinese(line, chineseRate)) continue;
+                if (RomajiHelper.IsChinese(line, options.ChineseRate)) continue;
 
                 var convertedLine = new ConvertedLine
                 {
@@ -46,7 +49,7 @@ namespace RomajiConverter.Core.Helpers
                 };
 
                 if (index + 1 < lineTextList.Length &&
-                    RomajiHelper.IsChinese(lineTextList[index + 1], chineseRate))
+                    RomajiHelper.IsChinese(lineTextList[index + 1], options.ChineseRate))
                     convertedLine.Chinese = lineTextList[index + 1];
 
                 convertedLine.Index = (ushort)cacheList.Count;
@@ -57,24 +60,27 @@ namespace RomajiConverter.Core.Helpers
 
             //获取ai结果
             var client = new ChatClient(
-                model: openAIModelName,
-                credential: new ApiKeyCredential(openAIApiKey),
+                model: options.Model,
+                credential: new ApiKeyCredential(options.ApiKey),
                 options: new OpenAIClientOptions
                 {
-                    Endpoint = new Uri(openAIUrl)
+                    Endpoint = new Uri(options.BaseUrl)
                 }
             );
 
+            var prompt = string.IsNullOrEmpty(options.Prompt) ? Prompt : options.Prompt;
+
+            var content = $"{string.Join("\n", cacheList.Select(p => p.Japanese))}\n{prompt}";
             var messages = new List<ChatMessage>
             {
-                new UserChatMessage($"{string.Join("\n",cacheList.Select(p => p.Japanese))}\n{_prompt}")
+                new UserChatMessage(content)
             };
 
-            Debug.WriteLine($"{string.Join("\n", cacheList.Select(p => p.Japanese))}\n{_prompt}");
+            Debug.WriteLine(content);
 
             var completion = await client.CompleteChatAsync(messages, cancellationToken: cancellationToken);
 
-            var resultLines = completion.Value.Content[0].Text.Replace("\r", "").Split("\n", StringSplitOptions.RemoveEmptyEntries);
+            var resultLines = FixFormat(completion.Value.Content[0].Text).Split("\n", StringSplitOptions.RemoveEmptyEntries);
             for (ushort i = 0; i < resultLines.Length; i++)
             {
                 Debug.Write(resultLines[i]);
@@ -85,7 +91,7 @@ namespace RomajiConverter.Core.Helpers
                     Japanese = i >= cacheList.Count ? string.Empty : cacheList[i].Japanese
                 };
                 convertedLines.Add(line);
-                var units = new ObservableCollection<ConvertedUnit>(resultLines[i].Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(u => GetUnit(i, u)));
+                var units = new ObservableCollection<ConvertedUnit>(resultLines[i].Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(u => GetUnit(i, u, options.IsParticleAsPronunciation)));
                 foreach (var unit in units)
                 {
                     convertedLines[i].Units.Add(unit);
@@ -93,7 +99,7 @@ namespace RomajiConverter.Core.Helpers
             }
         }
 
-        public static async Task ToRomajiStreamingAsync(ObservableCollection<ConvertedLine> convertedLines, string text, string openAIUrl, string openAIModelName, string openAIApiKey, CancellationToken cancellationToken = default, float chineseRate = 1f)
+        public static async Task ToRomajiStreamingAsync(ObservableCollection<ConvertedLine> convertedLines, string text, ToRomajiAIOptions options, CancellationToken cancellationToken = default)
         {
             var lineTextList = text.Split(Environment.NewLine.ToArray())
                 .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
@@ -103,7 +109,7 @@ namespace RomajiConverter.Core.Helpers
             {
                 var line = lineTextList[index];
 
-                if (RomajiHelper.IsChinese(line, chineseRate)) continue;
+                if (RomajiHelper.IsChinese(line, options.ChineseRate)) continue;
 
                 var convertedLine = new ConvertedLine
                 {
@@ -111,7 +117,7 @@ namespace RomajiConverter.Core.Helpers
                 };
 
                 if (index + 1 < lineTextList.Length &&
-                    RomajiHelper.IsChinese(lineTextList[index + 1], chineseRate))
+                    RomajiHelper.IsChinese(lineTextList[index + 1], options.ChineseRate))
                     convertedLine.Chinese = lineTextList[index + 1];
 
                 convertedLine.Index = (ushort)cacheList.Count;
@@ -122,20 +128,23 @@ namespace RomajiConverter.Core.Helpers
 
             //获取ai结果
             var client = new ChatClient(
-                model: openAIModelName,
-                credential: new ApiKeyCredential(openAIApiKey),
+                model: options.Model,
+                credential: new ApiKeyCredential(options.ApiKey),
                 options: new OpenAIClientOptions
                 {
-                    Endpoint = new Uri(openAIUrl)
+                    Endpoint = new Uri(options.BaseUrl)
                 }
             );
 
+            var prompt = string.IsNullOrEmpty(options.Prompt) ? Prompt : options.Prompt;
+
+            var content = $"{string.Join("\n", cacheList.Select(p => p.Japanese))}\n{prompt}";
             var messages = new List<ChatMessage>
             {
-                new UserChatMessage($"{string.Join("\n",cacheList.Select(p => p.Japanese))}\n{_prompt}")
+                new UserChatMessage(content)
             };
 
-            Debug.WriteLine($"{string.Join("\n", cacheList.Select(p => p.Japanese))}\n{_prompt}");
+            Debug.WriteLine(content);
 
             var completionUpdates = client.CompleteChatStreamingAsync(messages, cancellationToken: cancellationToken);
 
@@ -155,7 +164,7 @@ namespace RomajiConverter.Core.Helpers
             {
                 if (completionUpdate.ContentUpdate.Count > 0)
                 {
-                    var delta = completionUpdate.ContentUpdate[0].Text.Replace("\r", "");
+                    var delta = FixFormat(completionUpdate.ContentUpdate[0].Text);
                     if (string.IsNullOrEmpty(delta)) continue;
                     stringBuilder.Append(delta);
                     Debug.Write(completionUpdate.ContentUpdate[0].Text);
@@ -165,7 +174,7 @@ namespace RomajiConverter.Core.Helpers
                         if (stringBuilder[r] == '\n')
                         {
                             var lastLine = convertedLines.Last();
-                            lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l)));
+                            lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l), options.IsParticleAsPronunciation));
 
                             lineIndex++;
                             var newLine = new ConvertedLine
@@ -181,7 +190,7 @@ namespace RomajiConverter.Core.Helpers
                         else if (stringBuilder[r] == ' ')
                         {
                             var lastLine = convertedLines.Last();
-                            lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l)));
+                            lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l), options.IsParticleAsPronunciation));
 
                             r++;
                             l = r;
@@ -197,18 +206,46 @@ namespace RomajiConverter.Core.Helpers
             if (l != r)
             {
                 var lastLine = convertedLines.Last();
-                lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l)));
+                lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l), options.IsParticleAsPronunciation));
             }
         }
 
-        private static ConvertedUnit GetUnit(ushort lineIndex, string unitString)
+        private static string FixFormat(string content)
+        {
+            content = content.Replace("\r", "");
+
+            return content;
+        }
+
+        private static ConvertedUnit GetUnit(ushort lineIndex, string unitString, bool isParticleAsPronunciation)
         {
             var match = _formatRegex.Match(unitString);
 
-            return match.Success
-                ? new ConvertedUnit(lineIndex, match.Groups[1].Value, match.Groups[2].Value, KanaHelper.KatakanaToRomaji(match.Groups[2].Value),
-                    true)
-                : new ConvertedUnit(lineIndex, unitString, KanaHelper.ToHiragana(unitString), KanaHelper.KatakanaToRomaji(unitString), false);
+            if (!match.Success)
+            {
+                return new ConvertedUnit(lineIndex, unitString, KanaHelper.ToHiragana(unitString),
+                    KanaHelper.KatakanaToRomaji(unitString), false);
+            }
+
+            var origin = match.Groups[1].Value;
+            var kanji_gana = match.Groups[3].Value;
+            var particle_gana = match.Groups[5].Value;
+
+            if (!string.IsNullOrEmpty(kanji_gana))
+            {
+                return new ConvertedUnit(lineIndex, origin, kanji_gana,
+                    KanaHelper.KatakanaToRomaji(kanji_gana), true);
+            }
+            else if (isParticleAsPronunciation && !string.IsNullOrEmpty(particle_gana))
+            {
+                return new ConvertedUnit(lineIndex, origin, particle_gana,
+                    KanaHelper.KatakanaToRomaji(particle_gana), false);
+            }
+            else
+            {
+                return new ConvertedUnit(lineIndex, origin, KanaHelper.ToHiragana(origin),
+                    KanaHelper.KatakanaToRomaji(origin), false);
+            }
         }
     }
 }

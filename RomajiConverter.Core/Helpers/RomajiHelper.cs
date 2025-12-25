@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using RomajiConverter.Core.Options;
 
 namespace RomajiConverter.Core.Helpers
 {
@@ -55,10 +55,12 @@ namespace RomajiConverter.Core.Helpers
         /// 生成转换结果列表
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="chineseRate"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
-        public static IEnumerable<ConvertedLine> ToRomaji(string text, float chineseRate = 1f)
+        public static IEnumerable<ConvertedLine> ToRomaji(string text, ToRomajiOptions options = null)
         {
+            options = options ?? new ToRomajiOptions();
+
             var lineTextList = text.Split(Environment.NewLine.ToArray())
                 .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
 
@@ -67,7 +69,7 @@ namespace RomajiConverter.Core.Helpers
             {
                 var line = lineTextList[index];
 
-                if (IsChinese(line, chineseRate)) continue;
+                if (IsChinese(line, options.ChineseRate)) continue;
 
                 var convertedLine = new ConvertedLine
                 {
@@ -82,52 +84,15 @@ namespace RomajiConverter.Core.Helpers
                         convertedLine.Units.Add(new ConvertedUnit(lineIndex, sentence, sentence, sentence, false));
                     }
                     else
-                        foreach (var unit in SentenceToRomaji(lineIndex, sentence))
+                        foreach (var unit in SentenceToRomaji(lineIndex, sentence, options.IsParticleAsPronunciation))
                             convertedLine.Units.Add(unit);
                 }
 
-                if (index + 1 < lineTextList.Length && IsChinese(lineTextList[index + 1], chineseRate))
+                if (index + 1 < lineTextList.Length && IsChinese(lineTextList[index + 1], options.ChineseRate))
                     convertedLine.Chinese = lineTextList[index + 1];
 
                 lineIndex++;
                 yield return convertedLine;
-            }
-        }
-
-        public static async Task ToRomajiStreamingAsync(ObservableCollection<ConvertedLine> convertedLines, string text, float chineseRate = 1f)
-        {
-            var lineTextList = text.Split(Environment.NewLine.ToArray())
-                .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
-
-            ushort lineIndex = 0;
-            for (var index = 0; index < lineTextList.Length; index++)
-            {
-                var line = lineTextList[index];
-
-                if (IsChinese(line, chineseRate)) continue;
-
-                var convertedLine = new ConvertedLine
-                {
-                    Index = lineIndex,
-                    Japanese = line.Replace("\0", "")
-                };
-
-                foreach (var sentence in convertedLine.Japanese.LineToUnits())
-                {
-                    if (IsEnglish(sentence))
-                    {
-                        convertedLine.Units.Add(new ConvertedUnit(lineIndex, sentence, sentence, sentence, false));
-                    }
-                    else
-                        foreach (var unit in await Task.Run(() => SentenceToRomaji(lineIndex, sentence).ToList()))
-                            convertedLine.Units.Add(unit);
-                }
-
-                if (index + 1 < lineTextList.Length && IsChinese(lineTextList[index + 1], chineseRate))
-                    convertedLine.Chinese = lineTextList[index + 1];
-
-                lineIndex++;
-                convertedLines.Add(convertedLine);
             }
         }
 
@@ -136,19 +101,20 @@ namespace RomajiConverter.Core.Helpers
         /// </summary>
         /// <param name="lineIndex"></param>
         /// <param name="str"></param>
+        /// <param name="isParticleAsPronunciation"></param>
         /// <returns></returns>
-        public static IEnumerable<ConvertedUnit> SentenceToRomaji(ushort lineIndex, string str)
+        public static IEnumerable<ConvertedUnit> SentenceToRomaji(ushort lineIndex, string str, bool isParticleAsPronunciation)
         {
             foreach (var item in _tagger.ParseToNodes(str))
             {
-                var unit = MeCabNodeToUnit(lineIndex, item);
+                var unit = MeCabNodeToUnit(lineIndex, item, isParticleAsPronunciation);
 
                 if (unit != null)
                     yield return unit;
             }
         }
 
-        public static ConvertedUnit MeCabNodeToUnit(ushort lineIndex, MeCabNode item)
+        public static ConvertedUnit MeCabNodeToUnit(ushort lineIndex, MeCabNode item, bool isParticleAsPronunciation)
         {
             ConvertedUnit unit = null;
             if (item.CharType > 0)
@@ -163,7 +129,7 @@ namespace RomajiConverter.Core.Helpers
                         KanaHelper.KatakanaToRomaji(customResult),
                         true);
                 }
-                else if (features.Length > 0 && item.GetPos1() != "助詞" && IsJapanese(item.Surface))
+                else if (features.Length > 0 && (!isParticleAsPronunciation || item.GetPos1() != "助詞") && IsJapanese(item.Surface))
                 {
                     //纯假名
                     unit = new ConvertedUnit(lineIndex,

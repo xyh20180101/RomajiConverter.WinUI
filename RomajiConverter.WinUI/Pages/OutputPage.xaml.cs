@@ -1,14 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Windows.ApplicationModel.DataTransfer;
-using Windows.System;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.System;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -25,6 +27,45 @@ public sealed partial class OutputPage : Page
         JPCheckBox.Toggled += ThirdCheckBox_OnToggled;
         KanjiHiraganaCheckBox.Toggled += ThirdCheckBox_OnToggled;
         CHCheckBox.Toggled += ThirdCheckBox_OnToggled;
+
+        App.ConvertedLineList.CollectionChanged += ConvertedLineListOnCollectionChanged;
+    }
+
+    private void ConvertedLineListOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (App.Config.IsDetailMode) return;
+
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                {
+                    ((ConvertedLine)e.NewItems[0]).Units.CollectionChanged += UnitsOnCollectionChanged;
+                    break;
+                }
+            case NotifyCollectionChangedAction.Remove:
+                {
+                    ((ConvertedLine)e.OldItems[0]).Units.CollectionChanged -= UnitsOnCollectionChanged;
+                    break;
+                }
+            case NotifyCollectionChangedAction.Replace:
+                {
+                    ((ConvertedLine)e.OldItems[0]).Units.CollectionChanged -= UnitsOnCollectionChanged;
+                    ((ConvertedLine)e.NewItems[0]).Units.CollectionChanged += UnitsOnCollectionChanged;
+                    break;
+                }
+        }
+
+        RenderText();
+    }
+
+    private void UnitsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        RenderText();
+    }
+
+    public void ClearText()
+    {
+        OutputTextBox.Text = string.Empty;
     }
 
     /// <summary>

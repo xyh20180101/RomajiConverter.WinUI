@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using RomajiConverter.Core.Helpers;
 
 namespace RomajiConverter.WinUI.Models;
 
@@ -19,8 +20,11 @@ public class MyConfig : INotifyPropertyChanged
     private string _leftParenthesis;
     private string _rightParenthesis;
 
+    private bool _isParticleAsPronunciation;
+
     private bool _isAIMode;
     private ObservableCollection<OpenAIConfig> _openAIConfigs = [];
+    private string _prompt;
     
     private string _fontFamilyName;
     private int _fontPixelSize;
@@ -58,6 +62,10 @@ public class MyConfig : INotifyPropertyChanged
         IsOpenExplorerAfterSaveImage = true;
         LeftParenthesis = "(";
         RightParenthesis = ")";
+
+        IsParticleAsPronunciation = true;
+
+        Prompt = string.Empty;
 
         FontFamilyName = "微软雅黑";
         FontPixelSize = 48;
@@ -180,6 +188,21 @@ public class MyConfig : INotifyPropertyChanged
 
     #endregion
 
+    #region 转换设置
+
+    public bool IsParticleAsPronunciation
+    {
+        get => _isParticleAsPronunciation;
+        set
+        {
+            if (value == _isParticleAsPronunciation) return;
+            _isParticleAsPronunciation = value;
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
     #region AI设置
 
     public bool IsAIMode
@@ -200,6 +223,17 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _openAIConfigs) return;
             _openAIConfigs = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string Prompt
+    {
+        get => _prompt;
+        set
+        {
+            if (value == _prompt) return;
+            _prompt = value;
             OnPropertyChanged();
         }
     }
