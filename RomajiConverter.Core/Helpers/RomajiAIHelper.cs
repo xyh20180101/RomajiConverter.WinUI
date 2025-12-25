@@ -17,7 +17,7 @@ namespace RomajiConverter.Core.Helpers
 {
     public static class RomajiAIHelper
     {
-        public const string Prompt = @"上面是一段日文歌词，你需要逐词转换为以下格式：
+        public const string Prompt = @"用户将输入一段日文歌词，你需要逐词转换为以下格式：
 - 每行输出必须严格对应每行输入，禁止额外添加换行，禁止输出空行，不能因为遇到标点符号而换行，换行符必须使用单个\n
 - 对每行日文进行分词处理
 - 如果一个分词是日文且包含汉字，则需要给出平假名，用小写括号在原文后标注，格式为：日文分词(平假名)
@@ -31,6 +31,11 @@ namespace RomajiConverter.Core.Helpers
 输出：はな は|わ 綺麗(きれい) です";
 
         private static Regex _formatRegex = new Regex(@"^(.*?)(\((.*?)\))*?(\|(.*?))*?$", RegexOptions.Compiled);
+
+        private static ChatCompletionOptions _chatCompletionOptions = new ChatCompletionOptions
+        {
+            Temperature = 0.2f
+        };
         public static async Task ToRomaji(ObservableCollection<ConvertedLine> convertedLines, string text, ToRomajiAIOptions options, CancellationToken cancellationToken = default)
         {
             var lineTextList = text.Split(Environment.NewLine.ToArray())
@@ -69,16 +74,18 @@ namespace RomajiConverter.Core.Helpers
             );
 
             var prompt = string.IsNullOrEmpty(options.Prompt) ? Prompt : options.Prompt;
+            var content = string.Join("\n", cacheList.Select(p => p.Japanese));
 
-            var content = $"{string.Join("\n", cacheList.Select(p => p.Japanese))}\n{prompt}";
             var messages = new List<ChatMessage>
             {
+                new SystemChatMessage(prompt),
                 new UserChatMessage(content)
             };
 
+            Debug.WriteLine(prompt);
             Debug.WriteLine(content);
 
-            var completion = await client.CompleteChatAsync(messages, cancellationToken: cancellationToken);
+            var completion = await client.CompleteChatAsync(messages, _chatCompletionOptions, cancellationToken: cancellationToken);
 
             var resultLines = FixFormat(completion.Value.Content[0].Text).Split("\n", StringSplitOptions.RemoveEmptyEntries);
             for (ushort i = 0; i < resultLines.Length; i++)
@@ -137,16 +144,18 @@ namespace RomajiConverter.Core.Helpers
             );
 
             var prompt = string.IsNullOrEmpty(options.Prompt) ? Prompt : options.Prompt;
+            var content = string.Join("\n", cacheList.Select(p => p.Japanese));
 
-            var content = $"{string.Join("\n", cacheList.Select(p => p.Japanese))}\n{prompt}";
             var messages = new List<ChatMessage>
             {
+                new SystemChatMessage(prompt),
                 new UserChatMessage(content)
             };
 
+            Debug.WriteLine(prompt);
             Debug.WriteLine(content);
 
-            var completionUpdates = client.CompleteChatStreamingAsync(messages, cancellationToken: cancellationToken);
+            var completionUpdates = client.CompleteChatStreamingAsync(messages, _chatCompletionOptions, cancellationToken: cancellationToken);
 
             var stringBuilder = new StringBuilder();
             ushort lineIndex = 0;
@@ -213,6 +222,7 @@ namespace RomajiConverter.Core.Helpers
         private static string FixFormat(string content)
         {
             content = content.Replace("\r", "");
+            content = content.Replace("\\n", "\n");
 
             return content;
         }
