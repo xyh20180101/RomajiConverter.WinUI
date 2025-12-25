@@ -23,6 +23,8 @@ public sealed partial class InputPage : Page
         InitializeComponent();
     }
 
+    public MainPage MainPage { get; set; }
+
     public EditPage MainEditPage { get; set; }
 
     public OutputPage MainOutputPage { get; set; }
@@ -43,6 +45,7 @@ public sealed partial class InputPage : Page
             App.ConvertedLineList.Clear();
             MainOutputPage.ClearText();
 
+            MainPage.SetButtonIsEnabled(false);
             StopButton.IsEnabled = true;
             ConvertButton.IsEnabled = false;
             MainEditPage.ShowLoading(true);
@@ -95,6 +98,7 @@ public sealed partial class InputPage : Page
             MainEditPage.ShowLoading(false);
             ConvertButton.IsEnabled = true;
             StopButton.IsEnabled = false;
+            MainPage.SetButtonIsEnabled(true);
         }
     }
 

@@ -34,6 +34,7 @@ public sealed partial class MainPage : Page
     private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
     {
         //提供跨页面操作对象
+        MainInputPage.MainPage = this;
         MainInputPage.MainEditPage = MainEditPage;
         MainInputPage.MainOutputPage = MainOutputPage;
 
@@ -221,6 +222,11 @@ public sealed partial class MainPage : Page
             Effect = SlideNavigationTransitionEffect.FromRight
         });
         GC.Collect();
+    }
+
+    public void SetButtonIsEnabled(bool isEnabled)
+    {
+        DetailModeButton.IsEnabled = isEnabled;
     }
 
     #endregion
