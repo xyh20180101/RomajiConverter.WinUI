@@ -38,8 +38,22 @@
 6. 界面文本均支持大小缩放，方法：Ctrl+滚轮
 
 ## AI模式说明
-- 使用前需在设置中配置OpenAI相关配置，必须是兼容OpenAI、支持流式输出的非推理模型（目前个人测试下来，考虑配置便捷度和质量，建议使用`deepseek-chat`）
+- 使用前需在设置中配置OpenAI相关配置，必须是兼容OpenAI、支持流式输出的模型（目前个人测试下来，考虑配置便捷度和质量，建议使用`deepseek-chat`）
 - 如需修改系统提示词，在程序目录下找到`config.json`编辑`Prompt`属性，为空时表示使用默认提示词
+
+### 配置参数获取流程（以DeepSeek为例）
+- 打开API开放平台（[DeepSeek API开放平台](https://platform.deepseek.com)）
+- 充值余额（1块钱也可以）
+- 打开`API keys`，创建API key（DeepSeek的key只显示一次，需要记录好）
+- 打开`接口文档`，找到兼容OpenAI的调用地址（此处是`https://api.deepseek.com`）
+- 查看文档，挑选合适的模型（此处为`deepseek-chat`）
+- 回到RomajiConverter - 设置 - 添加配置：
+```
+BaseUrl = https://api.deepseek.com
+模型 = deepseek-chat
+Api Key = sk-xxxxxxxxxxx
+```
+- 其他平台流程类似，有些平台会有免费模型，但质量不太行，一般都支持充值余额按量付费
 
 ## 缺陷
 - 分词器
@@ -51,11 +65,14 @@
     - 根据AI模型的性能，存在不同程度的转换错误/排版错误
 
 ## 常见问题
-```
-本能が云(い)う、嫌々(いやいや)  =>  honnou ga云(i)u、iyaiya(iyaiya)
-どこかで微(かす)か伝うメーデー  =>  doko ka de bi(kasu)ka tsutau mee dee
-```
-- 上面这种汉字没转换、读音错误的情况的原因为：歌词上传者已经在括号里标注了读音。这种情况下直接使用括号里的读音就可以了
+- 分词器
+    ```
+    本能が云(い)う、嫌々(いやいや)  =>  honnou ga云(i)u、iyaiya(iyaiya)
+    どこかで微(かす)か伝うメーデー  =>  doko ka de bi(kasu)ka tsutau mee dee
+    ```
+    - 上面这种汉字没转换、读音错误的情况的原因为：歌词上传者已经在括号里标注了读音。这种情况下直接使用括号里的读音就可以了
+- AI
+    - 如果配置好之后点击转换一直加载中，可能是模型默认进入深度思考模式，换一个模型即可
 
 ## 下载与更新
 - 下载请查看[Release](https://github.com/xyh20180101/RomajiConverter.WinUI/releases)，选择适合你系统的最新版本下载

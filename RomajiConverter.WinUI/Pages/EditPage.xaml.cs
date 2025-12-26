@@ -225,18 +225,19 @@ public sealed partial class EditPage : Page
                 }
         }
 
-        _ = DispatcherQueue.GetForCurrentThread()
-            .EnqueueAsync(() =>
-            {
-                if (EditScrollViewer.ExtentHeight > EditScrollViewer.ViewportHeight)
+        if(App.Config.IsAutoScroll)
+            _ = DispatcherQueue.GetForCurrentThread()
+                .EnqueueAsync(() =>
                 {
-                    EditScrollViewer.ChangeView(
-                        horizontalOffset: null,
-                        verticalOffset: EditScrollViewer.ExtentHeight,
-                        zoomFactor: null,
-                        disableAnimation: true);
-                }
-            });
+                    if (EditScrollViewer.ExtentHeight > EditScrollViewer.ViewportHeight)
+                    {
+                        EditScrollViewer.ChangeView(
+                            horizontalOffset: null,
+                            verticalOffset: EditScrollViewer.ExtentHeight,
+                            zoomFactor: null,
+                            disableAnimation: true);
+                    }
+                });
     }
 
     private EditableLabelGroup GetUnit(ConvertedUnit data)

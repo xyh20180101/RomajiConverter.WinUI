@@ -68,6 +68,13 @@
                     <ToggleSwitch x:Name="IsParticleAsPronunciationToggleSwitch"
                                   IsOn="{x:Bind winUi:App.Config.IsParticleAsPronunciation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="IsAutoScrollSetting" Margin="16,2" Header="自动滚动到最底">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE896;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsAutoScrollToggleSwitch"
+                                  IsOn="{x:Bind winUi:App.Config.IsAutoScroll,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </toolkit:SettingsCard>
                 <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成图片选项" />
                 <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="16,2" Description="" Header="字体">
                     <toolkit:SettingsCard.HeaderIcon>

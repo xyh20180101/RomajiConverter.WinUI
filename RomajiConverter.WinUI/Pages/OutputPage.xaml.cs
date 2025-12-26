@@ -1,7 +1,9 @@
+using CommunityToolkit.WinUI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Extensions;
 using System;
@@ -56,11 +58,21 @@ public sealed partial class OutputPage : Page
         }
 
         RenderText();
+
+        if (App.Config.IsAutoScroll && OutputTextBox.FindDescendant<ScrollViewer>() is { } sv)
+        {
+            sv.ChangeView(null, sv.ExtentHeight, null, true);
+        }
     }
 
     private void UnitsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         RenderText();
+
+        if (App.Config.IsAutoScroll && OutputTextBox.FindDescendant<ScrollViewer>() is { } sv)
+        {
+            sv.ChangeView(null, sv.ExtentHeight, null, true);
+        }
     }
 
     public void ClearText()

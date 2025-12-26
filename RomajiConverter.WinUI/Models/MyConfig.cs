@@ -21,6 +21,7 @@ public class MyConfig : INotifyPropertyChanged
     private string _rightParenthesis;
 
     private bool _isParticleAsPronunciation;
+    private bool _isAutoScroll;
 
     private bool _isAIMode;
     private ObservableCollection<OpenAIConfig> _openAIConfigs = [];
@@ -64,6 +65,7 @@ public class MyConfig : INotifyPropertyChanged
         RightParenthesis = ")";
 
         IsParticleAsPronunciation = true;
+        IsAutoScroll = true;
 
         Prompt = string.Empty;
 
@@ -197,6 +199,17 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _isParticleAsPronunciation) return;
             _isParticleAsPronunciation = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsAutoScroll
+    {
+        get => _isAutoScroll;
+        set
+        {
+            if (value == _isAutoScroll) return;
+            _isAutoScroll = value;
             OnPropertyChanged();
         }
     }
