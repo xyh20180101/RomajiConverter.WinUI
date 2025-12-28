@@ -9,11 +9,13 @@
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
     xmlns:winUi="using:RomajiConverter.WinUI"
     xmlns:valueConverters="using:RomajiConverter.WinUI.ValueConverters"
+    xmlns:models="using:RomajiConverter.WinUI.Models"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="SettingsPage_OnLoaded">
     <Page.Resources>
         <valueConverters:DoubleToStringValueConverter x:Key="DoubleToStringValueConverter"></valueConverters:DoubleToStringValueConverter>
+        <valueConverters:BoolNegationValueConverter x:Key="BoolNegationValueConverter"></valueConverters:BoolNegationValueConverter>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -30,24 +32,58 @@
         </CommandBar>
         <ScrollViewer x:Name="SettingScrollViewer" Grid.Row="1">
             <StackPanel Margin="8,0,8,16">
-                <TextBlock x:Uid="LyricsOptionTextBlock" Margin="16,4,4,4" FontWeight="SemiBold" Text="获取歌词选项" />
-                <toolkit:SettingsCard x:Uid="LyricsOptionIsUseOldLrcParser" Margin="8,4,8,4"
-                                      Description="" Header="使用旧版本Lrc解析器">
+                <TextBlock x:Uid="AIOptionsTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="AI选项" />
+                <toolkit:SettingsExpander x:Name="OpenAIConfigsSettingExpander" x:Uid="OpenAIConfigsSettingExpander" Margin="16,2" Header="OpenAI 配置" ItemsSource="{x:Bind winUi:App.Config.OpenAIConfigs}">
+                    <toolkit:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xF4A5;" />
+                    </toolkit:SettingsExpander.HeaderIcon>
+                    <toolkit:SettingsExpander.ItemTemplate>
+                        <DataTemplate x:DataType="models:OpenAIConfig">
+                            <toolkit:SettingsCard Header="{x:Bind Name,Mode=TwoWay}" Description="{x:Bind BaseUrl,Mode=TwoWay}" Padding="58,8,44,8" BorderThickness="0,1,0,0" CornerRadius="0" MinHeight="52">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button CommandParameter="{x:Bind}" IsEnabled="{x:Bind IsSelected, Converter={StaticResource BoolNegationValueConverter},Mode=TwoWay}" Click="OpenAIConfigSetDefaultButton_OnClick">设为当前配置</Button>
+                                    <Button CommandParameter="{x:Bind}" Click="OpenAIConfigEditButton_OnClick">编辑</Button>
+                                    <Button CommandParameter="{x:Bind}" Click="OpenAIConfigRemoveButton_OnClick">删除</Button>
+                                </StackPanel>
+                            </toolkit:SettingsCard>
+                        </DataTemplate>
+                    </toolkit:SettingsExpander.ItemTemplate>
+                    <toolkit:SettingsExpander.ItemsFooter>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <toolkit:SettingsCard Grid.Row="0" Padding="58,8,44,8" BorderThickness="0,1,0,0" CornerRadius="0" MinHeight="52">
+                                <Button x:Name="OpenAddOpenAIConfigWindowButton" Style="{StaticResource AccentButtonStyle}" Click="OpenAddOpenAIConfigWindowButton_OnClick">添加配置</Button>
+                            </toolkit:SettingsCard>
+                        </Grid>
+                    </toolkit:SettingsExpander.ItemsFooter>
+                </toolkit:SettingsExpander>
+                <TextBlock x:Uid="ConvertOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="转换选项" />
+                <toolkit:SettingsCard x:Uid="IsParticleAsPronunciationSetting" Margin="16,2" Header="助词假名转换" Description="启用时，は/へ/を作为助词时的假名转换为わ/え/お，罗马音转为wa/e/o">
                     <toolkit:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE81C;" />
+                        <FontIcon Glyph="&#xE8AB;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="IsUseOldLrcParser"
-                                  IsOn="{x:Bind winUi:App.Config.IsUseOldLrcParser,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    <ToggleSwitch x:Name="IsParticleAsPronunciationToggleSwitch"
+                                  IsOn="{x:Bind winUi:App.Config.IsParticleAsPronunciation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="IsAutoScrollSetting" Margin="16,2" Header="自动滚动到最底">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE896;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsAutoScrollToggleSwitch"
+                                  IsOn="{x:Bind winUi:App.Config.IsAutoScroll,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
                 <TextBlock x:Uid="ImageOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成图片选项" />
-                <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="8,4,8,4" Description="" Header="字体">
+                <toolkit:SettingsCard x:Uid="ImageOptionFontSetting" Margin="16,2" Description="" Header="字体">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D2;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="FontFamilyComboBox"
                               SelectedValue="{x:Bind winUi:App.Config.FontFamilyName,Mode=TwoWay}" />
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionFontColorSetting" Margin="8,4,8,4" Description="" Header="字体颜色">
+                <toolkit:SettingsCard x:Uid="ImageOptionFontColorSetting" Margin="16,2" Description="" Header="字体颜色">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D3;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -74,7 +110,7 @@
                                  LostFocus="FontColorTextBox_OnLostFocus" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionBackgroundColorSetting" Margin="8,4,8,4" Description=""
+                <toolkit:SettingsCard x:Uid="ImageOptionBackgroundColorSetting" Margin="16,2" Description=""
                                       Header="背景颜色">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE790;" />
@@ -102,7 +138,7 @@
                                  LostFocus="BackgroundColorTextBox_OnLostFocus" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionFontSizeSetting" Margin="8,4,8,4" Description="" Header="字体大小">
+                <toolkit:SettingsCard x:Uid="ImageOptionFontSizeSetting" Margin="16,2" Description="" Header="字体大小">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8E9;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -114,7 +150,7 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionPagePaddingSetting" Margin="8,4,8,4" Description=""
+                <toolkit:SettingsCard x:Uid="ImageOptionPagePaddingSetting" Margin="16,2" Description=""
                                       Header="页面内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF573;" />
@@ -127,7 +163,7 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionTextMarginSetting" Margin="8,4,8,4" Description="" Header="字间距">
+                <toolkit:SettingsCard x:Uid="ImageOptionTextMarginSetting" Margin="16,2" Description="" Header="字间距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE799;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -139,7 +175,7 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionWordMarginSetting" Margin="8,4,8,4" Description="" Header="词间距">
+                <toolkit:SettingsCard x:Uid="ImageOptionWordMarginSetting" Margin="16,2" Description="" Header="词间距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xECA5;" />
                     </toolkit:SettingsCard.HeaderIcon>
@@ -151,7 +187,7 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionLineMarginSetting" Margin="8,4,8,4" Description=""
+                <toolkit:SettingsCard x:Uid="ImageOptionLineMarginSetting" Margin="16,2" Description=""
                                       Header="行外边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xEA37;" />
@@ -164,7 +200,7 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionLinePaddingSetting" Margin="8,4,8,4" Description=""
+                <toolkit:SettingsCard x:Uid="ImageOptionLinePaddingSetting" Margin="16,2" Description=""
                                       Header="行内边距">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF168;" />
@@ -177,7 +213,7 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionIsOpenExplorerAfterSaveImageSetting" Margin="8,4,8,4"
+                <toolkit:SettingsCard x:Uid="ImageOptionIsOpenExplorerAfterSaveImageSetting" Margin="16,2"
                                       Description="" Header="生成图片后打开文件夹">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE838;" />
@@ -186,7 +222,7 @@
                                   IsOn="{x:Bind winUi:App.Config.IsOpenExplorerAfterSaveImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
                 <TextBlock x:Uid="TextOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成文本选项" />
-                <toolkit:SettingsCard x:Uid="TextOptionLeftParenthesisSetting" Margin="8,4,8,4" Description=""
+                <toolkit:SettingsCard x:Uid="TextOptionLeftParenthesisSetting" Margin="16,2" Description=""
                                       Header="左括号符号">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE973;" />
@@ -194,7 +230,7 @@
                     <TextBox x:Name="LeftParenthesisTextBox" MaxLength="5" TextWrapping="Wrap"
                              Text="{x:Bind winUi:App.Config.LeftParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="TextOptionRightParenthesisSetting" Margin="8,4,8,4" Description=""
+                <toolkit:SettingsCard x:Uid="TextOptionRightParenthesisSetting" Margin="16,2" Description=""
                                       Header="右括号符号">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE974;" />
@@ -203,14 +239,20 @@
                              Text="{x:Bind winUi:App.Config.RightParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
                 <TextBlock x:Uid="OtherOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="其他" />
-                <toolkit:SettingsCard x:Uid="OtherOptionResetSetting" Margin="8,4,8,4" Description="" Header="恢复默认设置">
+                <toolkit:SettingsCard x:Uid="MicaKindSetting" Margin="16,2" Header="云母材质">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xEF1F;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="MicaKindComboBox" SelectedItem="{x:Bind winUi:App.Config.MicaKind,Mode=TwoWay}"></ComboBox>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="OtherOptionResetSetting" Margin="16,2" Description="" Header="恢复默认设置">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE72C;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <Button x:Uid="OtherOptionResetSettingButton" x:Name="ResetButton" Content="恢复默认设置"
                             Tapped="ResetButton_OnTapped" />
                 </toolkit:SettingsCard>
-                <toolkit:SettingsExpander x:Uid="VersionSettingExpander" Margin="8,4,8,4" Header="应用版本">
+                <toolkit:SettingsExpander x:Uid="VersionSettingExpander" Margin="16,2" Header="应用版本">
                     <toolkit:SettingsExpander.HeaderIcon>
                         <FontIcon Glyph="&#xE946;" />
                     </toolkit:SettingsExpander.HeaderIcon>

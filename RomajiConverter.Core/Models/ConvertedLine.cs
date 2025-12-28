@@ -1,20 +1,23 @@
-﻿namespace RomajiConverter.Core.Models;
+﻿using System.Collections.ObjectModel;
 
-public class ConvertedLine
+namespace RomajiConverter.Core.Models
 {
-    public ConvertedLine()
+    public class ConvertedLine
     {
-        Index = 0;
-        Chinese = "";
-        Japanese = "";
-        Units = Array.Empty<ConvertedUnit>();
+        public ConvertedLine()
+        {
+            Index = 0;
+            Chinese = "";
+            Japanese = "";
+            Units = new ObservableCollection<ConvertedUnit>();
+        }
+
+        public ushort Index { get; set; }
+
+        public string Chinese { get; set; }
+
+        public string Japanese { get; set; }
+
+        public ObservableCollection<ConvertedUnit> Units { get; set; }
     }
-
-    public ushort Index { get; set; }
-
-    public string Chinese { get; set; }
-
-    public string Japanese { get; set; }
-
-    public ConvertedUnit[] Units { get; set; }
 }

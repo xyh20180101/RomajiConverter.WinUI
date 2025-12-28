@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AIOptionsTextBlock.Text" xml:space="preserve">
+    <value>AI Option</value>
+  </data>
+  <data name="OpenAINotConfig" xml:space="preserve">
+    <value>OpenAI configuration not set</value>
+  </data>
   <data name="AppTitleTextBlock.Text" xml:space="preserve">
     <value>Romaji Converter</value>
   </data>
@@ -191,6 +197,9 @@
   </data>
   <data name="Exception" xml:space="preserve">
     <value>Exception</value>
+  </data>
+  <data name="FileNotExist" xml:space="preserve">
+    <value>File not exist</value>
   </data>
   <data name="GetLyricsError" xml:space="preserve">
     <value>Get Lyrics Error</value>
@@ -294,6 +303,9 @@
   <data name="NotValidLyricsFile" xml:space="preserve">
     <value>File is not a valid lyrics json file</value>
   </data>
+  <data name="OpenAIModelNameSetting.Header" xml:space="preserve">
+    <value>Model</value>
+  </data>
   <data name="OtherOptionResetSetting.Header" xml:space="preserve">
     <value>Reset Settings</value>
   </data>
@@ -347,6 +359,9 @@
   </data>
   <data name="TextOptionTextBlock.Text" xml:space="preserve">
     <value>Text Option</value>
+  </data>
+  <data name="Tip" xml:space="preserve">
+    <value>Tip</value>
   </data>
   <data name="UpdateButton.Content" xml:space="preserve">
     <value>Check Update</value>

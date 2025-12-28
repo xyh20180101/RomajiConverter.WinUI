@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Windows.ApplicationModel.Resources;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Models;
+using System;
+using System.Collections.ObjectModel;
+using Windows.ApplicationModel.Resources;
 using UnhandledExceptionEventArgs = Microsoft.UI.Xaml.UnhandledExceptionEventArgs;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -22,7 +22,7 @@ public partial class App : Application
 
     public static MyConfig Config = new();
 
-    public static List<ConvertedLine> ConvertedLineList = new();
+    public static ObservableCollection<ConvertedLine> ConvertedLineList = new();
 
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code

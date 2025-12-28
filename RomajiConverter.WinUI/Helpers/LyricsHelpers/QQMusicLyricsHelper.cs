@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RomajiConverter.WinUI.Models;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Windows.ApplicationModel.Resources;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Helpers.LyricsHelpers;
 
@@ -18,14 +19,23 @@ public class QQMusicLyricsHelper : LyricsHelper
 
     public static async Task<List<MultilingualLrc>> GetLrc(string url)
     {
-        var httpClient = new HttpClient();
+        var httpClient = new HttpClient(new HttpClientHandler
+        {
+            AllowAutoRedirect = false
+        });
 
-        // 获取歌曲Id
-        var response = await httpClient.GetAsync(url);
-        if (response.StatusCode == HttpStatusCode.Redirect)
-            response = await httpClient.GetAsync(response.Headers.Location?.AbsoluteUri);
-        var content = await response.Content.ReadAsStringAsync();
-        var songId = long.Parse(SongIdRegex.Match(content).Groups["songId"].Value);
+        var songId = 0L;
+        if (url.Contains("c6.y.qq.com")) //pc客户端分享
+        {
+            var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.Redirect)
+                songId = long.Parse(HttpUtility.ParseQueryString(response.Headers.Location.Query)["songid"]);
+        }
+        else if (url.Contains("i.y.qq.com")) //网页分享
+        {
+            var query = HttpUtility.ParseQueryString(new Uri(url).Query);
+            songId = long.Parse(query["songid"]);
+        }
 
         // 拼接参数
         var requestBody = new

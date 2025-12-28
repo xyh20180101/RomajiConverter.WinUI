@@ -1,111 +1,112 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
-namespace RomajiConverter.Core.Helpers;
-
-/// <summary>
-/// 此类用于片假、平假互转
-/// </summary>
-public static class KanaHelper
+namespace RomajiConverter.Core.Helpers
 {
     /// <summary>
-    /// 转为片假名
+    /// 此类用于片假、平假互转
     /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    public static string ToKatakana(string str)
+    public static class KanaHelper
     {
-        var stringBuilder = new StringBuilder();
-        foreach (var c in str)
+        /// <summary>
+        /// 转为片假名
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ToKatakana(string str)
         {
-            var bytes = Encoding.Unicode.GetBytes(c.ToString());
-            if (bytes.Length == 2 && bytes[1] == 0x30 && bytes[0] >= 0x40 && bytes[0] <= 0x9F)
-                stringBuilder.Append(Encoding.Unicode.GetString(new[] { (byte)(bytes[0] + 0x60), bytes[1] }));
-            else
-                stringBuilder.Append(c);
-        }
-
-        return stringBuilder.ToString();
-    }
-
-    /// <summary>
-    /// 转为平假名
-    /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    public static string ToHiragana(string str)
-    {
-        var stringBuilder = new StringBuilder();
-        foreach (var c in str)
-        {
-            var bytes = Encoding.Unicode.GetBytes(c.ToString());
-            if (bytes.Length == 2 && bytes[1] == 0x30 && bytes[0] >= 0xA0 && bytes[0] <= 0xFA)
-                stringBuilder.Append(Encoding.Unicode.GetString(new[] { (byte)(bytes[0] - 0x60), bytes[1] }));
-            else
-                stringBuilder.Append(c);
-        }
-
-        return stringBuilder.ToString();
-    }
-
-    /// <summary>
-    /// 假名转罗马音
-    /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    public static string KatakanaToRomaji(string str)
-    {
-        var result = new StringBuilder();
-
-        for (var i = 0; i < str.Length;)
-        {
-            if (i < str.Length - 1)
+            var stringBuilder = new StringBuilder();
+            foreach (var c in str)
             {
-                var extendedWord = str.Substring(i, 2);
-                if (ExtendedKanaDictionary.ContainsKey(extendedWord))
-                {
-                    result.Append(ExtendedKanaDictionary[extendedWord]);
-                    i += 2;
-                    continue;
-                }
-            }
-
-            var word = str[i].ToString();
-            if (KanaDictionary.ContainsKey(word))
-            {
-                //正常转换
-                result.Append(KanaDictionary[word]);
-            }
-            else if (word == "ー")
-            {
-                //长音,取前一个音
-                result.Append(result.Length > 0 ? result[^1] : word);
-            }
-            else
-            {
-                //不能识别,保持原样
-                result.Append(word);
-            }
-
-            i++;
-        }
-
-        //处理促音
-        for (var i = 0; i < result.Length; i++)
-        {
-            if (result[i] == 'っ' || result[i] == 'ッ')
-                if (i < result.Length - 1)
-                    if (result[i + 1] == 'c')
-                        result[i] = 't';
-                    else
-                        result[i] = result[i + 1];
+                var bytes = Encoding.Unicode.GetBytes(c.ToString());
+                if (bytes.Length == 2 && bytes[1] == 0x30 && bytes[0] >= 0x40 && bytes[0] <= 0x9F)
+                    stringBuilder.Append(Encoding.Unicode.GetString(new[] { (byte)(bytes[0] + 0x60), bytes[1] }));
                 else
-                    result.Remove(i, 1);
+                    stringBuilder.Append(c);
+            }
+
+            return stringBuilder.ToString();
         }
 
-        return result.ToString();
-    }
+        /// <summary>
+        /// 转为平假名
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ToHiragana(string str)
+        {
+            var stringBuilder = new StringBuilder();
+            foreach (var c in str)
+            {
+                var bytes = Encoding.Unicode.GetBytes(c.ToString());
+                if (bytes.Length == 2 && bytes[1] == 0x30 && bytes[0] >= 0xA0 && bytes[0] <= 0xFA)
+                    stringBuilder.Append(Encoding.Unicode.GetString(new[] { (byte)(bytes[0] - 0x60), bytes[1] }));
+                else
+                    stringBuilder.Append(c);
+            }
 
-    public static Dictionary<string, string> KanaDictionary = new Dictionary<string, string>
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 假名转罗马音
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string KatakanaToRomaji(string str)
+        {
+            var result = new StringBuilder();
+
+            for (var i = 0; i < str.Length;)
+            {
+                if (i < str.Length - 1)
+                {
+                    var extendedWord = str.Substring(i, 2);
+                    if (ExtendedKanaDictionary.ContainsKey(extendedWord))
+                    {
+                        result.Append(ExtendedKanaDictionary[extendedWord]);
+                        i += 2;
+                        continue;
+                    }
+                }
+
+                var word = str[i].ToString();
+                if (KanaDictionary.ContainsKey(word))
+                {
+                    //正常转换
+                    result.Append(KanaDictionary[word]);
+                }
+                else if (word == "ー")
+                {
+                    //长音,取前一个音
+                    result.Append(result.Length > 0 ? result[result.Length - 1].ToString() : word);
+                }
+                else
+                {
+                    //不能识别,保持原样
+                    result.Append(word);
+                }
+
+                i++;
+            }
+
+            //处理促音
+            for (var i = 0; i < result.Length; i++)
+            {
+                if (result[i] == 'っ' || result[i] == 'ッ')
+                    if (i < result.Length - 1)
+                        if (result[i + 1] == 'c')
+                            result[i] = 't';
+                        else
+                            result[i] = result[i + 1];
+                    else
+                        result.Remove(i, 1);
+            }
+
+            return result.ToString();
+        }
+
+        public static Dictionary<string, string> KanaDictionary = new Dictionary<string, string>
     {
         //平假
         { "あ", "a" }, { "い", "i" }, { "う", "u" }, { "え", "e" }, { "お", "o" },
@@ -150,7 +151,7 @@ public static class KanaHelper
         { "ャ", "ya" }, { "ュ", "yu" }, { "ョ", "yo" }, { "ヮ", "wa" },
     };
 
-    public static Dictionary<string, string> ExtendedKanaDictionary = new Dictionary<string, string>
+        public static Dictionary<string, string> ExtendedKanaDictionary = new Dictionary<string, string>
     {
         //平假-拗音
         { "きゃ", "kya" }, { "きゅ", "kyu" }, { "きょ", "kyo" },
@@ -198,4 +199,5 @@ public static class KanaHelper
         { "ファ", "fa" }, { "フィ", "fi" }, { "フェ", "fe" }, { "フォ", "fo" },
         { "フュ", "fyu" },
     };
+    }
 }

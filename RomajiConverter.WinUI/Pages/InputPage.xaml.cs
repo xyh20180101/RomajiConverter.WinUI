@@ -1,10 +1,18 @@
-using Windows.System;
+using CommunityToolkit.WinUI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using RomajiConverter.Core.Helpers;
 using RomajiConverter.WinUI.Extensions;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
+using Windows.System;
+using RomajiConverter.Core.Options;
+using DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue;
 
 namespace RomajiConverter.WinUI.Pages;
 
@@ -15,23 +23,83 @@ public sealed partial class InputPage : Page
         InitializeComponent();
     }
 
+    public MainPage MainPage { get; set; }
+
     public EditPage MainEditPage { get; set; }
 
     public OutputPage MainOutputPage { get; set; }
+
+    private CancellationTokenSource _convertCancellationTokenSource = null;
 
     /// <summary>
     /// 转换按钮事件
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ConvertButton_OnClick(object sender, RoutedEventArgs e)
+    private async void ConvertButton_OnClick(object sender, RoutedEventArgs e)
     {
-        App.ConvertedLineList = RomajiHelper.ToRomaji(InputTextBox.Text, AutoVariantCheckBox.IsChecked.Value);
+        _convertCancellationTokenSource = new CancellationTokenSource();
 
-        if (App.Config.IsDetailMode)
-            MainEditPage.RenderEditPanel();
-        else
-            MainOutputPage.RenderText();
+        try
+        {
+            App.ConvertedLineList.Clear();
+            MainOutputPage.ClearText();
+
+            MainPage.SetButtonIsEnabled(false);
+            StopButton.IsEnabled = true;
+            ConvertButton.IsEnabled = false;
+            MainEditPage.ShowLoading(true);
+
+            var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+            if (App.Config.IsAIMode)
+            {
+                var config = App.Config.OpenAIConfigs.FirstOrDefault(p => p.IsSelected);
+                if (config is null)
+                {
+                    var resourceLoader = ResourceLoader.GetForViewIndependentUse();
+                    await new ContentDialog
+                    {
+                        XamlRoot = XamlRoot,
+                        Title = resourceLoader.GetString("Tip"),
+                        Content = resourceLoader.GetString("OpenAINotConfig"),
+                        CloseButtonText = resourceLoader.GetString("Close"),
+                        DefaultButton = ContentDialogButton.Close
+                    }.ShowAsync();
+                    return;
+                }
+                await RomajiAIHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text, new ToRomajiAIOptions
+                {
+                    IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation,
+                    BaseUrl = config.BaseUrl,
+                    Model = config.Model,
+                    ApiKey = config.ApiKey,
+                    Prompt = App.Config.Prompt
+                }, _convertCancellationTokenSource.Token);
+            }
+            else
+            {
+                var enumerable = RomajiHelper.ToRomaji(InputTextBox.Text, new ToRomajiOptions { IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation });
+                using var enumerator = enumerable.GetEnumerator();
+                while (!_convertCancellationTokenSource.IsCancellationRequested)
+                {
+                    if (await Task.Run(() => !enumerator.MoveNext())) break;
+
+                    await dispatcherQueue.EnqueueAsync(() =>
+                    {
+                        App.ConvertedLineList.Add(enumerator.Current);
+                    });
+                }
+            }
+        }
+        catch (TaskCanceledException exception) { }
+        catch (OperationCanceledException exception) { }
+        finally
+        {
+            MainEditPage.ShowLoading(false);
+            ConvertButton.IsEnabled = true;
+            StopButton.IsEnabled = false;
+            MainPage.SetButtonIsEnabled(true);
+        }
     }
 
     /// <summary>
@@ -61,5 +129,10 @@ public sealed partial class InputPage : Page
     public void SetTextBoxText(string str)
     {
         InputTextBox.Text = str;
+    }
+
+    private void StopButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        _convertCancellationTokenSource?.Cancel();
     }
 }

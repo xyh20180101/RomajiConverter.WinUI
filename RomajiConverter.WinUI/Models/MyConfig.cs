@@ -1,31 +1,43 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.UI.Composition.SystemBackdrops;
+using RomajiConverter.WinUI.Extensions;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using RomajiConverter.WinUI.Extensions;
+using RomajiConverter.Core.Helpers;
 
 namespace RomajiConverter.WinUI.Models;
 
 public class MyConfig : INotifyPropertyChanged
 {
-    private string _backgroundColor;
+    private bool _isDetailMode;
+    private int _windowsWidth;
+    private int _windowsHeight;
+    private double _inputTextBoxFontSize;
     private double _editPanelFontSize;
-    private string _fontColor;
+    private double _outputTextBoxFontSize;
+    private bool _isOpenExplorerAfterSaveImage;
+    private string _leftParenthesis;
+    private string _rightParenthesis;
+
+    private bool _isParticleAsPronunciation;
+    private bool _isAutoScroll;
+
+    private bool _isAIMode;
+    private ObservableCollection<OpenAIConfig> _openAIConfigs = [];
+    private string _prompt;
+    
     private string _fontFamilyName;
     private int _fontPixelSize;
-    private double _inputTextBoxFontSize;
-    private bool _isDetailMode;
-    private bool _isOpenExplorerAfterSaveImage;
-    private bool _isUseOldLrcParser;
-    private string _leftParenthesis;
+    private string _fontColor;
+    private string _backgroundColor;
+    private int _pagePadding;
+    private int _textMargin;
+    private float _wordMargin;
     private int _lineMargin;
     private int _linePadding;
-    private double _outputTextBoxFontSize;
-    private int _pagePadding;
-    private string _rightParenthesis;
-    private int _textMargin;
-    private int _windowsHeight;
-    private int _windowsWidth;
-    private float _wordMargin;
+
+    private MicaKind _micaKind;
 
     /// <summary>
     /// 默认设置
@@ -45,14 +57,17 @@ public class MyConfig : INotifyPropertyChanged
         WindowWidth = 1400;
         WindowHeight = 800;
 
-        IsUseOldLrcParser = false;
-
         InputTextBoxFontSize = 14;
         EditPanelFontSize = 14;
         OutputTextBoxFontSize = 14;
         IsOpenExplorerAfterSaveImage = true;
         LeftParenthesis = "(";
         RightParenthesis = ")";
+
+        IsParticleAsPronunciation = true;
+        IsAutoScroll = true;
+
+        Prompt = string.Empty;
 
         FontFamilyName = "微软雅黑";
         FontPixelSize = 48;
@@ -63,6 +78,8 @@ public class MyConfig : INotifyPropertyChanged
         WordMargin = 0.5f;
         LineMargin = 48;
         LinePadding = 12;
+
+        MicaKind = MicaKind.BaseAlt;
     }
 
     public void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -101,17 +118,6 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _windowsHeight) return;
             _windowsHeight = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public bool IsUseOldLrcParser
-    {
-        get => _isUseOldLrcParser;
-        set
-        {
-            if (value == _isUseOldLrcParser) return;
-            _isUseOldLrcParser = value;
             OnPropertyChanged();
         }
     }
@@ -178,6 +184,69 @@ public class MyConfig : INotifyPropertyChanged
         {
             if (value == _rightParenthesis) return;
             _rightParenthesis = value;
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
+    #region 转换设置
+
+    public bool IsParticleAsPronunciation
+    {
+        get => _isParticleAsPronunciation;
+        set
+        {
+            if (value == _isParticleAsPronunciation) return;
+            _isParticleAsPronunciation = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsAutoScroll
+    {
+        get => _isAutoScroll;
+        set
+        {
+            if (value == _isAutoScroll) return;
+            _isAutoScroll = value;
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
+    #region AI设置
+
+    public bool IsAIMode
+    {
+        get => _isAIMode;
+        set
+        {
+            if (value == _isAIMode) return;
+            _isAIMode = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<OpenAIConfig> OpenAIConfigs
+    {
+        get => _openAIConfigs;
+        set
+        {
+            if (value == _openAIConfigs) return;
+            _openAIConfigs = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string Prompt
+    {
+        get => _prompt;
+        set
+        {
+            if (value == _prompt) return;
+            _prompt = value;
             OnPropertyChanged();
         }
     }
@@ -286,4 +355,15 @@ public class MyConfig : INotifyPropertyChanged
     }
 
     #endregion
+
+    public MicaKind MicaKind
+    {
+        get => _micaKind;
+        set
+        {
+            if (value == _micaKind) return;
+            _micaKind = value;
+            OnPropertyChanged();
+        }
+    }
 }

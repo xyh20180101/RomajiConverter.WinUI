@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AIOptionsTextBlock.Text" xml:space="preserve">
+    <value>AI选项</value>
+  </data>
+  <data name="OpenAINotConfig" xml:space="preserve">
+    <value>OpenAI配置项未设置</value>
+  </data>
   <data name="AppTitleTextBlock.Text" xml:space="preserve">
     <value>罗马音转换器</value>
   </data>
@@ -191,6 +197,9 @@
   </data>
   <data name="Exception" xml:space="preserve">
     <value>异常</value>
+  </data>
+  <data name="FileNotExist" xml:space="preserve">
+    <value>文件不存在</value>
   </data>
   <data name="GetLyricsError" xml:space="preserve">
     <value>获取歌词出错</value>
@@ -294,6 +303,9 @@
   <data name="NotValidLyricsFile" xml:space="preserve">
     <value>无效的歌词json文件</value>
   </data>
+  <data name="OpenAIModelNameSetting.Header" xml:space="preserve">
+    <value>模型</value>
+  </data>
   <data name="OtherOptionResetSetting.Header" xml:space="preserve">
     <value>恢复默认设置</value>
   </data>
@@ -347,6 +359,9 @@
   </data>
   <data name="TextOptionTextBlock.Text" xml:space="preserve">
     <value>生成文本选项</value>
+  </data>
+  <data name="Tip" xml:space="preserve">
+    <value>提示</value>
   </data>
   <data name="UpdateButton.Content" xml:space="preserve">
     <value>检查更新</value>

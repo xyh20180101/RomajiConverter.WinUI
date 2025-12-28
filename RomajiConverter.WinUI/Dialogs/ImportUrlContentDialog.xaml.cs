@@ -85,7 +85,14 @@ public sealed partial class ImportUrlContentDialog : ContentDialog, INotifyPrope
 
             if (url.Contains("music.163.com"))
             {
-                var songId = HttpUtility.ParseQueryString(new Uri(url).Query)["id"];
+                var uri = new Uri(url);
+                var songId = HttpUtility.ParseQueryString(uri.Query)["id"];
+
+                if (string.IsNullOrEmpty(songId))
+                {
+                    var match = Regex.Match(uri.Fragment, @"[?&]id=(\d+)");
+                    songId = match.Success ? match.Groups[1].Value : string.Empty;
+                }
 
                 LrcResult = await CloudMusicLyricsHelper.GetLrc(songId);
             }

@@ -7,9 +7,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winUi="using:RomajiConverter.WinUI"
-    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    xmlns:controls1="using:RomajiConverter.WinUI.Controls"
     xmlns:valueConverters="using:RomajiConverter.WinUI.ValueConverters"
+    xmlns:controls="using:RomajiConverter.WinUI.Controls"
+    xmlns:controls1="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
     <Page.Resources>
@@ -29,7 +29,7 @@
         <Expander x:Uid="TextDisplayOptionExpander" Margin="4,4,8,4" Grid.Row="0" HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left" Padding="16,16,16,8" Header="文本显示选项">
             <StackPanel>
-                <controls:WrapPanel>
+                <controls1:WrapPanel>
                     <ToggleSwitch x:Uid="SpaceCheckBox" x:Name="SpaceCheckBox" MinWidth="100" Header="空格分隔"
                                   IsOn="True" />
                     <ToggleSwitch x:Uid="NewLineCheckBox" x:Name="NewLineCheckBox" MinWidth="100" Header="每句换行"
@@ -41,7 +41,7 @@
                     <ToggleSwitch x:Uid="KanjiHiraganaCheckBox" x:Name="KanjiHiraganaCheckBox" MinWidth="100"
                                   Header="汉字假名标注" />
                     <ToggleSwitch x:Uid="CHCheckBox" x:Name="CHCheckBox" MinWidth="100" Header="中文" IsOn="True" />
-                </controls:WrapPanel>
+                </controls1:WrapPanel>
             </StackPanel>
         </Expander>
         <TextBox x:Name="OutputTextBox" Grid.Row="1" Margin="4,4,8,4" AcceptsReturn="True" TextWrapping="Wrap"
@@ -49,7 +49,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  IsSpellCheckEnabled="False" PointerWheelChanged="OutputTextBox_OnPointerWheelChanged"
                  FontSize="{x:Bind winUi:App.Config.OutputTextBoxFontSize,Mode=OneWay}" />
-        <controls1:ScaleLabel Grid.Row="1"
+        <controls:ScaleLabel Grid.Row="1"
                               ScaleText="{x:Bind winUi:App.Config.OutputTextBoxFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
                               HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,8" />
         <Grid Grid.Row="2" Margin="4,4,8,8">

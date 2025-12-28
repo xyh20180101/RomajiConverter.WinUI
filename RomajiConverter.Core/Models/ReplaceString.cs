@@ -1,22 +1,23 @@
-﻿namespace RomajiConverter.Core.Models;
-
-public class ReplaceString
+﻿namespace RomajiConverter.Core.Models
 {
-    public ReplaceString(ushort id, string value, bool isSystem)
+    public class ReplaceString
     {
-        Id = id;
-        Value = value;
-        IsSystem = isSystem;
-    }
+        public ReplaceString(ushort id, string value, bool isSystem)
+        {
+            Id = id;
+            Value = value;
+            IsSystem = isSystem;
+        }
 
-    public ushort Id { get; set; }
+        public ushort Id { get; set; }
 
-    public string Value { get; set; }
+        public string Value { get; set; }
 
-    public bool IsSystem { get; set; }
+        public bool IsSystem { get; set; }
 
-    public override string ToString()
-    {
-        return Value;
+        public override string ToString()
+        {
+            return Value;
+        }
     }
 }
