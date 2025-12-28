@@ -19,23 +19,22 @@ public class QQMusicLyricsHelper : LyricsHelper
 
     public static async Task<List<MultilingualLrc>> GetLrc(string url)
     {
-        var httpClient = new HttpClient();
-
-        // 获取歌曲Id
-        var songId = 0L;
-        var uri = new Uri(url);
-        var querySongId = HttpUtility.ParseQueryString(uri.Query)["songid"];
-        if (!string.IsNullOrEmpty(querySongId))
+        var httpClient = new HttpClient(new HttpClientHandler
         {
-            songId = long.Parse(querySongId);
-        }
-        else //pc客户端
+            AllowAutoRedirect = false
+        });
+
+        var songId = 0L;
+        if (url.Contains("c6.y.qq.com")) //pc客户端分享
         {
             var response = await httpClient.GetAsync(url);
             if (response.StatusCode == HttpStatusCode.Redirect)
-                response = await httpClient.GetAsync(response.Headers.Location?.AbsoluteUri);
-            var content = await response.Content.ReadAsStringAsync();
-            songId = long.Parse(SongIdRegex.Match(content).Groups["songId"].Value);
+                songId = long.Parse(HttpUtility.ParseQueryString(response.Headers.Location.Query)["songid"]);
+        }
+        else if (url.Contains("i.y.qq.com")) //网页分享
+        {
+            var query = HttpUtility.ParseQueryString(new Uri(url).Query);
+            songId = long.Parse(query["songid"]);
         }
 
         // 拼接参数
