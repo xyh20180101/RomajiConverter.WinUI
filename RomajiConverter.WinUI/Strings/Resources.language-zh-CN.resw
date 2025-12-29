@@ -126,9 +126,6 @@
   <data name="AppTitleTextBlock.Text" xml:space="preserve">
     <value>罗马音转换器</value>
   </data>
-  <data name="AutoVariantCheckBox.Content" xml:space="preserve">
-    <value>识别变体</value>
-  </data>
   <data name="BackButton.Label" xml:space="preserve">
     <value>返回</value>
   </data>
@@ -374,5 +371,56 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>
+  </data>
+  <data name="StopButton.Content" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="AIModeButton.Label" xml:space="preserve">
+    <value>AI模式</value>
+  </data>
+  <data name="OpenAIConfigsSettingExpander.Header" xml:space="preserve">
+    <value>OpenAI 配置</value>
+  </data>
+  <data name="SetDefaultButton.Content" xml:space="preserve">
+    <value>设为当前配置</value>
+  </data>
+  <data name="EditButton.Content" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="RemoveButton.Content" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="OpenAddOpenAIConfigWindowButton.Content" xml:space="preserve">
+    <value>添加配置</value>
+  </data>
+  <data name="ConvertOptionTextBlock.Text" xml:space="preserve">
+    <value>转换选项</value>
+  </data>
+  <data name="IsParticleAsPronunciationSetting.Header" xml:space="preserve">
+    <value>助词假名转换</value>
+  </data>
+  <data name="IsParticleAsPronunciationSetting.Description" xml:space="preserve">
+    <value>启用时，は/へ/を作为助词时的假名转换为わ/え/お，罗马音转为wa/e/o</value>
+  </data>
+  <data name="IsAutoScrollSetting.Header" xml:space="preserve">
+    <value>自动滚动到最底</value>
+  </data>
+  <data name="MicaKindSetting.Header" xml:space="preserve">
+    <value>云母材质</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialog.Title" xml:space="preserve">
+    <value>添加OpenAI配置</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialogTextBlock1.Text" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialogTextBlock3.Text" xml:space="preserve">
+    <value>模型</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialog.CloseButtonText" xml:space="preserve">
+    <value>取消</value>
   </data>
 </root>

@@ -10,7 +10,7 @@
   <Identity
     Name="RomajiConverter.WinUI"
     Publisher="CN=JT-XXB-05"
-    Version="1.0.0.0" />
+    Version="2.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="d11620bf-4716-4cff-b72d-62268df64fe4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

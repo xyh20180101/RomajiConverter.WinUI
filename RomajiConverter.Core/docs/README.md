@@ -4,21 +4,34 @@
 
 ## 使用
 ```C#
-List<ConvertedLine> list = RomajiHelper.ToRomaji("");
+//离线分词器
+IEnumerable<ConvertedLine> list = RomajiHelper.ToRomaji(jpnStr);
 
+//AI
+var list = new ObservableCollection<ConvertedLine>();
+await RomajiAIHelper.ToRomajiStreamingAsync(list, jpnStr, new ToRomajiAIOptions
+{
+    BaseUrl = "",
+    Model = "",
+    ApiKey = ""
+}); //流式插入
+
+//以下是类结构
 public class ConvertedLine
 {
-    public ushort Index { get; set; }
+    public ushort Index { get; set; } = 0;
 
-    public string Chinese { get; set; }
+    public string Chinese { get; set; } = string.Empty;
 
-    public string Japanese { get; set; }
+    public string Japanese { get; set; } = string.Empty;
 
-    public ConvertedUnit[] Units { get; set; }
+    public ObservableCollection<ConvertedUnit> Units { get; set; } = new ObservableCollection<ConvertedUnit>();
 }
 
 public class ConvertedUnit
 {
+    public ushort LineIndex { get; set; }
+
     public string Japanese { get; set; }
 
     public string Romaji { get; set; }

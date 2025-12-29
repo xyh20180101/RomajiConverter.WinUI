@@ -60,7 +60,6 @@ public sealed partial class MainWindow : Window
     {
         CloudMusicLyricsHelper.Init();
         RomajiHelper.Init();
-        VariantHelper.Init();
     }
 
     /// <summary>

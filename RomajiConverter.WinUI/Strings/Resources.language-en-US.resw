@@ -126,9 +126,6 @@
   <data name="AppTitleTextBlock.Text" xml:space="preserve">
     <value>Romaji Converter</value>
   </data>
-  <data name="AutoVariantCheckBox.Content" xml:space="preserve">
-    <value>Consider Variant</value>
-  </data>
   <data name="BackButton.Label" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -374,5 +371,56 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="StopButton.Content" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="AIModeButton.Label" xml:space="preserve">
+    <value>AI Mode</value>
+  </data>
+  <data name="OpenAIConfigsSettingExpander.Header" xml:space="preserve">
+    <value>OpenAI Configs</value>
+  </data>
+  <data name="SetDefaultButton.Content" xml:space="preserve">
+    <value>Set as current</value>
+  </data>
+  <data name="EditButton.Content" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="RemoveButton.Content" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="OpenAddOpenAIConfigWindowButton.Content" xml:space="preserve">
+    <value>Add config</value>
+  </data>
+  <data name="ConvertOptionTextBlock.Text" xml:space="preserve">
+    <value>Convert Option</value>
+  </data>
+  <data name="IsParticleAsPronunciationSetting.Header" xml:space="preserve">
+    <value>Particle Kana Conversion</value>
+  </data>
+  <data name="IsParticleAsPronunciationSetting.Description" xml:space="preserve">
+    <value>When enabled, the kana for the particles は/へ/を are converted to わ/え/お respectively, and their romanization is changed to wa/e/o</value>
+  </data>
+  <data name="IsAutoScrollSetting.Header" xml:space="preserve">
+    <value>Auto-scroll to Bottom</value>
+  </data>
+  <data name="MicaKindSetting.Header" xml:space="preserve">
+    <value>Mica Kind</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialog.Title" xml:space="preserve">
+    <value>Add OpenAI Config</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialogTextBlock1.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialogTextBlock3.Text" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AddOpenAIConfigContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Confirm</value>
   </data>
 </root>

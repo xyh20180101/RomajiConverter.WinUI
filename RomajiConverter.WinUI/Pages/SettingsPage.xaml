@@ -41,9 +41,9 @@
                         <DataTemplate x:DataType="models:OpenAIConfig">
                             <toolkit:SettingsCard Header="{x:Bind Name,Mode=TwoWay}" Description="{x:Bind BaseUrl,Mode=TwoWay}" Padding="58,8,44,8" BorderThickness="0,1,0,0" CornerRadius="0" MinHeight="52">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Button CommandParameter="{x:Bind}" IsEnabled="{x:Bind IsSelected, Converter={StaticResource BoolNegationValueConverter},Mode=TwoWay}" Click="OpenAIConfigSetDefaultButton_OnClick">设为当前配置</Button>
-                                    <Button CommandParameter="{x:Bind}" Click="OpenAIConfigEditButton_OnClick">编辑</Button>
-                                    <Button CommandParameter="{x:Bind}" Click="OpenAIConfigRemoveButton_OnClick">删除</Button>
+                                    <Button x:Uid="SetDefaultButton" CommandParameter="{x:Bind}" IsEnabled="{x:Bind IsSelected, Converter={StaticResource BoolNegationValueConverter},Mode=TwoWay}" Click="OpenAIConfigSetDefaultButton_OnClick">设为当前配置</Button>
+                                    <Button x:Uid="EditButton" CommandParameter="{x:Bind}" Click="OpenAIConfigEditButton_OnClick">编辑</Button>
+                                    <Button x:Uid="RemoveButton" CommandParameter="{x:Bind}" Click="OpenAIConfigRemoveButton_OnClick">删除</Button>
                                 </StackPanel>
                             </toolkit:SettingsCard>
                         </DataTemplate>
@@ -55,7 +55,7 @@
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <toolkit:SettingsCard Grid.Row="0" Padding="58,8,44,8" BorderThickness="0,1,0,0" CornerRadius="0" MinHeight="52">
-                                <Button x:Name="OpenAddOpenAIConfigWindowButton" Style="{StaticResource AccentButtonStyle}" Click="OpenAddOpenAIConfigWindowButton_OnClick">添加配置</Button>
+                                <Button x:Uid="OpenAddOpenAIConfigWindowButton" Style="{StaticResource AccentButtonStyle}" Click="OpenAddOpenAIConfigWindowButton_OnClick">添加配置</Button>
                             </toolkit:SettingsCard>
                         </Grid>
                     </toolkit:SettingsExpander.ItemsFooter>

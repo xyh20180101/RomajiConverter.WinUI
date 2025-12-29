@@ -39,7 +39,7 @@
 
 ## AI模式说明
 - 使用前需在设置中配置OpenAI相关配置，必须是兼容OpenAI、支持流式输出的模型（目前个人测试下来，考虑配置便捷度和质量，建议使用`deepseek-chat`）
-- 如需修改系统提示词，在程序目录下找到`config.json`编辑`Prompt`属性，为空时表示使用默认提示词
+- 如需修改系统提示词，编辑程序目录下`config.json`的`Prompt`属性，为空时表示使用默认提示词（见`RomajiConverter.Core/Helpers/RomajiAIHelper.cs`）
 
 ### 配置参数获取流程（以DeepSeek为例）
 - 打开API开放平台（[DeepSeek API开放平台](https://platform.deepseek.com)）
@@ -58,7 +58,7 @@ Api Key = sk-xxxxxxxxxxx
 ## 缺陷
 - 分词器
     - 汉字和多音假名（例如：は）的转换不一定准确，以实际发音为准
-    - 尽管提供了识别简繁变体的功能，但不一定准确，请保证歌词文本是正确的日文
+    - 不能识别简体化写法，请保证歌词文本是正确的日文
     - 双击方框有时不能进入编辑模式，再次尝试即可
 
 - AI
@@ -79,6 +79,10 @@ Api Key = sk-xxxxxxxxxxx
 - 选择框架依赖版需要安装[.net core 8.0桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)，独立版则不需要
 
 ## 更新日志
+
+### 2.0.1
+- 补充本地化资源
+- 完全移除变体功能
 
 ### 2.0.0
 - 新增AI模式

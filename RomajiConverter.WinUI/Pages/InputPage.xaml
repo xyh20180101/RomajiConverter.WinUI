@@ -32,9 +32,9 @@
         <controls:ScaleLabel Grid.Row="0" Grid.Column="0"
                              ScaleText="{x:Bind winUi:App.Config.InputTextBoxFontSize,Mode=OneWay,Converter={StaticResource FontSizeToScaleTextValueConverter}}"
                              HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8" />
-        <Grid Grid.Row="1" Margin="4,4,4,8">
-            <Button x:Uid="StopButton" x:Name="StopButton" Content="停止" HorizontalAlignment="Right" Margin="0,0,60,0" IsEnabled="False" Click="StopButton_OnClick"/>
-            <Button x:Uid="ConvertButton" x:Name="ConvertButton" Content="转换" HorizontalAlignment="Right" Click="ConvertButton_OnClick" Style="{StaticResource AccentButtonStyle}"  />
-        </Grid>
+        <StackPanel Grid.Row="1" Margin="8,4,4,8" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button x:Uid="StopButton" x:Name="StopButton" Content="停止" IsEnabled="False" Click="StopButton_OnClick"/>
+            <Button x:Uid="ConvertButton" x:Name="ConvertButton" Content="转换" Click="ConvertButton_OnClick" Style="{StaticResource AccentButtonStyle}"  />
+        </StackPanel>
     </Grid>
 </Page>
