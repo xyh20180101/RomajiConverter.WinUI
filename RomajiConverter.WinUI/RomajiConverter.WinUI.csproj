@@ -21,15 +21,12 @@
 	</PropertyGroup>
 
 	<Import Project="..\publish.props" />
-
 	<ItemGroup>
-		<Content Remove="Assets\BadgeLogo.scale-100.png" />
-		<Content Remove="Assets\BadgeLogo.scale-125.png" />
-		<Content Remove="Assets\BadgeLogo.scale-150.png" />
-		<Content Remove="Assets\BadgeLogo.scale-200.png" />
-		<Content Remove="Assets\BadgeLogo.scale-400.png" />
-	</ItemGroup>
-	<ItemGroup>
+		<None Remove="Assets\BadgeLogo.scale-100.png" />
+		<None Remove="Assets\BadgeLogo.scale-125.png" />
+		<None Remove="Assets\BadgeLogo.scale-150.png" />
+		<None Remove="Assets\BadgeLogo.scale-200.png" />
+		<None Remove="Assets\BadgeLogo.scale-400.png" />
 		<None Remove="Controls\EditableLabel.xaml" />
 		<None Remove="Controls\EditableLabelGroup.xaml" />
 		<None Remove="Controls\ScaleLabel.xaml" />
@@ -113,6 +110,7 @@
 	<PropertyGroup Label="Globals">
 	  <WebView2UseWinRT>False</WebView2UseWinRT>
 	  <WebView2EnableCsWinRTProjection>False</WebView2EnableCsWinRTProjection>
+	  <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
 	</PropertyGroup>
 
 	<!-- 

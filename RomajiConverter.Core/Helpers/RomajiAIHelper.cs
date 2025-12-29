@@ -38,7 +38,7 @@ namespace RomajiConverter.Core.Helpers
         {
             Temperature = 0.2f
         };
-        public static async Task ToRomaji(ObservableCollection<ConvertedLine> convertedLines, string text, ToRomajiAIOptions options, CancellationToken cancellationToken = default)
+        public static async Task ToRomaji(ICollection<ConvertedLine> convertedLines, string text, ToRomajiAIOptions options, CancellationToken cancellationToken = default)
         {
             var lineTextList = text.Split(Environment.NewLine.ToArray())
                 .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
@@ -89,7 +89,7 @@ namespace RomajiConverter.Core.Helpers
 
             var completion = await client.CompleteChatAsync(messages, _chatCompletionOptions, cancellationToken: cancellationToken);
 
-            var resultLines = FixFormat(completion.Value.Content[0].Text).Split("\n", StringSplitOptions.RemoveEmptyEntries);
+            var resultLines = FixFormat(completion.Value.Content[0].Text).Split("\n".ToCharArray(), options: StringSplitOptions.RemoveEmptyEntries);
             for (ushort i = 0; i < resultLines.Length; i++)
             {
                 Debug.Write(resultLines[i]);
@@ -100,15 +100,15 @@ namespace RomajiConverter.Core.Helpers
                     Japanese = i >= cacheList.Count ? string.Empty : cacheList[i].Japanese
                 };
                 convertedLines.Add(line);
-                var units = new ObservableCollection<ConvertedUnit>(resultLines[i].Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(u => GetUnit(i, u, options.IsParticleAsPronunciation)));
+                var units = new ObservableCollection<ConvertedUnit>(resultLines[i].Split(" ".ToCharArray(), options: StringSplitOptions.RemoveEmptyEntries).Select(u => GetUnit(i, u, options.IsParticleAsPronunciation)));
                 foreach (var unit in units)
                 {
-                    convertedLines[i].Units.Add(unit);
+                    line.Units.Add(unit);
                 }
             }
         }
 
-        public static async Task ToRomajiStreamingAsync(ObservableCollection<ConvertedLine> convertedLines, string text, ToRomajiAIOptions options, CancellationToken cancellationToken = default)
+        public static async Task ToRomajiStreamingAsync(ICollection<ConvertedLine> convertedLines, string text, ToRomajiAIOptions options, CancellationToken cancellationToken = default)
         {
             var lineTextList = text.Split(Environment.NewLine.ToArray())
                 .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
@@ -171,47 +171,57 @@ namespace RomajiConverter.Core.Helpers
                 Japanese = lineIndex >= cacheList.Count ? string.Empty : cacheList[lineIndex].Japanese
             };
             convertedLines.Add(firstLine);
-            await foreach (var completionUpdate in completionUpdates)
+
+            var enumerator = completionUpdates.GetAsyncEnumerator(cancellationToken);
+            try
             {
-                if (completionUpdate.ContentUpdate.Count > 0)
+                while (await enumerator.MoveNextAsync())
                 {
-                    var delta = FixFormat(completionUpdate.ContentUpdate[0].Text);
-                    if (string.IsNullOrEmpty(delta)) continue;
-                    stringBuilder.Append(delta);
-                    Debug.Write(completionUpdate.ContentUpdate[0].Text);
-
-                    while (r < stringBuilder.Length)
+                    var completionUpdate = enumerator.Current;
+                    if (completionUpdate.ContentUpdate.Count > 0)
                     {
-                        if (stringBuilder[r] == '\n')
-                        {
-                            var lastLine = convertedLines.Last();
-                            lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l), options.IsParticleAsPronunciation));
+                        var delta = FixFormat(completionUpdate.ContentUpdate[0].Text);
+                        if (string.IsNullOrEmpty(delta)) continue;
+                        stringBuilder.Append(delta);
+                        Debug.Write(completionUpdate.ContentUpdate[0].Text);
 
-                            lineIndex++;
-                            var newLine = new ConvertedLine
+                        while (r < stringBuilder.Length)
+                        {
+                            if (stringBuilder[r] == '\n')
                             {
-                                Chinese = lineIndex >= cacheList.Count ? string.Empty : cacheList[lineIndex].Chinese,
-                                Index = lineIndex,
-                                Japanese = lineIndex >= cacheList.Count ? string.Empty : cacheList[lineIndex].Japanese
-                            };
-                            convertedLines.Add(newLine);
-                            r++;
-                            l = r;
-                        }
-                        else if (stringBuilder[r] == ' ')
-                        {
-                            var lastLine = convertedLines.Last();
-                            lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l), options.IsParticleAsPronunciation));
+                                var lastLine = convertedLines.Last();
+                                lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l), options.IsParticleAsPronunciation));
 
-                            r++;
-                            l = r;
-                        }
-                        else
-                        {
-                            r++;
+                                lineIndex++;
+                                var newLine = new ConvertedLine
+                                {
+                                    Chinese = lineIndex >= cacheList.Count ? string.Empty : cacheList[lineIndex].Chinese,
+                                    Index = lineIndex,
+                                    Japanese = lineIndex >= cacheList.Count ? string.Empty : cacheList[lineIndex].Japanese
+                                };
+                                convertedLines.Add(newLine);
+                                r++;
+                                l = r;
+                            }
+                            else if (stringBuilder[r] == ' ')
+                            {
+                                var lastLine = convertedLines.Last();
+                                lastLine.Units.Add(GetUnit(lineIndex, stringBuilder.ToString(l, r - l), options.IsParticleAsPronunciation));
+
+                                r++;
+                                l = r;
+                            }
+                            else
+                            {
+                                r++;
+                            }
                         }
                     }
                 }
+            }
+            finally
+            {
+                await enumerator.DisposeAsync();
             }
 
             if (l != r)
