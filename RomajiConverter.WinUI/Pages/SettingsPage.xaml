@@ -61,6 +61,13 @@
                     </toolkit:SettingsExpander.ItemsFooter>
                 </toolkit:SettingsExpander>
                 <TextBlock x:Uid="ConvertOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="转换选项" />
+                <toolkit:SettingsCard x:Uid="IsIncludeLyricTimestampsSetting" Margin="16,2" Header="是否包含歌词时间戳" Description="启用时，将歌词的时间戳也记录下来">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8AB;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsIncludeLyricTimestampsToggleSwitch"
+                  IsOn="{x:Bind winUi:App.Config.IsIncludeLyricTimestamps,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </toolkit:SettingsCard>
                 <toolkit:SettingsCard x:Uid="IsParticleAsPronunciationSetting" Margin="16,2" Header="助词假名转换" Description="启用时，は/へ/を作为助词时的假名转换为わ/え/お，罗马音转为wa/e/o">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8AB;" />

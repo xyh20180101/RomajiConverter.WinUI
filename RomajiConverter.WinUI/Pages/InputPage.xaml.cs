@@ -70,6 +70,7 @@ public sealed partial class InputPage : Page
                 await RomajiAIHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text, new ToRomajiAIOptions
                 {
                     IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation,
+                    IsIncludeLyricTimestamps = App.Config.IsIncludeLyricTimestamps,
                     BaseUrl = config.BaseUrl,
                     Model = config.Model,
                     ApiKey = config.ApiKey,
@@ -78,7 +79,11 @@ public sealed partial class InputPage : Page
             }
             else
             {
-                var enumerable = RomajiHelper.ToRomaji(InputTextBox.Text, new ToRomajiOptions { IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation });
+                var enumerable = RomajiHelper.ToRomaji(InputTextBox.Text, new ToRomajiOptions
+                {
+                    IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation,
+                    IsIncludeLyricTimestamps = App.Config.IsIncludeLyricTimestamps
+                });
                 using var enumerator = enumerable.GetEnumerator();
                 while (!_convertCancellationTokenSource.IsCancellationRequested)
                 {

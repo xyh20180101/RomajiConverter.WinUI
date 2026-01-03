@@ -93,17 +93,27 @@ public sealed partial class MainPage : Page
         var stringBuilder = new StringBuilder();
 
         if (lrc.Select(p => p.CLrc).All(p => p.Length == 0))
-            // 没有翻译
-            foreach (var item in lrc)
-                stringBuilder.AppendLine(item.JLrc);
+            if (App.Config.IsIncludeLyricTimestamps)
+                foreach (var item in lrc)
+                    stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.JLrc}");
+            else
+                foreach (var item in lrc)
+                    stringBuilder.AppendLine(item.JLrc);
         else
-            // 有翻译
-            foreach (var item in lrc)
-            {
-                stringBuilder.AppendLine(item.JLrc);
-                stringBuilder.AppendLine(item.CLrc);
-            }
-
+        {
+            if (App.Config.IsIncludeLyricTimestamps)
+                foreach (var item in lrc)
+                {
+                    stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.JLrc}");
+                    stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.CLrc}");
+                }
+            else
+                foreach (var item in lrc)
+                {
+                    stringBuilder.AppendLine(item.JLrc);
+                    stringBuilder.AppendLine(item.CLrc);
+                }
+        }   
         MainInputPage.SetTextBoxText(stringBuilder.ToString());
     }
 

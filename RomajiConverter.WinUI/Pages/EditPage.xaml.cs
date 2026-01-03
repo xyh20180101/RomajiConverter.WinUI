@@ -77,9 +77,15 @@ public sealed partial class EditPage : Page
                     var lineData = (ConvertedLine)e.NewItems[0];
                     var line = GetLine(lineData);
                     lineData.Units.CollectionChanged += UnitsOnCollectionChanged;
+                    var separator = GetSeparator();
+                    if (string.IsNullOrEmpty(lineData.Japanese))
+                    {
+                        line.Visibility = Visibility.Collapsed;
+                        separator.Visibility = Visibility.Collapsed;
+                    }
 
                     EditPanel.Children.Insert(e.NewStartingIndex * 2, line);
-                    EditPanel.Children.Insert(e.NewStartingIndex * 2 + 1, GetSeparator());
+                    EditPanel.Children.Insert(e.NewStartingIndex * 2 + 1, separator);
                     break;
                 }
             case NotifyCollectionChangedAction.Remove:
