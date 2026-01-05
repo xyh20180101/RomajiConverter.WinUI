@@ -53,9 +53,6 @@
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.1" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-		<PackageReference Include="NTextCat" Version="0.3.65" />
-		<PackageReference Include="Opportunity.LrcParser" Version="1.0.4" />
 		<!--<PackageReference Include="RomajiConverter.Core" Version="1.0.9" />-->
 		<PackageReference Include="System.Drawing.Common" Version="10.0.1" />
 		<PackageReference Include="System.Windows.Extensions" Version="10.0.1" />

@@ -38,6 +38,8 @@ public sealed partial class InputPage : Page
     /// <param name="e"></param>
     private async void ConvertButton_OnClick(object sender, RoutedEventArgs e)
     {
+        var text = InputTextBox.Text;
+
         _convertCancellationTokenSource = new CancellationTokenSource();
 
         try
@@ -67,7 +69,7 @@ public sealed partial class InputPage : Page
                     }.ShowAsync();
                     return;
                 }
-                await RomajiAIHelper.ToRomajiStreamingAsync(App.ConvertedLineList, InputTextBox.Text, new ToRomajiAIOptions
+                await RomajiAIHelper.LoadRomajiAsync(App.ConvertedLineList, text, new ToRomajiAIOptions
                 {
                     IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation,
                     BaseUrl = config.BaseUrl,
@@ -78,7 +80,10 @@ public sealed partial class InputPage : Page
             }
             else
             {
-                var enumerable = RomajiHelper.ToRomaji(InputTextBox.Text, new ToRomajiOptions { IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation });
+                var enumerable = RomajiHelper.ToRomaji(text, new ToRomajiOptions
+                {
+                    IsParticleAsPronunciation = App.Config.IsParticleAsPronunciation
+                });
                 using var enumerator = enumerable.GetEnumerator();
                 while (!_convertCancellationTokenSource.IsCancellationRequested)
                 {

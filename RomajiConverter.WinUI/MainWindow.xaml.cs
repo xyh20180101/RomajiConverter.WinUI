@@ -1,9 +1,10 @@
 using System;
 using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using Windows.Graphics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
-using Newtonsoft.Json;
 using RomajiConverter.Core.Helpers;
 using RomajiConverter.WinUI.Helpers.LyricsHelpers;
 using RomajiConverter.WinUI.Models;
@@ -45,14 +46,18 @@ public sealed partial class MainWindow : Window
         var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, App.ConfigFileName);
         if (File.Exists(configPath))
         {
-            App.Config = JsonConvert.DeserializeObject<MyConfig>(File.ReadAllText(configPath));
+            App.Config = JsonSerializer.Deserialize<MyConfig>(File.ReadAllText(configPath));
         }
         else
         {
             App.Config = new MyConfig();
             var file = File.Create(configPath);
             using var sw = new StreamWriter(file);
-            sw.Write(JsonConvert.SerializeObject(App.Config, Formatting.Indented));
+            sw.Write(JsonSerializer.Serialize(App.Config, new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            }));
         }
     }
 
@@ -70,6 +75,10 @@ public sealed partial class MainWindow : Window
     private void MainWindow_OnClosed(object sender, WindowEventArgs args)
     {
         File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, App.ConfigFileName),
-            JsonConvert.SerializeObject(App.Config, Formatting.Indented));
+            JsonSerializer.Serialize(App.Config, new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            }));
     }
 }

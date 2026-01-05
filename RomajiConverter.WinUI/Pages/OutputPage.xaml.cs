@@ -3,7 +3,6 @@ using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Extensions;
 using System;
@@ -24,6 +23,7 @@ public sealed partial class OutputPage : Page
 
         SpaceCheckBox.Toggled += ThirdCheckBox_OnToggled;
         NewLineCheckBox.Toggled += ThirdCheckBox_OnToggled;
+        TimestampCheckBox.Toggled += ThirdCheckBox_OnToggled;
         RomajiCheckBox.Toggled += ThirdCheckBox_OnToggled;
         HiraganaCheckBox.Toggled += ThirdCheckBox_OnToggled;
         JPCheckBox.Toggled += ThirdCheckBox_OnToggled;
@@ -100,13 +100,17 @@ public sealed partial class OutputPage : Page
         }
 
         var output = new StringBuilder();
+
+        var time = string.Empty;
         for (var i = 0; i < App.ConvertedLineList.Count; i++)
         {
             var item = App.ConvertedLineList[i];
+            if (TimestampCheckBox.IsOn)
+                time = item.Time is null ? string.Empty : $"[{item.Time:mm\\:ss\\.fff}]";
             if (RomajiCheckBox.IsOn)
-                output.AppendLine(GetString(item.Units.Select(p => p.Romaji)));
+                output.AppendLine(time + GetString(item.Units.Select(p => p.Romaji)));
             if (HiraganaCheckBox.IsOn)
-                output.AppendLine(GetString(item.Units.Select(p => p.Hiragana)));
+                output.AppendLine(time + GetString(item.Units.Select(p => p.Hiragana)));
             if (JPCheckBox.IsOn)
             {
                 if (KanjiHiraganaCheckBox.IsOn)
@@ -126,16 +130,16 @@ public sealed partial class OutputPage : Page
                         replacedIndex = hiraganaIndex;
                     }
 
-                    output.AppendLine(japanese);
+                    output.AppendLine(time + japanese);
                 }
                 else
                 {
-                    output.AppendLine(item.Japanese);
+                    output.AppendLine(time + item.Japanese);
                 }
             }
 
             if (CHCheckBox.IsOn && !string.IsNullOrWhiteSpace(item.Chinese))
-                output.AppendLine(item.Chinese);
+                output.AppendLine(time + item.Chinese);
             if (NewLineCheckBox.IsOn && i < App.ConvertedLineList.Count - 1)
                 output.AppendLine();
         }

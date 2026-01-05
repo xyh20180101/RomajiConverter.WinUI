@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
 		<PackageId>RomajiConverter.Core</PackageId>
-		<Version>2.0.0</Version>
+		<Version>2.1.0</Version>
 		<Authors>WL</Authors>
 		<RepositoryUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xyh20180101/RomajiConverter.WinUI</PackageProjectUrl>

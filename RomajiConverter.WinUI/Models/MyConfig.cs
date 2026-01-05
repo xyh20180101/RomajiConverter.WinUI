@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using RomajiConverter.Core.Helpers;
 
 namespace RomajiConverter.WinUI.Models;
 

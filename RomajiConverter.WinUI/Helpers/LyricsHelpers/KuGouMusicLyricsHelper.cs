@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Helpers.LyricsHelpers;
@@ -54,7 +54,7 @@ public class KuGouMusicLyricsHelper : LyricsHelper
 
         var query = string.Join("&", headers.Select(p => $"{p.Key}={p.Value}")) + $"&signature={signature}";
 
-        JObject songInfo;
+        JsonObject songInfo;
         var lrc = new List<MultilingualLrc>();
         try
         {
@@ -62,7 +62,7 @@ public class KuGouMusicLyricsHelper : LyricsHelper
                 await (await httpClient.GetAsync($"https://m3ws.kugou.com/api/v1/krc/get_lyrics?{query}"))
                     .Content
                     .ReadAsStringAsync();
-            songInfo = JsonConvert.DeserializeObject<JObject>(songInfoJson);
+            songInfo = JsonSerializer.Deserialize<JsonObject>(songInfoJson);
             var jpnLrcText = (string)songInfo["data"]["lrc"];
             lrc = ParseLrc(jpnLrcText, string.Empty);
         }
@@ -74,7 +74,7 @@ public class KuGouMusicLyricsHelper : LyricsHelper
         try
         {
             // 这个接口没有直接的中文lrc,而是提供了翻译数组
-            var transString = (string)songInfo["data"]["landata"].FirstOrDefault(p => (int)p["type"] == 1)["content"];
+            var transString = (string)songInfo["data"]["landata"].AsArray().FirstOrDefault(p => (int)p["type"] == 1)["content"];
             var matches = TransRegex.Matches(transString);
 
             for (var i = 0; i < lrc.Count; i++) lrc[i].CLrc = matches[i].Groups["trans"].Value.Trim();

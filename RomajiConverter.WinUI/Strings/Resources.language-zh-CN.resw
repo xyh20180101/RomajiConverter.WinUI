@@ -423,4 +423,7 @@
   <data name="AddOpenAIConfigContentDialog.CloseButtonText" xml:space="preserve">
     <value>取消</value>
   </data>
+  <data name="TimestampCheckBox.Header" xml:space="preserve">
+    <value>时间戳</value>
+  </data>
 </root>

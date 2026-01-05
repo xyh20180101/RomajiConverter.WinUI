@@ -61,11 +61,25 @@ namespace RomajiConverter.Core.Helpers
         {
             options = options ?? new ToRomajiOptions();
 
-            var lineTextList = text.Split(Environment.NewLine.ToArray())
-                .Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
+            var timeSpans = new List<TimeSpan?>();
+            var lineTextList = text.Split(Environment.NewLine.ToArray()).Where(p => !string.IsNullOrWhiteSpace(p)).ToList();
+
+            for (var i = 0; i < lineTextList.Count; i++)
+            {
+                if (LrcParser.LrcLineRegex.IsMatch(lineTextList[i]))
+                {
+                    var lyric = LrcParser.Parse(lineTextList[i]).FirstOrDefault();
+                    timeSpans.Add(lyric.Time);
+                    lineTextList[i] = lyric.Text;
+                }
+                else
+                {
+                    timeSpans.Add(null);
+                }
+            }
 
             ushort lineIndex = 0;
-            for (var index = 0; index < lineTextList.Length; index++)
+            for (var index = 0; index < lineTextList.Count; index++)
             {
                 var line = lineTextList[index];
 
@@ -74,6 +88,7 @@ namespace RomajiConverter.Core.Helpers
                 var convertedLine = new ConvertedLine
                 {
                     Index = lineIndex,
+                    Time = index < timeSpans.Count ? timeSpans[index] : null,
                     Japanese = line.Replace("\0", "")
                 };
 
@@ -88,7 +103,7 @@ namespace RomajiConverter.Core.Helpers
                             convertedLine.Units.Add(unit);
                 }
 
-                if (index + 1 < lineTextList.Length && IsChinese(lineTextList[index + 1], options.ChineseRate))
+                if (index + 1 < lineTextList.Count && IsChinese(lineTextList[index + 1], options.ChineseRate))
                     convertedLine.Chinese = lineTextList[index + 1];
 
                 lineIndex++;
