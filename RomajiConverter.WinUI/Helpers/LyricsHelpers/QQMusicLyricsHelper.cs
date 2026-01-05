@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RomajiConverter.WinUI.Models;
+﻿using RomajiConverter.WinUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -69,9 +69,9 @@ public class QQMusicLyricsHelper : LyricsHelper
         try
         {
             var songInfoJson = await (await httpClient.PostAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
-                    new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8))).Content
+                    new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8))).Content
                 .ReadAsStringAsync();
-            var songInfo = JsonConvert.DeserializeObject<JObject>(songInfoJson);
+            var songInfo = JsonSerializer.Deserialize<JsonObject>(songInfoJson);
             var jpnLrcText =
                 Encoding.UTF8.GetString(Convert.FromBase64String((string)songInfo["req_1"]["data"]["lyric"]));
             var chnLrcText =

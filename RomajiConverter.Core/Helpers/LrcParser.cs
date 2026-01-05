@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace RomajiConverter.Core.Helpers
@@ -36,7 +35,7 @@ namespace RomajiConverter.Core.Helpers
                 }
             }
 
-            return result.OrderBy(p => p.Time).ToList();
+            return result;
         }
     }
 }

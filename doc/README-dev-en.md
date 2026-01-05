@@ -16,8 +16,6 @@ Here's the document for developers, if you're more interested in using the app, 
 - Access the song sharing link, get the song ID and other information, and get the lyrics and Chinese translation through the official interface
 
 ## Project references
-[MeCab.DotNet](https://github.com/kekyo/MeCab.DotNet)  
-[NTextCat](https://github.com/ivanakcheurov/ntextcat)  
-[LrcParser](https://github.com/OpportunityLiu/LrcParser)  
-[UniDic](https://clrd.ninjal.ac.jp/unidic/)  
+[MeCab.DotNet](https://github.com/kekyo/MeCab.DotNet)
+[UniDic](https://clrd.ninjal.ac.jp/unidic/)
 [unihan-database](https://github.com/unicode-org/unihan-database)

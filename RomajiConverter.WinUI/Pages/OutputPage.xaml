@@ -34,7 +34,7 @@
                                   IsOn="True" />
                     <ToggleSwitch x:Uid="NewLineCheckBox" x:Name="NewLineCheckBox" MinWidth="100" Header="每句换行"
                                   IsOn="True" />
-                    <ToggleSwitch x:Uid="TimeCheckBox" x:Name="TimeCheckBox" MinWidth="100" Header="时间"
+                    <ToggleSwitch x:Uid="TimestampCheckBox" x:Name="TimestampCheckBox" MinWidth="100" Header="时间戳"
                                   IsOn="False" />
                     <ToggleSwitch x:Uid="RomajiCheckBox" x:Name="RomajiCheckBox" MinWidth="100" Header="罗马音"
                                   IsOn="True" />

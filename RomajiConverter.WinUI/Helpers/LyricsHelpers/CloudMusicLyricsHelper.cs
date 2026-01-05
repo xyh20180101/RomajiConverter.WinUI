@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Microsoft.Data.Sqlite;
-using Newtonsoft.Json.Linq;
 using RomajiConverter.WinUI.Models;
 
 namespace RomajiConverter.WinUI.Helpers.LyricsHelpers;
@@ -51,7 +52,7 @@ public class CloudMusicLyricsHelper : LyricsHelper
             if(!File.Exists(HistoryPath))
                 throw new Exception(ResourceLoader.GetForViewIndependentUse().GetString("FileNotExist"));
             //旧版本获取songId方法
-            var history = JArray.Parse(File.ReadAllText(HistoryPath));
+            var history = JsonSerializer.Deserialize<JsonArray>(File.ReadAllText(HistoryPath));
             return history[0]["track"]["id"].ToString();
         }
     }
@@ -63,11 +64,11 @@ public class CloudMusicLyricsHelper : LyricsHelper
             var client = new HttpClient();
             client.BaseAddress = new Uri("http://music.163.com/");
             var jpnLrcResponse = await client.GetAsync($"api/song/media?id={songId}");
-            var content = JObject.Parse(await jpnLrcResponse.Content.ReadAsStringAsync());
+            var content = JsonSerializer.Deserialize<JsonObject>(await jpnLrcResponse.Content.ReadAsStringAsync());
             var jpnLrcText = content["lyric"].ToString();
 
             var chnLrcResponse = await client.GetAsync($"api/song/lyric?os=pc&id={songId}&tv=-1");
-            content = JObject.Parse(await chnLrcResponse.Content.ReadAsStringAsync());
+            content = JsonSerializer.Deserialize<JsonObject>(await chnLrcResponse.Content.ReadAsStringAsync());
 
             var chnLrcText = content["tlyric"]["lyric"].ToString();
 

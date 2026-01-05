@@ -2,7 +2,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
-using Newtonsoft.Json;
 using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Dialogs;
 using RomajiConverter.WinUI.Helpers;
@@ -16,10 +15,11 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using RomajiConverter.Core.Helpers;
 using WinRT.Interop;
 
 namespace RomajiConverter.WinUI.Pages;
@@ -93,26 +93,15 @@ public sealed partial class MainPage : Page
         var stringBuilder = new StringBuilder();
 
         if (lrc.Select(p => p.CLrc).All(p => p.Length == 0))
-            if (App.Config.IsIncludeLyricTimestamps)
-                foreach (var item in lrc)
-                    stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.JLrc}");
-            else
-                foreach (var item in lrc)
-                    stringBuilder.AppendLine(item.JLrc);
+            foreach (var item in lrc)
+                stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.JLrc}");
         else
         {
-            if (App.Config.IsIncludeLyricTimestamps)
-                foreach (var item in lrc)
-                {
-                    stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.JLrc}");
-                    stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.CLrc}");
-                }
-            else
-                foreach (var item in lrc)
-                {
-                    stringBuilder.AppendLine(item.JLrc);
-                    stringBuilder.AppendLine(item.CLrc);
-                }
+            foreach (var item in lrc)
+            {
+                stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.JLrc}");
+                stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.CLrc}");
+            }
         }   
         MainInputPage.SetTextBoxText(stringBuilder.ToString());
     }
@@ -138,9 +127,9 @@ public sealed partial class MainPage : Page
         if (file != null)
             try
             {
-                App.ConvertedLineList = JsonConvert.DeserializeObject<ObservableCollection<ConvertedLine>>(await File.ReadAllTextAsync(file.Path));
+                App.ConvertedLineList = JsonSerializer.Deserialize<ObservableCollection<ConvertedLine>>(await File.ReadAllTextAsync(file.Path));
             }
-            catch (JsonSerializationException exception)
+            catch (JsonException exception)
             {
                 var resourceLoader = ResourceLoader.GetForViewIndependentUse();
                 throw new Exception(resourceLoader.GetString("NotValidLyricsFile"), exception);
@@ -166,7 +155,11 @@ public sealed partial class MainPage : Page
         var file = await fileSavePicker.PickSaveFileAsync();
         if (file != null)
             await FileIO.WriteTextAsync(file,
-                JsonConvert.SerializeObject(App.ConvertedLineList, Formatting.Indented));
+                JsonSerializer.Serialize(App.ConvertedLineList, new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    WriteIndented = true
+                }));
     }
 
     /// <summary>

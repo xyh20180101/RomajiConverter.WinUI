@@ -3,7 +3,6 @@ using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using RomajiConverter.Core.Models;
 using RomajiConverter.WinUI.Extensions;
 using System;
@@ -24,7 +23,7 @@ public sealed partial class OutputPage : Page
 
         SpaceCheckBox.Toggled += ThirdCheckBox_OnToggled;
         NewLineCheckBox.Toggled += ThirdCheckBox_OnToggled;
-        TimeCheckBox.Toggled += ThirdCheckBox_OnToggled;
+        TimestampCheckBox.Toggled += ThirdCheckBox_OnToggled;
         RomajiCheckBox.Toggled += ThirdCheckBox_OnToggled;
         HiraganaCheckBox.Toggled += ThirdCheckBox_OnToggled;
         JPCheckBox.Toggled += ThirdCheckBox_OnToggled;
@@ -106,8 +105,8 @@ public sealed partial class OutputPage : Page
         for (var i = 0; i < App.ConvertedLineList.Count; i++)
         {
             var item = App.ConvertedLineList[i];
-            if (TimeCheckBox.IsOn)
-                time = $"[{item.Time:mm\\:ss\\.fff}]";
+            if (TimestampCheckBox.IsOn)
+                time = item.Time is null ? string.Empty : $"[{item.Time:mm\\:ss\\.fff}]";
             if (RomajiCheckBox.IsOn)
                 output.AppendLine(time + GetString(item.Units.Select(p => p.Romaji)));
             if (HiraganaCheckBox.IsOn)

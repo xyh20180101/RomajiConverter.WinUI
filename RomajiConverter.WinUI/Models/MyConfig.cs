@@ -19,7 +19,6 @@ public class MyConfig : INotifyPropertyChanged
     private string _leftParenthesis;
     private string _rightParenthesis;
 
-    private bool _isIncludeLyricTimestamps;
     private bool _isParticleAsPronunciation;
     private bool _isAutoScroll;
 
@@ -64,7 +63,6 @@ public class MyConfig : INotifyPropertyChanged
         LeftParenthesis = "(";
         RightParenthesis = ")";
 
-        IsIncludeLyricTimestamps = false;
         IsParticleAsPronunciation = true;
         IsAutoScroll = true;
 
@@ -192,17 +190,6 @@ public class MyConfig : INotifyPropertyChanged
     #endregion
 
     #region 转换设置
-
-    public bool IsIncludeLyricTimestamps
-    {
-        get => _isIncludeLyricTimestamps;
-        set
-        {
-            if (value == _isIncludeLyricTimestamps) return;
-            _isIncludeLyricTimestamps = value;
-            OnPropertyChanged();
-        }
-    }
 
     public bool IsParticleAsPronunciation
     {

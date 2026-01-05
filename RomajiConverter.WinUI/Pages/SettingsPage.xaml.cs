@@ -2,13 +2,14 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
-using Newtonsoft.Json.Linq;
 using RomajiConverter.WinUI.Dialogs;
 using RomajiConverter.WinUI.Extensions;
 using System;
 using System.Drawing.Text;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using Windows.ApplicationModel.Resources;
 using Windows.System;
@@ -105,7 +106,7 @@ public sealed partial class SettingsPage : Page
                 await httpClient.GetAsync(
                         new Uri("https://api.github.com/repos/xyh20180101/RomajiConverter.WinUI/releases/latest"))
                     .AsTask(cancellationTokenSource.Token);
-            var data = JObject.Parse(await httpResponseMessage.Content.ReadAsStringAsync());
+            var data = JsonSerializer.Deserialize<JsonObject>(await httpResponseMessage.Content.ReadAsStringAsync());
 
             UpdateRing.IsActive = false;
             UpdateRing.Visibility = Visibility.Collapsed;

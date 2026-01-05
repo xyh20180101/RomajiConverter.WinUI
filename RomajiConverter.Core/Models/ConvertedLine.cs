@@ -7,7 +7,7 @@ namespace RomajiConverter.Core.Models
     {
         public ushort Index { get; set; } = 0;
 
-        public TimeSpan Time { get; set; } = TimeSpan.Zero;
+        public TimeSpan? Time { get; set; }
 
         public string Chinese { get; set; } = string.Empty;
 

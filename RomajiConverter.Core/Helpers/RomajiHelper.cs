@@ -61,20 +61,21 @@ namespace RomajiConverter.Core.Helpers
         {
             options = options ?? new ToRomajiOptions();
 
-            var timeSpans = new List<TimeSpan>();
-            var lineTextList = new List<string>();
+            var timeSpans = new List<TimeSpan?>();
+            var lineTextList = text.Split(Environment.NewLine.ToArray()).Where(p => !string.IsNullOrWhiteSpace(p)).ToList();
 
-            if (options.IsIncludeLyricTimestamps)
+            for (var i = 0; i < lineTextList.Count; i++)
             {
-                foreach (var lyric in LrcParser.Parse(text))
+                if (LrcParser.LrcLineRegex.IsMatch(lineTextList[i]))
                 {
+                    var lyric = LrcParser.Parse(lineTextList[i]).FirstOrDefault();
                     timeSpans.Add(lyric.Time);
-                    lineTextList.Add(lyric.Text);
+                    lineTextList[i] = lyric.Text;
                 }
-            }
-            else
-            {
-                lineTextList = text.Split(Environment.NewLine.ToArray()).Where(p => !string.IsNullOrWhiteSpace(p)).ToList();
+                else
+                {
+                    timeSpans.Add(null);
+                }
             }
 
             ushort lineIndex = 0;
@@ -87,7 +88,7 @@ namespace RomajiConverter.Core.Helpers
                 var convertedLine = new ConvertedLine
                 {
                     Index = lineIndex,
-                    Time = lineIndex < timeSpans.Count ? timeSpans[lineIndex] : TimeSpan.Zero,
+                    Time = index < timeSpans.Count ? timeSpans[index] : null,
                     Japanese = line.Replace("\0", "")
                 };
 
