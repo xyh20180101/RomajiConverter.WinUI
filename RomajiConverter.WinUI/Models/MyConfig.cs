@@ -15,7 +15,7 @@ public class MyConfig : INotifyPropertyChanged
     private double _inputTextBoxFontSize;
     private double _editPanelFontSize;
     private double _outputTextBoxFontSize;
-    private bool _isOpenExplorerAfterSaveImage;
+    private bool _isOpenExplorerAfterSave;
     private string _leftParenthesis;
     private string _rightParenthesis;
 
@@ -59,7 +59,7 @@ public class MyConfig : INotifyPropertyChanged
         InputTextBoxFontSize = 14;
         EditPanelFontSize = 14;
         OutputTextBoxFontSize = 14;
-        IsOpenExplorerAfterSaveImage = true;
+        IsOpenExplorerAfterSave = true;
         LeftParenthesis = "(";
         RightParenthesis = ")";
 
@@ -154,13 +154,13 @@ public class MyConfig : INotifyPropertyChanged
         }
     }
 
-    public bool IsOpenExplorerAfterSaveImage
+    public bool IsOpenExplorerAfterSave
     {
-        get => _isOpenExplorerAfterSaveImage;
+        get => _isOpenExplorerAfterSave;
         set
         {
-            if (value == _isOpenExplorerAfterSaveImage) return;
-            _isOpenExplorerAfterSaveImage = value;
+            if (value == _isOpenExplorerAfterSave) return;
+            _isOpenExplorerAfterSave = value;
             OnPropertyChanged();
         }
     }

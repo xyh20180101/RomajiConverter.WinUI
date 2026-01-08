@@ -14,7 +14,6 @@
     Loaded="MainPage_OnLoaded">
     <Page.Resources>
         <valueConverters:IsDetailModeToWidthValueConverter x:Key="IsDetailModeToWidthValueConverter" />
-        <valueConverters:IsDetailModeToVisibilityValueConverter x:Key="IsDetailModeToVisibilityValueConverter" />
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -49,33 +48,24 @@
                     <FontIcon Glyph="&#xF4A5;" />
                 </AppBarToggleButton.Icon>
             </AppBarToggleButton>
-            <AppBarSeparator />
-            <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Label="打开"
-                          Tapped="ReadButton_OnTapped"
-                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE8E5;" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton x:Uid="SaveButton" x:Name="SaveButton" Label="保存" Tapped="SaveButton_OnTapped"
-                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE74E;" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton x:Uid="ConvertPictureButton" x:Name="ConvertPictureButton" Label="导出图片"
-                          Tapped="ConvertPictureButton_OnTapped"
-                          Visibility="{x:Bind winUi:App.Config.IsDetailMode,Mode=OneWay,Converter={StaticResource IsDetailModeToVisibilityValueConverter}}">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE8B9;" />
-                </AppBarButton.Icon>
-            </AppBarButton>
             <AppBarToggleButton x:Uid="DetailModeButton" x:Name="DetailModeButton" Label="详细模式"
                                 IsChecked="{x:Bind winUi:App.Config.IsDetailMode,Mode=TwoWay}">
                 <AppBarToggleButton.Icon>
                     <FontIcon Glyph="&#xEA37;" />
                 </AppBarToggleButton.Icon>
             </AppBarToggleButton>
+            <AppBarSeparator />
+            <AppBarButton x:Uid="ReadButton" x:Name="ReadButton" Label="打开"
+                          Tapped="ReadButton_OnTapped">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE8E5;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Uid="SaveButton" x:Name="SaveButton" Label="保存" Tapped="SaveButton_OnTapped">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE74E;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarButton x:Uid="SettingButton" x:Name="SettingButton" Label="设置"
                           Tapped="SettingButton_OnTapped">
                 <AppBarButton.Icon>

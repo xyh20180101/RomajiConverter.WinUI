@@ -92,7 +92,7 @@ public sealed partial class OutputPage : Page
     /// 获取结果文本
     /// </summary>
     /// <returns></returns>
-    private string GetResultText()
+    public string GetResultText()
     {
         string GetString(IEnumerable<string> array)
         {

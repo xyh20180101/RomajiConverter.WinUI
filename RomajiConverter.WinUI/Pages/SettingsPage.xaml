@@ -213,14 +213,6 @@
                                  VerticalAlignment="Center" TextWrapping="Wrap" MaxLength="3" />
                     </StackPanel>
                 </toolkit:SettingsCard>
-                <toolkit:SettingsCard x:Uid="ImageOptionIsOpenExplorerAfterSaveImageSetting" Margin="16,2"
-                                      Description="" Header="生成图片后打开文件夹">
-                    <toolkit:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE838;" />
-                    </toolkit:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="IsOpenExplorerAfterSaveImageToggleSwitch"
-                                  IsOn="{x:Bind winUi:App.Config.IsOpenExplorerAfterSaveImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                </toolkit:SettingsCard>
                 <TextBlock x:Uid="TextOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="生成文本选项" />
                 <toolkit:SettingsCard x:Uid="TextOptionLeftParenthesisSetting" Margin="16,2" Description=""
                                       Header="左括号符号">
@@ -239,6 +231,14 @@
                              Text="{x:Bind winUi:App.Config.RightParenthesis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </toolkit:SettingsCard>
                 <TextBlock x:Uid="OtherOptionTextBlock" Margin="16,32,4,4" FontWeight="SemiBold" Text="其他" />
+                <toolkit:SettingsCard x:Uid="ImageOptionIsOpenExplorerAfterSaveSetting" Margin="16,2"
+                                      Description="" Header="保存后打开文件夹">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE838;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsOpenExplorerAfterSaveToggleSwitch"
+                                  IsOn="{x:Bind winUi:App.Config.IsOpenExplorerAfterSave,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </toolkit:SettingsCard>
                 <toolkit:SettingsCard x:Uid="MicaKindSetting" Margin="16,2" Header="云母材质">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xEF1F;" />
