@@ -102,7 +102,7 @@ public sealed partial class MainPage : Page
                 stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.JLrc}");
                 stringBuilder.AppendLine($"[{item.Time:mm\\:ss\\.fff}]{item.CLrc}");
             }
-        }   
+        }
         MainInputPage.SetTextBoxText(stringBuilder.ToString());
     }
 
@@ -119,21 +119,32 @@ public sealed partial class MainPage : Page
             SuggestedStartLocation = PickerLocationId.DocumentsLibrary
         };
         fileOpenPicker.FileTypeFilter.Add(".json");
+        fileOpenPicker.FileTypeFilter.Add(".lrc");
 
         var hwnd = WindowNative.GetWindowHandle(App.MainWindow);
         InitializeWithWindow.Initialize(fileOpenPicker, hwnd);
 
         var file = await fileOpenPicker.PickSingleFileAsync();
         if (file != null)
-            try
+        {
+            switch (file.FileType)
             {
-                App.ConvertedLineList = JsonSerializer.Deserialize<ObservableCollection<ConvertedLine>>(await File.ReadAllTextAsync(file.Path));
+                case ".json":
+                    try
+                    {
+                        App.ConvertedLineList = JsonSerializer.Deserialize<ObservableCollection<ConvertedLine>>(await File.ReadAllTextAsync(file.Path));
+                    }
+                    catch (JsonException exception)
+                    {
+                        var resourceLoader = ResourceLoader.GetForViewIndependentUse();
+                        throw new Exception(resourceLoader.GetString("NotValidLyricsFile"), exception);
+                    }
+                    break;
+                case ".lrc":
+                    MainInputPage.SetTextBoxText(await File.ReadAllTextAsync(file.Path));
+                    break;
             }
-            catch (JsonException exception)
-            {
-                var resourceLoader = ResourceLoader.GetForViewIndependentUse();
-                throw new Exception(resourceLoader.GetString("NotValidLyricsFile"), exception);
-            }
+        }
     }
 
     /// <summary>
@@ -148,31 +159,7 @@ public sealed partial class MainPage : Page
             SuggestedStartLocation = PickerLocationId.DocumentsLibrary
         };
         fileSavePicker.FileTypeChoices.Add("json", new List<string> { ".json" });
-
-        var hwnd = WindowNative.GetWindowHandle(App.MainWindow);
-        InitializeWithWindow.Initialize(fileSavePicker, hwnd);
-
-        var file = await fileSavePicker.PickSaveFileAsync();
-        if (file != null)
-            await FileIO.WriteTextAsync(file,
-                JsonSerializer.Serialize(App.ConvertedLineList, new JsonSerializerOptions
-                {
-                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                    WriteIndented = true
-                }));
-    }
-
-    /// <summary>
-    /// 导出图片按钮事件
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private async void ConvertPictureButton_OnTapped(object sender, TappedRoutedEventArgs e)
-    {
-        var fileSavePicker = new FileSavePicker
-        {
-            SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-        };
+        fileSavePicker.FileTypeChoices.Add("lrc", new List<string> { ".lrc" });
         fileSavePicker.FileTypeChoices.Add("png", new List<string> { ".png" });
 
         var hwnd = WindowNative.GetWindowHandle(App.MainWindow);
@@ -181,33 +168,50 @@ public sealed partial class MainPage : Page
         var file = await fileSavePicker.PickSaveFileAsync();
         if (file != null)
         {
-            var renderData = new List<string[][]>();
-            foreach (var line in App.ConvertedLineList)
+            switch (file.FileType)
             {
-                var renderLine = new List<string[]>();
-                foreach (var unit in line.Units)
-                {
-                    var renderUnit = new List<string>();
-                    if (MainEditPage.ToggleSwitchState.Romaji)
-                        renderUnit.Add(unit.Romaji);
-                    if (MainEditPage.ToggleSwitchState.Hiragana)
+                case ".json":
+                    await FileIO.WriteTextAsync(file,
+                        JsonSerializer.Serialize(App.ConvertedLineList, new JsonSerializerOptions
+                        {
+                            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                        }));
+                    break;
+                case ".lrc":
+                    await FileIO.WriteTextAsync(file, MainOutputPage.GetResultText());
+                    break;
+                case ".png":
                     {
-                        if (MainEditPage.ToggleSwitchState.IsOnlyShowKanji)
-                            renderUnit.Add(unit.IsKanji ? unit.Hiragana : " ");
-                        else
-                            renderUnit.Add(unit.Hiragana);
+                        var renderData = new List<string[][]>();
+                        foreach (var line in App.ConvertedLineList)
+                        {
+                            var renderLine = new List<string[]>();
+                            foreach (var unit in line.Units)
+                            {
+                                var renderUnit = new List<string>();
+                                if (MainEditPage.ToggleSwitchState.Romaji)
+                                    renderUnit.Add(unit.Romaji);
+                                if (MainEditPage.ToggleSwitchState.Hiragana)
+                                {
+                                    if (MainEditPage.ToggleSwitchState.IsOnlyShowKanji)
+                                        renderUnit.Add(unit.IsKanji ? unit.Hiragana : " ");
+                                    else
+                                        renderUnit.Add(unit.Hiragana);
+                                }
+
+                                renderUnit.Add(unit.Japanese);
+                                renderLine.Add(renderUnit.ToArray());
+                            }
+
+                            renderData.Add(renderLine.ToArray());
+                        }
+
+                        using var image = renderData.ToImage(new GenerateImageHelper.ImageSetting(App.Config));
+                        image.Save(file.Path, ImageFormat.Png);
                     }
-
-                    renderUnit.Add(unit.Japanese);
-                    renderLine.Add(renderUnit.ToArray());
-                }
-
-                renderData.Add(renderLine.ToArray());
+                    break;
             }
-
-            using var image = renderData.ToImage(new GenerateImageHelper.ImageSetting(App.Config));
-            image.Save(file.Path, ImageFormat.Png);
-            if (App.Config.IsOpenExplorerAfterSaveImage)
+            if (App.Config.IsOpenExplorerAfterSave)
                 Process.Start("explorer.exe", $"/select,\"{file.Path}\"");
         }
     }

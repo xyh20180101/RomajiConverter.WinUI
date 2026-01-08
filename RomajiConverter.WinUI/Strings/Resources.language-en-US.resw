@@ -165,9 +165,6 @@
   <data name="ConvertButton.Content" xml:space="preserve">
     <value>Convert</value>
   </data>
-  <data name="ConvertPictureButton.Label" xml:space="preserve">
-    <value>Export Image</value>
-  </data>
   <data name="ConvertTextButton.Content" xml:space="preserve">
     <value>Generate Text</value>
   </data>
@@ -219,8 +216,8 @@
   <data name="ImageOptionFontSizeSetting.Header" xml:space="preserve">
     <value>Font Size</value>
   </data>
-  <data name="ImageOptionIsOpenExplorerAfterSaveImageSetting.Header" xml:space="preserve">
-    <value>Open Explorer After Saved Image</value>
+  <data name="ImageOptionIsOpenExplorerAfterSaveSetting.Header" xml:space="preserve">
+    <value>Open Explorer After Save</value>
   </data>
   <data name="ImageOptionLineMarginSetting.Header" xml:space="preserve">
     <value>Line Margin</value>

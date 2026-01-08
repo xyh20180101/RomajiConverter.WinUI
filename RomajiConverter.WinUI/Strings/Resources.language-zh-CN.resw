@@ -165,9 +165,6 @@
   <data name="ConvertButton.Content" xml:space="preserve">
     <value>转换</value>
   </data>
-  <data name="ConvertPictureButton.Label" xml:space="preserve">
-    <value>导出图片</value>
-  </data>
   <data name="ConvertTextButton.Content" xml:space="preserve">
     <value>生成文本</value>
   </data>
@@ -219,8 +216,8 @@
   <data name="ImageOptionFontSizeSetting.Header" xml:space="preserve">
     <value>字体大小</value>
   </data>
-  <data name="ImageOptionIsOpenExplorerAfterSaveImageSetting.Header" xml:space="preserve">
-    <value>生成图片后打开文件夹</value>
+  <data name="ImageOptionIsOpenExplorerAfterSaveSetting.Header" xml:space="preserve">
+    <value>保存后打开文件夹</value>
   </data>
   <data name="ImageOptionLineMarginSetting.Header" xml:space="preserve">
     <value>行外边距</value>
